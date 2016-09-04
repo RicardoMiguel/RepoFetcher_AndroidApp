@@ -46,7 +46,7 @@ public class GitHubServiceHandler extends RepoServiceHandler{
         HashMap<String, String> params = new HashMap<>();
         params.put("type", "all");
         Observable<List<Repo>> repositoriesOb = getInstance().listRepositories(user, params);
-        scheduleOnIO_ObserveOnMainThread(repositoriesOb, new Subscriber<List<Repo>>() {
+        ServiceUtils.scheduleOnIO_ObserveOnMainThread(repositoriesOb, new Subscriber<List<Repo>>() {
             @Override
             public void onCompleted() {
 

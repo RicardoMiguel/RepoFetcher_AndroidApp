@@ -10,5 +10,5 @@ import java.util.List;
  * Created by ricar on 04/09/2016.
  */
 public interface RepoService {
-    public void callListRepositories(@NonNull String user, @NonNull RepoServiceResponse<List<Repo>> callback);
+    void callListRepositories(@NonNull String user, @NonNull RepoServiceResponse<List<Repo>> callback);
 }
