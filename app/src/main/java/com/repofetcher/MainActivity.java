@@ -50,12 +50,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getRepoList(@NonNull String user){
-        GitHubServiceHandler.callListRepositories(user, new GitHubServiceResponse<List<Repo>>() {
-            @Override
-            public void onSuccess(List<Repo> object) {
-                buildRepositoriesRecyclerView(object);
-            }
-        });
+//        GitHubServiceHandler.callListRepositories(user, new GitHubServiceResponse<List<Repo>>() {
+//            @Override
+//            public void onSuccess(List<Repo> object) {
+//                buildRepositoriesRecyclerView(object);
+//            }
+//        });
+        GitHubServiceHandler.callListRepositories(user, (object)-> buildRepositoriesRecyclerView(object));
     }
 
     private void buildRepositoriesRecyclerView(@NonNull List<Repo> repoList){
