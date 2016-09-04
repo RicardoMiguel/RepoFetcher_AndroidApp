@@ -16,18 +16,16 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
 import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.observables.ConnectableObservable;
 import rx.schedulers.Schedulers;
 
 /**
  * Created by ricar on 02/09/2016.
  */
-public class GitHubServiceHandler {
+public class GitHubServiceHandler extends RepoServiceHandler{
 
-    private static GitHubService gitHubService;
+    private GitHubService gitHubService;
 
-    private static GitHubService getInstance(){
+    private GitHubService getInstance(){
         if(gitHubService == null){
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -44,7 +42,7 @@ public class GitHubServiceHandler {
         return gitHubService;
     }
 
-    public static void callListRepositories(@NonNull String user, @NonNull final GitHubServiceResponse<List<Repo>> callback){
+    public void callListRepositories(@NonNull String user, @NonNull final RepoServiceResponse<List<Repo>> callback){
         HashMap<String, String> params = new HashMap<>();
         params.put("type", "all");
         Observable<List<Repo>> repositoriesOb = getInstance().listRepositories(user, params);
@@ -64,18 +62,5 @@ public class GitHubServiceHandler {
                 callback.onSuccess(objects);
             }
         });
-    }
-
-    private static void scheduleOnIO_ObserveOnMainThread(@NonNull Observable<?> observable, @NonNull Subscriber<?>... subscribers){
-        ConnectableObservable<?> connectableObservable = observable.publish();
-
-        for(Subscriber subscriber: subscribers){
-            connectableObservable
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(subscriber);
-        }
-
-        connectableObservable.connect();
-
     }
 }
