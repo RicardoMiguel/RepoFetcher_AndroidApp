@@ -18,7 +18,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by ricar on 04/09/2016.
  */
-public abstract class RepoServiceHandler<T extends IService> implements IRepoServiceHandler {
+abstract class RepoServiceHandler<T> implements IRepoServiceHandler {
 
     private T service;
 

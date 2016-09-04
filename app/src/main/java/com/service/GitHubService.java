@@ -13,7 +13,7 @@ import rx.Observable;
 /**
  * Created by ricar on 02/09/2016.
  */
-interface GitHubService extends IService{
+interface GitHubService {
     @GET("users/{user}/repos")
     Observable<List<Repo>> listRepositories(@Path("user") String user, @QueryMap Map<String, String> params);
 }

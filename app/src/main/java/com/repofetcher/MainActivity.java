@@ -15,7 +15,7 @@ import android.widget.EditText;
 import com.controller.RepoListAdapter;
 import com.controller.VerticalSpaceItemDecoration;
 import com.model.Repo;
-import com.service.GitHubServiceHandler;
+import com.service.FetcherCallsHandler;
 import com.service.RepoServiceResponse;
 
 import java.util.List;
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getRepoList(@NonNull String user){
-        new GitHubServiceHandler().callListRepositories(user, new RepoServiceResponse<List<Repo>>() {
+        FetcherCallsHandler.callListRepositories(FetcherCallsHandler.GITHUB, user, new RepoServiceResponse<List<Repo>>() {
             @Override
             public void onSuccess(List<Repo> object) {
                 buildRepositoriesRecyclerView(object);

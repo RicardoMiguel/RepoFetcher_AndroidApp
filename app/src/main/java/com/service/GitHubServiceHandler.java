@@ -13,7 +13,7 @@ import rx.Subscriber;
 /**
  * Created by ricar on 02/09/2016.
  */
-public class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
+class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
 
     @Override
     protected Class<GitHubService> getServiceClassSpecification() {
