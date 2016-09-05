@@ -3,8 +3,6 @@ package com.service;
 import android.support.annotation.NonNull;
 
 import com.model.Repo;
-import com.repofetcher.R;
-import com.repofetcher.RepoFetcherApplication;
 
 import java.util.List;
 
@@ -29,7 +27,7 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler {
             OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(RepoFetcherApplication.getContext().getString(R.string.github_base_url))
+                    .baseUrl(getServiceBaseUrl())
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))
                     .client(client)
@@ -40,6 +38,9 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler {
     }
 
     protected abstract Class<T> getServiceClassSpecification();
+
+    @NonNull
+    protected abstract String getServiceBaseUrl();
 
     @Override
     public abstract void callListRepositories(@NonNull String user, @NonNull RepoServiceResponse<List<Repo>> callback);

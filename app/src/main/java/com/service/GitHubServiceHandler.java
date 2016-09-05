@@ -3,6 +3,8 @@ package com.service;
 import android.support.annotation.NonNull;
 
 import com.model.Repo;
+import com.repofetcher.R;
+import com.repofetcher.RepoFetcherApplication;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +19,12 @@ class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
     @Override
     protected Class<GitHubService> getServiceClassSpecification() {
         return GitHubService.class;
+    }
+
+    @NonNull
+    @Override
+    protected String getServiceBaseUrl() {
+        return RepoFetcherApplication.getContext().getString(R.string.github_base_url);
     }
 
     public void callListRepositories(@NonNull String user, @NonNull final RepoServiceResponse<List<Repo>> callback){
