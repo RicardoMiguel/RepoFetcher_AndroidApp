@@ -41,21 +41,11 @@ public class MainActivity extends AppCompatActivity {
         Button fetchRepoUserListButton = (Button)findViewById(R.id.fetch_repo_list_button);
         repoListRecyclerView = (RecyclerView)findViewById(R.id.repo_list_recycler_view);
 
-        fetchRepoUserListButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getRepoList(usernameEditText.getText().toString());
-            }
-        });
+        fetchRepoUserListButton.setOnClickListener( view -> getRepoList(usernameEditText.getText().toString()) );
     }
 
     private void getRepoList(@NonNull String user){
-        FetcherCallsHandler.callListRepositories(FetcherCallsHandler.GITHUB, user, new RepoServiceResponse<List<Repo>>() {
-            @Override
-            public void onSuccess(List<Repo> object) {
-                buildRepositoriesRecyclerView(object);
-            }
-        });
+        GitHubServiceHandler.callListRepositories(user, this::buildRepositoriesRecyclerView);
     }
 
     private void buildRepositoriesRecyclerView(@NonNull List<Repo> repoList){
