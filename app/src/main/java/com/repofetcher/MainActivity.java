@@ -7,9 +7,9 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 
 import com.controller.RepoListAdapter;
@@ -45,7 +45,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getRepoList(@NonNull String user){
-        FetcherCallsHandler.callListRepositories(FetcherCallsHandler.GITHUB, user, this::buildRepositoriesRecyclerView);
+        FetcherCallsHandler.callListRepositories(FetcherCallsHandler.GITHUB, user, new RepoServiceResponse<List<Repo>>() {
+            @Override
+            public void onSuccess(List<Repo> object) {
+                buildRepositoriesRecyclerView(object);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                Toast.makeText(MainActivity.this, t.toString(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void buildRepositoriesRecyclerView(@NonNull List<Repo> repoList){

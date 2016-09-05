@@ -34,7 +34,9 @@ public class SubscriberAdapter<T> extends Subscriber<T> {
 
     @Override
     public void onError(Throwable e) {
-
+        if(this.response != null){
+            this.response.onError(e);
+        }
     }
 
     @Override

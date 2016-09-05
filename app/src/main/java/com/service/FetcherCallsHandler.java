@@ -1,10 +1,12 @@
 package com.service;
 
+import android.accounts.NetworkErrorException;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.model.Repo;
+import com.repofetcher.RepoFetcherApplication;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -54,7 +56,15 @@ public class FetcherCallsHandler extends HashMap<Integer, IRepoServiceHandler>{
 
     public static void callListRepositories(@RepoServiceType int service, @NonNull String user, @NonNull RepoServiceResponse<List<Repo>> callback){
         IRepoServiceHandler handler = getInstance().get(service);
-        handler.callListRepositories(user, callback);
+        makeCallIfThereIsNetwork(() -> handler.callListRepositories(user, callback), callback);
     }
 
+    private static void makeCallIfThereIsNetwork(@NonNull Runnable runnable, @NonNull RepoServiceResponse<?> callback){
+        if(ServiceUtils.isNetworkAvailable(RepoFetcherApplication.getContext())){
+            runnable.run();
+        } else {
+            SubscriberAdapter<?> subscriberAdapter = new SubscriberAdapter<>(callback);
+            subscriberAdapter.onError(new NetworkErrorException());
+        }
+    }
 }
