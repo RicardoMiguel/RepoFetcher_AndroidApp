@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getRepoList(@NonNull String user){
-        GitHubServiceHandler.callListRepositories(user, this::buildRepositoriesRecyclerView);
+        FetcherCallsHandler.callListRepositories(FetcherCallsHandler.GITHUB, user, this::buildRepositoriesRecyclerView);
     }
 
     private void buildRepositoriesRecyclerView(@NonNull List<Repo> repoList){
