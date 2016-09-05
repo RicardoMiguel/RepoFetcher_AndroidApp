@@ -23,11 +23,6 @@ class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
         HashMap<String, String> params = new HashMap<>();
         params.put("type", "all");
         Observable<List<Repo>> repositoriesOb = getService().listRepositories(user, params);
-        ServiceUtils.scheduleOnIO_ObserveOnMainThread(repositoriesOb, new SubscriberAdapter<List<Repo>>() {
-            @Override
-            public void onNext(List<Repo> repos) {
-                callback.onSuccess(repos);
-            }
-        });
+        ServiceUtils.scheduleOnIO_ObserveOnMainThread(repositoriesOb, new SubscriberAdapter<>(callback));
     }
 }
