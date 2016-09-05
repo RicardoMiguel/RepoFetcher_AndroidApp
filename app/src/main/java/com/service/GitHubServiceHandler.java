@@ -3,52 +3,28 @@ package com.service;
 import android.support.annotation.NonNull;
 
 import com.model.Repo;
-import com.repofetcher.R;
-import com.repofetcher.RepoFetcherApplication;
 
 import java.util.HashMap;
 import java.util.List;
 
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
 import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.observables.ConnectableObservable;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by ricar on 02/09/2016.
  */
-public class GitHubServiceHandler {
+class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
 
-    private static GitHubService gitHubService;
-
-    private static GitHubService getInstance(){
-        if(gitHubService == null){
-            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-            OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
-
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(RepoFetcherApplication.getContext().getString(R.string.github_base_url))
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))
-                    .client(client)
-                    .build();
-            gitHubService = retrofit.create(GitHubService.class);
-        }
-        return gitHubService;
+    @Override
+    protected Class<GitHubService> getServiceClassSpecification() {
+        return GitHubService.class;
     }
 
-    public static void callListRepositories(@NonNull String user, @NonNull final GitHubServiceResponse<List<Repo>> callback){
+    public void callListRepositories(@NonNull String user, @NonNull final RepoServiceResponse<List<Repo>> callback){
         HashMap<String, String> params = new HashMap<>();
         params.put("type", "all");
-        Observable<List<Repo>> repositoriesOb = getInstance().listRepositories(user, params);
-        scheduleOnIO_ObserveOnMainThread(repositoriesOb, new Subscriber<List<Repo>>() {
+        Observable<List<Repo>> repositoriesOb = getService().listRepositories(user, params);
+        ServiceUtils.scheduleOnIO_ObserveOnMainThread(repositoriesOb, new Subscriber<List<Repo>>() {
             @Override
             public void onCompleted() {
 
@@ -64,18 +40,5 @@ public class GitHubServiceHandler {
                 callback.onSuccess(objects);
             }
         });
-    }
-
-    private static void scheduleOnIO_ObserveOnMainThread(@NonNull Observable<?> observable, @NonNull Subscriber<?>... subscribers){
-        ConnectableObservable<?> connectableObservable = observable.publish();
-
-        for(Subscriber subscriber: subscribers){
-            connectableObservable
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(subscriber);
-        }
-
-        connectableObservable.connect();
-
     }
 }
