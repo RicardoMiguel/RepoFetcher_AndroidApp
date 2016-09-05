@@ -9,6 +9,7 @@ import rx.Subscriber;
  */
 public class SubscriberAdapter<T> extends Subscriber<T> {
 
+    @Nullable
     private RepoServiceResponse<T> response;
 
     public SubscriberAdapter() {

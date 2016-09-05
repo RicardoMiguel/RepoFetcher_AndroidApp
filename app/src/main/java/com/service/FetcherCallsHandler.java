@@ -23,8 +23,10 @@ public class FetcherCallsHandler extends HashMap<Integer, IRepoServiceHandler>{
     @Retention(RetentionPolicy.SOURCE)
     public @interface RepoServiceType {}
 
+    @Nullable //The instance might be null. Use getInstance instead.
     private static FetcherCallsHandler instance;
 
+    @NonNull
     private static FetcherCallsHandler getInstance(){
         if(instance == null){
             instance = new FetcherCallsHandler();
@@ -32,11 +34,13 @@ public class FetcherCallsHandler extends HashMap<Integer, IRepoServiceHandler>{
         return instance;
     }
 
+    private FetcherCallsHandler(){
+    }
+
     public static void callListRepositories(@RepoServiceType int service, @NonNull String user, @NonNull RepoServiceResponse<List<Repo>> callback){
         IRepoServiceHandler handler = getInstance().get(service);
         handler.callListRepositories(user, callback);
     }
-
 
     @Nullable
     private IRepoServiceHandler chooseService(@RepoServiceType int service){
@@ -56,7 +60,9 @@ public class FetcherCallsHandler extends HashMap<Integer, IRepoServiceHandler>{
 
         if(handler == null){
             handler = chooseService((int)key);
-            put((int)key, handler);
+            if(handler != null) {
+                put((int) key, handler);
+            }
         }
 
         return handler;
