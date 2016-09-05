@@ -37,29 +37,13 @@ public class FetcherCallsHandler extends HashMap<Integer, IRepoServiceHandler>{
     private FetcherCallsHandler(){
     }
 
-    public static void callListRepositories(@RepoServiceType int service, @NonNull String user, @NonNull RepoServiceResponse<List<Repo>> callback){
-        IRepoServiceHandler handler = getInstance().get(service);
-        handler.callListRepositories(user, callback);
-    }
-
-    @Nullable
-    private IRepoServiceHandler chooseService(@RepoServiceType int service){
-        switch (service){
-            case GITHUB:
-                return new GitHubServiceHandler();
-            case BITBUCKET:
-                return null;
-        }
-        return null;
-    }
-
     @Override
     public IRepoServiceHandler get(Object key) {
 
         IRepoServiceHandler handler = super.get(key);
 
         if(handler == null){
-            handler = chooseService((int)key);
+            handler = new RepoServiceFactory().create((int)key);
             if(handler != null) {
                 put((int) key, handler);
             }
@@ -67,4 +51,10 @@ public class FetcherCallsHandler extends HashMap<Integer, IRepoServiceHandler>{
 
         return handler;
     }
+
+    public static void callListRepositories(@RepoServiceType int service, @NonNull String user, @NonNull RepoServiceResponse<List<Repo>> callback){
+        IRepoServiceHandler handler = getInstance().get(service);
+        handler.callListRepositories(user, callback);
+    }
+
 }
