@@ -17,6 +17,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
 }
 
 dependencies {
@@ -49,4 +56,8 @@ dependencies {
 
     //RecyclerView Animators
     compile 'jp.wasabeef:recyclerview-animators:2.2.3'
+
+    //RetroLambda - Has to be the last one. Source: https://medium.com/android-news/retrolambda-on-android-191cc8151f85#.plukggfya
+    apply plugin: 'com.android.application'
+    apply plugin: 'me.tatarka.retrolambda' // I'm the last one!
 }
