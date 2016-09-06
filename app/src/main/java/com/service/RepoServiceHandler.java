@@ -2,10 +2,6 @@ package com.service;
 
 import android.support.annotation.NonNull;
 
-import com.model.Repo;
-
-import java.util.List;
-
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -41,9 +37,5 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler {
 
     @NonNull
     protected abstract String getServiceBaseUrl();
-
-    @Override
-    public abstract void callListRepositories(@NonNull String user, @NonNull RepoServiceResponse<List<Repo>> callback);
-
 
 }
