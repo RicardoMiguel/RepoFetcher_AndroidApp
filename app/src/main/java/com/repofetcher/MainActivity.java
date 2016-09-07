@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.controller.RepoListAdapter;
 import com.controller.VerticalSpaceItemDecoration;
-import com.model.Repo;
+import com.model.github.Repo;
 import com.service.FetcherCallsHandler;
 import com.service.RepoServiceResponse;
 

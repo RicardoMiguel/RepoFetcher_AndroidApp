@@ -2,16 +2,21 @@ package com.service;
 
 import android.support.annotation.NonNull;
 
-import com.model.Repo;
+import com.model.github.Repo;
 import com.repofetcher.R;
 import com.repofetcher.RepoFetcherApplication;
 
 import java.util.List;
 
+import rx.Observable;
+
 /**
  * Created by ricar on 06/09/2016.
  */
 public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService>{
+
+    BitBucketServiceHandler() {
+    }
 
     @Override
     protected Class<BitBucketService> getServiceClassSpecification() {
@@ -25,7 +30,8 @@ public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService
     }
 
     @Override
-    public void callListRepositories(@NonNull String user, @NonNull RepoServiceResponse<List<Repo>> callback) {
-
+    public void callListRepositories(@NonNull String user, @NonNull final RepoServiceResponse<List<Repo>> callback) {
+        Observable<List<Repo>> repositoriesOb = getService().listRepositories(user);
+        ServiceUtils.scheduleOnIO_ObserveOnMainThread(repositoriesOb, new SubscriberAdapter<>(callback));
     }
 }

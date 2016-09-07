@@ -1,6 +1,6 @@
 package com.service;
 
-import com.model.Repo;
+import com.model.github.Repo;
 
 import java.util.List;
 import java.util.Map;

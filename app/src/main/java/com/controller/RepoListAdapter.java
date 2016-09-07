@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.model.Repo;
+import com.model.github.Repo;
 import com.repofetcher.R;
 import com.squareup.picasso.Picasso;
 

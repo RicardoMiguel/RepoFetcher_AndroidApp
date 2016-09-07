@@ -2,7 +2,7 @@ package com.service;
 
 import android.support.annotation.NonNull;
 
-import com.model.Repo;
+import com.model.github.Repo;
 
 import java.util.List;
 

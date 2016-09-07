@@ -2,7 +2,7 @@ package com.service;
 
 import android.support.annotation.NonNull;
 
-import com.model.Repo;
+import com.model.github.Repo;
 import com.repofetcher.R;
 import com.repofetcher.RepoFetcherApplication;
 
@@ -15,6 +15,9 @@ import rx.Observable;
  * Created by ricar on 02/09/2016.
  */
 class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
+
+    GitHubServiceHandler() {
+    }
 
     @Override
     protected Class<GitHubService> getServiceClassSpecification() {
