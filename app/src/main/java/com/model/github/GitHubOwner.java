@@ -6,9 +6,10 @@ package com.model.github;
  */
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.model.Owner;
 
 
-public class Owner {
+public class GitHubOwner implements Owner{
 
     @SerializedName("login")
     @Expose

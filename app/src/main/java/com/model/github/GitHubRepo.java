@@ -3,12 +3,14 @@ package com.model.github;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.model.Owner;
+import com.model.Repo;
 
 /**
  * Created by ricar on 16/08/2016.
  */
 
-public class Repo {
+public class GitHubRepo implements Repo{
 
     @SerializedName("id")
     @Expose
@@ -21,7 +23,7 @@ public class Repo {
     private String fullName;
     @SerializedName("owner")
     @Expose
-    private Owner owner;
+    private GitHubOwner owner;
 
     /**
      *
@@ -91,7 +93,7 @@ public class Repo {
      * @param owner
      * The owner
      */
-    public void setOwner(Owner owner) {
+    public void setOwner(GitHubOwner owner) {
         this.owner = owner;
     }
 

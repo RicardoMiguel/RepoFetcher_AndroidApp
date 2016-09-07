@@ -14,7 +14,8 @@ import android.widget.Toast;
 
 import com.controller.RepoListAdapter;
 import com.controller.VerticalSpaceItemDecoration;
-import com.model.github.Repo;
+import com.model.Repo;
+import com.model.github.GitHubRepo;
 import com.service.FetcherCallsHandler;
 import com.service.RepoServiceResponse;
 
@@ -45,9 +46,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getRepoList(@NonNull String user){
-        FetcherCallsHandler.callListRepositories(FetcherCallsHandler.GITHUB, user, new RepoServiceResponse<List<Repo>>() {
+        FetcherCallsHandler.callListRepositories(FetcherCallsHandler.GITHUB, user, new RepoServiceResponse<List<GitHubRepo>>() {
             @Override
-            public void onSuccess(List<Repo> object) {
+            public void onSuccess(List<GitHubRepo> object) {
                 buildRepositoriesRecyclerView(object);
             }
 
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void buildRepositoriesRecyclerView(@NonNull List<Repo> repoList){
+    private void buildRepositoriesRecyclerView(@NonNull List<? extends Repo> repoList){
         RepoListAdapter adapter = new RepoListAdapter(repoList, this);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         repoListRecyclerView.setLayoutManager(mLayoutManager);

@@ -1,6 +1,6 @@
 package com.service;
 
-import com.model.github.Repo;
+import com.model.github.GitHubRepo;
 
 import java.util.List;
 
@@ -13,5 +13,5 @@ import rx.Observable;
  */
 public interface BitBucketService {
     @GET("repositories/{user}/")
-    Observable<List<Repo>> listRepositories(@Path("user") String user);
+    Observable<List<GitHubRepo>> listRepositories(@Path("user") String user);
 }

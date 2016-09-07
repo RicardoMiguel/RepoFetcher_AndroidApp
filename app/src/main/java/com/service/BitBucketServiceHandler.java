@@ -2,7 +2,7 @@ package com.service;
 
 import android.support.annotation.NonNull;
 
-import com.model.github.Repo;
+import com.model.github.GitHubRepo;
 import com.repofetcher.R;
 import com.repofetcher.RepoFetcherApplication;
 
@@ -30,8 +30,8 @@ public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService
     }
 
     @Override
-    public void callListRepositories(@NonNull String user, @NonNull final RepoServiceResponse<List<Repo>> callback) {
-        Observable<List<Repo>> repositoriesOb = getService().listRepositories(user);
+    public void callListRepositories(@NonNull String user, @NonNull final RepoServiceResponse<?> callback) {
+        Observable<List<GitHubRepo>> repositoriesOb = getService().listRepositories(user);
         ServiceUtils.scheduleOnIO_ObserveOnMainThread(repositoriesOb, new SubscriberAdapter<>(callback));
     }
 }
