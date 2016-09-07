@@ -1,8 +1,6 @@
 package com.service;
 
-import com.model.github.GitHubRepo;
-
-import java.util.List;
+import com.model.bitbucket.BitBucketRepositories;
 
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -13,5 +11,5 @@ import rx.Observable;
  */
 public interface BitBucketService {
     @GET("repositories/{user}/")
-    Observable<List<GitHubRepo>> listRepositories(@Path("user") String user);
+    Observable<BitBucketRepositories> listRepositories(@Path("user") String user);
 }
