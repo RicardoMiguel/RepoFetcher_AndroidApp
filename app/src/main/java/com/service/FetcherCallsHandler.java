@@ -1,10 +1,12 @@
 package com.service;
 
+import android.accounts.NetworkErrorException;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.model.Repo;
+import com.repofetcher.RepoFetcherApplication;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -23,8 +25,10 @@ public class FetcherCallsHandler extends HashMap<Integer, IRepoServiceHandler>{
     @Retention(RetentionPolicy.SOURCE)
     public @interface RepoServiceType {}
 
+    @Nullable //The instance might be null. Use getInstance instead.
     private static FetcherCallsHandler instance;
 
+    @NonNull
     private static FetcherCallsHandler getInstance(){
         if(instance == null){
             instance = new FetcherCallsHandler();
@@ -32,21 +36,7 @@ public class FetcherCallsHandler extends HashMap<Integer, IRepoServiceHandler>{
         return instance;
     }
 
-    public static void callListRepositories(@RepoServiceType int service, @NonNull String user, @NonNull RepoServiceResponse<List<Repo>> callback){
-        IRepoServiceHandler handler = getInstance().get(service);
-        handler.callListRepositories(user, callback);
-    }
-
-
-    @Nullable
-    private IRepoServiceHandler chooseService(@RepoServiceType int service){
-        switch (service){
-            case GITHUB:
-                return new GitHubServiceHandler();
-            case BITBUCKET:
-                return null;
-        }
-        return null;
+    private FetcherCallsHandler(){
     }
 
     @Override
@@ -55,10 +45,26 @@ public class FetcherCallsHandler extends HashMap<Integer, IRepoServiceHandler>{
         IRepoServiceHandler handler = super.get(key);
 
         if(handler == null){
-            handler = chooseService((int)key);
-            put((int)key, handler);
+            handler = new RepoServiceFactory().create((int)key);
+            if(handler != null) {
+                put((int) key, handler);
+            }
         }
 
         return handler;
+    }
+
+    public static void callListRepositories(@RepoServiceType int service, @NonNull String user, @NonNull RepoServiceResponse<List<Repo>> callback){
+        IRepoServiceHandler handler = getInstance().get(service);
+        makeCallIfThereIsNetwork(() -> handler.callListRepositories(user, callback), callback);
+    }
+
+    private static void makeCallIfThereIsNetwork(@NonNull Runnable runnable, @NonNull RepoServiceResponse<?> callback){
+        if(ServiceUtils.isNetworkAvailable(RepoFetcherApplication.getContext())){
+            runnable.run();
+        } else {
+            SubscriberAdapter<?> subscriberAdapter = new SubscriberAdapter<>(callback);
+            subscriberAdapter.onError(new NetworkErrorException());
+        }
     }
 }
