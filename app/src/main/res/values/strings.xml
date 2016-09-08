@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">RepoFetcher</string>
     <string name="ask_username_label">Insert username: </string>
-    <string name="default_username">RicardoMiguel</string>
+    <string name="default_username">1111114_ricardo</string>
     <string name="fetch">Fetch</string>
-    <string name="github_base_url">https://api.github.com</string>
+    <string name="github_base_url">https://api.github.com/</string>
+    <string name="bitbucket_base_url">https://api.bitbucket.org/2.0/</string>
 </resources>

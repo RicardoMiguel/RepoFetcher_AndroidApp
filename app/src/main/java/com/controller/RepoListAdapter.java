@@ -20,10 +20,10 @@ import java.util.List;
  */
 public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.RepoListViewHolder> {
 
-    private List<Repo> repoList;
+    private List<? extends Repo> repoList;
     private Context context;
 
-    public RepoListAdapter(@NonNull List<Repo> repoList, @NonNull Context context) {
+    public RepoListAdapter(@NonNull List<? extends Repo> repoList, @NonNull Context context) {
         this.repoList = repoList;
         this.context = context;
     }

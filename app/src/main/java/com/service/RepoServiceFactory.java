@@ -13,7 +13,7 @@ class RepoServiceFactory {
             case FetcherCallsHandler.GITHUB:
                 return new GitHubServiceHandler();
             case FetcherCallsHandler.BITBUCKET:
-                return null;
+                return new BitBucketServiceHandler();
         }
         return null;
     }

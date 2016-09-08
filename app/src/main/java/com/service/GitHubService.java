@@ -1,6 +1,6 @@
 package com.service;
 
-import com.model.Repo;
+import com.model.github.GitHubRepo;
 
 import java.util.List;
 import java.util.Map;
@@ -15,6 +15,6 @@ import rx.Observable;
  */
 interface GitHubService {
     @GET("users/{user}/repos")
-    Observable<List<Repo>> listRepositories(@Path("user") String user, @QueryMap Map<String, String> params);
+    Observable<List<GitHubRepo>> listRepositories(@Path("user") String user, @QueryMap Map<String, String> params);
 }
 

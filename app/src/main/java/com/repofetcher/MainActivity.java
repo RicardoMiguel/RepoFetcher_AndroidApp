@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.controller.RepoListAdapter;
 import com.controller.VerticalSpaceItemDecoration;
 import com.model.Repo;
+import com.model.bitbucket.BitBucketRepositories;
 import com.service.FetcherCallsHandler;
 import com.service.RepoServiceResponse;
 
@@ -45,20 +46,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getRepoList(@NonNull String user){
-        FetcherCallsHandler.callListRepositories(FetcherCallsHandler.GITHUB, user, new RepoServiceResponse<List<Repo>>() {
+//        FetcherCallsHandler.callListRepositories(FetcherCallsHandler.GITHUB, user, new RepoServiceResponse<List<GitHubRepo>>() {
+//            @Override
+//            public void onSuccess(List<GitHubRepo> object) {
+//                buildRepositoriesRecyclerView(object);
+//            }
+//
+//            @Override
+//            public void onError(Throwable t) {
+//                Toast.makeText(MainActivity.this, t.toString(), Toast.LENGTH_LONG).show();
+//            }
+//        });
+
+        FetcherCallsHandler.callListRepositories(FetcherCallsHandler.BITBUCKET, user, new RepoServiceResponse<BitBucketRepositories>() {
+
             @Override
-            public void onSuccess(List<Repo> object) {
-                buildRepositoriesRecyclerView(object);
+            public void onSuccess(BitBucketRepositories object) {
+                buildRepositoriesRecyclerView(object.getValues());
             }
 
             @Override
             public void onError(Throwable t) {
                 Toast.makeText(MainActivity.this, t.toString(), Toast.LENGTH_LONG).show();
+                Log.e("LOl","",t);
             }
         });
     }
 
-    private void buildRepositoriesRecyclerView(@NonNull List<Repo> repoList){
+    private void buildRepositoriesRecyclerView(@NonNull List<? extends Repo> repoList){
         RepoListAdapter adapter = new RepoListAdapter(repoList, this);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         repoListRecyclerView.setLayoutManager(mLayoutManager);

@@ -5,13 +5,11 @@ import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.model.Repo;
 import com.repofetcher.RepoFetcherApplication;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by ricar on 04/09/2016.
@@ -54,7 +52,7 @@ public class FetcherCallsHandler extends HashMap<Integer, IRepoServiceHandler>{
         return handler;
     }
 
-    public static void callListRepositories(@RepoServiceType int service, @NonNull String user, @NonNull RepoServiceResponse<List<Repo>> callback){
+    public static void callListRepositories(@RepoServiceType int service, @NonNull String user, @NonNull RepoServiceResponse<?> callback){
         IRepoServiceHandler handler = getInstance().get(service);
         makeCallIfThereIsNetwork(() -> handler.callListRepositories(user, callback), callback);
     }
