@@ -30,7 +30,7 @@ public class IntroFragment extends BaseFragment{
 
     private void sendQuery(@Nullable String text){
         Bundle bundle = new Bundle();
-        bundle.putString( IntroFragment.class.getName(),text);
+        bundle.putString( IntroFragment.class.getName(), text);
         ServiceUtils.runIfInstanceNotNull(fragmentTransitionService,
                 () -> fragmentTransitionService.switchFragment(MultipleAccountRepositoriesFragment.class, bundle));
     }
