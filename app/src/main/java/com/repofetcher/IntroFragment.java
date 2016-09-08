@@ -32,6 +32,6 @@ public class IntroFragment extends BaseFragment{
         Bundle bundle = new Bundle();
         bundle.putString( IntroFragment.class.getName(),text);
         ServiceUtils.runIfInstanceNotNull(fragmentTransitionService,
-                () -> fragmentTransitionService.switchFragment(RepoListFragment.class, bundle));
+                () -> fragmentTransitionService.switchFragment(MultipleAccountRepositoriesFragment.class, bundle));
     }
 }

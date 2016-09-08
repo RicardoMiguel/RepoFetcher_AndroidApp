@@ -56,8 +56,8 @@ public class MainActivity extends AppCompatActivity implements FragmentTransitio
         Fragment fragment = null;
         if(fragmentClass == IntroFragment.class){
             fragment = new IntroFragment();
-        } else if(fragmentClass == RepoListFragment.class){
-            fragment = new RepoListFragment();
+        } else if(fragmentClass == MultipleAccountRepositoriesFragment.class){
+            fragment = new MultipleAccountRepositoriesFragment();
         }
 
         if(fragment != null && bundle != null){
