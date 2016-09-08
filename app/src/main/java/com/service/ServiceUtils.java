@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -35,5 +36,11 @@ public class ServiceUtils {
                 = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    public static void runIfInstanceNotNull(@Nullable Object instance, @NonNull Runnable runnable){
+        if(instance != null){
+            runnable.run();
+        }
     }
 }
