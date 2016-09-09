@@ -35,4 +35,10 @@ public abstract class BaseFragment extends Fragment {
             fragmentTransitionService = (FragmentTransitionService)context;
         }
     }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        fragmentTransitionService = null;
+    }
 }

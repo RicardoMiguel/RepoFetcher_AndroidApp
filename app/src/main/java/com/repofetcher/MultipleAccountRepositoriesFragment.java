@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,9 @@ import com.service.FetcherCallsHandler;
  */
 public class MultipleAccountRepositoriesFragment extends BaseFragment{
 
+    private static final String TAG = MultipleAccountRepositoriesFragment.class.getName();
     private String text;
+    private ViewPager viewPager;
 
     public MultipleAccountRepositoriesFragment() {
         super(R.layout.multiple_account_repos);
@@ -26,6 +29,7 @@ public class MultipleAccountRepositoriesFragment extends BaseFragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView");
         Bundle bundle = getArguments();
         text = bundle.getString(IntroFragment.class.getName(), null);
         return super.onCreateView(inflater, container, savedInstanceState);
@@ -33,8 +37,9 @@ public class MultipleAccountRepositoriesFragment extends BaseFragment{
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onViewCreated");
         super.onViewCreated(view, savedInstanceState);
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewPager);
+        viewPager = (ViewPager) view.findViewById(R.id.viewPager);
         TextView toolbarTitle = (TextView) view.findViewById(R.id.toolbar_title);
         toolbarTitle.setText(text);
 
@@ -48,9 +53,21 @@ public class MultipleAccountRepositoriesFragment extends BaseFragment{
         bitbucket.putInt(MultipleAccountRepositoriesFragment.class.getName(), FetcherCallsHandler.BITBUCKET);
         //
 
-        viewPager.setAdapter(new RepoListPageAdapter(this.getContext(), getFragmentManager(), github, bitbucket));
+        viewPager.setAdapter(new RepoListPageAdapter(this.getContext(), getChildFragmentManager(), github, bitbucket));
 
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    @Override
+    public void onDestroyView() {
+        Log.d(TAG, "onDestroyView");
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.d(TAG, "onDestroy");
+        super.onDestroy();
     }
 }

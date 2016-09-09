@@ -31,7 +31,7 @@ import jp.wasabeef.recyclerview.adapters.AnimationAdapter;
  */
 public class RepoListFragment extends BaseFragment{
 
-
+    private static final String TAG = RepoListFragment.class.getName();
     private static final int REPO_LIST_ANIMATION_DURATION = 300;
 
     private RecyclerView repoListRecyclerView;
@@ -45,6 +45,7 @@ public class RepoListFragment extends BaseFragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView");
         Bundle args = getArguments();
         if(args != null){
             user = args.getString(IntroFragment.class.getName());
@@ -55,17 +56,32 @@ public class RepoListFragment extends BaseFragment{
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onViewCreated");
         super.onViewCreated(view, savedInstanceState);
         repoListRecyclerView = (RecyclerView)view.findViewById(R.id.repo_list_recycler_view);
     }
 
     @Override
     public void onResume() {
+        Log.d(TAG, "onResume");
         super.onResume();
 
         if(!TextUtils.isEmpty(user)) {
             getRepoList(user, repo);
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        Log.d(TAG, "onDestroyView");
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.d(TAG, "onDestroy");
+        super.onDestroy();
+        FetcherCallsHandler.unSubscribe(this.hashCode());
     }
 
     private void buildRepositoriesRecyclerView(@NonNull List<? extends Repo> repoList){
@@ -124,11 +140,5 @@ public class RepoListFragment extends BaseFragment{
                 Toast.makeText(RepoListFragment.this.getContext(), t.toString(), Toast.LENGTH_LONG).show();
             }
         });
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        FetcherCallsHandler.unSubscribe(this.hashCode());
     }
 }
