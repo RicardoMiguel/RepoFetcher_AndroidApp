@@ -52,9 +52,9 @@ public class FetcherCallsHandler extends HashMap<Integer, IRepoServiceHandler>{
         return handler;
     }
 
-    public static void callListRepositories(@RepoServiceType int service, @NonNull String user, @NonNull RepoServiceResponse<?> callback){
+    public static void callListRepositories(int hash, @RepoServiceType int service, @NonNull String user, @NonNull RepoServiceResponse<?> callback){
         IRepoServiceHandler handler = getInstance().get(service);
-        makeCallIfThereIsNetwork(() -> handler.callListRepositories(user, callback), callback);
+        makeCallIfThereIsNetwork(() -> handler.callListRepositories(hash, user, callback), callback);
     }
 
     private static void makeCallIfThereIsNetwork(@NonNull Runnable runnable, @NonNull RepoServiceResponse<?> callback){
@@ -63,6 +63,15 @@ public class FetcherCallsHandler extends HashMap<Integer, IRepoServiceHandler>{
         } else {
             SubscriberAdapter<?> subscriberAdapter = new SubscriberAdapter<>(callback);
             subscriberAdapter.onError(new NetworkErrorException());
+        }
+    }
+
+    public static void unSubscribe(int id){
+        for (IRepoServiceHandler serviceHandler: getInstance().values())
+        {
+            if(serviceHandler instanceof SubscriberService){
+                ((SubscriberService) serviceHandler).removeSubscribers(id);
+            }
         }
     }
 }

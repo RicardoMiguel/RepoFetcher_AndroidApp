@@ -31,6 +31,7 @@ import jp.wasabeef.recyclerview.adapters.AnimationAdapter;
  */
 public class RepoListFragment extends BaseFragment{
 
+
     private static final int REPO_LIST_ANIMATION_DURATION = 300;
 
     private RecyclerView repoListRecyclerView;
@@ -96,7 +97,7 @@ public class RepoListFragment extends BaseFragment{
     }
 
     private void getBitBucketRepoList(@NonNull String user){
-        FetcherCallsHandler.callListRepositories(FetcherCallsHandler.BITBUCKET, user, new RepoServiceResponse<BitBucketRepositories>() {
+        FetcherCallsHandler.callListRepositories(this.hashCode(), FetcherCallsHandler.BITBUCKET, user, new RepoServiceResponse<BitBucketRepositories>() {
 
         @Override
         public void onSuccess(BitBucketRepositories object) {
@@ -112,7 +113,7 @@ public class RepoListFragment extends BaseFragment{
     }
 
     private void getGitHubRepoList(@NonNull String user){
-        FetcherCallsHandler.callListRepositories(FetcherCallsHandler.GITHUB, user, new RepoServiceResponse<List<GitHubRepo>>() {
+        FetcherCallsHandler.callListRepositories(this.hashCode(), FetcherCallsHandler.GITHUB, user, new RepoServiceResponse<List<GitHubRepo>>() {
             @Override
             public void onSuccess(List<GitHubRepo> object) {
                 buildRepositoriesRecyclerView(object);
@@ -123,5 +124,11 @@ public class RepoListFragment extends BaseFragment{
                 Toast.makeText(RepoListFragment.this.getContext(), t.toString(), Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        FetcherCallsHandler.unSubscribe(this.hashCode());
     }
 }

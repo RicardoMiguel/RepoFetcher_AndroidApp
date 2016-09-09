@@ -1,20 +1,30 @@
 package com.service;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import rx.Subscriber;
 import rx.schedulers.Schedulers;
 
 /**
  * Created by ricar on 04/09/2016.
  */
-abstract class RepoServiceHandler<T> implements IRepoServiceHandler {
+abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberService {
 
     private T service;
+
+    @Nullable private Map<Integer, List<Subscriber>> listToUnsubscribe;
 
     protected T getService(){
         if(service == null){
@@ -38,4 +48,28 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler {
     @NonNull
     protected abstract String getServiceBaseUrl();
 
+
+    @Override
+    public void addSubscribers(int id, Subscriber... subscribers) {
+        Map<Integer, List<Subscriber>> listMap = getListToUnsubscribe();
+        List<Subscriber> subscriber = listMap.get(id);
+        if(subscriber == null){
+            listMap.put(id, new ArrayList<>(Arrays.asList(subscribers)));
+        } else {
+            subscriber.addAll(Arrays.asList(subscribers));
+        }
+    }
+
+    @Override
+    public void removeSubscribers(int id) {
+        getListToUnsubscribe().remove(id);
+    }
+
+    @NonNull
+    private Map<Integer, List<Subscriber>> getListToUnsubscribe(){
+        if(listToUnsubscribe == null){
+            listToUnsubscribe = new HashMap<>();
+        }
+        return listToUnsubscribe;
+    }
 }
