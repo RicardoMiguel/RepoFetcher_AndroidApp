@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.model.github.GitHubRepo;
 import com.repofetcher.R;
 import com.repofetcher.RepoFetcherApplication;
+import com.service.request.ListRepositoriesRequest;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,13 +34,12 @@ class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
         return RepoFetcherApplication.getContext().getString(R.string.github_base_url);
     }
 
-    public void callListRepositories(int hash, @NonNull String user, @NonNull final RepoServiceResponse<?> callback){
-        HashMap<String, String> params = new HashMap<>();
-        params.put("type", "all");
-        Observable<List<GitHubRepo>> repositoriesOb = getService().listRepositories(user, params);
+    public void callListRepositories(@NonNull ListRepositoriesRequest<?> request){
 
-        Subscriber[] subscribers = {new SubscriberAdapter<>(callback)};
-        addSubscribers(hash, subscribers);
+        Observable<List<GitHubRepo>> repositoriesOb = getService().listRepositories(request.getUser(), request.getParams());
+
+        Subscriber[] subscribers = {new SubscriberAdapter<>(request.getServiceResponse())};
+        addSubscribers(request.getHash(), subscribers);
         ServiceUtils.scheduleOnIO_ObserveOnMainThread(repositoriesOb, subscribers);
     }
 }

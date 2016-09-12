@@ -6,6 +6,7 @@ import com.model.bitbucket.BitBucketRepositories;
 import com.model.github.GitHubRepo;
 import com.repofetcher.R;
 import com.repofetcher.RepoFetcherApplication;
+import com.service.request.ListRepositoriesRequest;
 
 import java.util.List;
 
@@ -32,10 +33,10 @@ public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService
     }
 
     @Override
-    public void callListRepositories(int hash, @NonNull String user, @NonNull final RepoServiceResponse<?> callback) {
-        Observable<BitBucketRepositories> repositoriesOb = getService().listRepositories(user);
-        Subscriber[] subscribers = {new SubscriberAdapter<>(callback)};
-        addSubscribers(hash, subscribers);
+    public void callListRepositories(@NonNull ListRepositoriesRequest<?> request) {
+        Observable<BitBucketRepositories> repositoriesOb = getService().listRepositories(request.getUser());
+        Subscriber[] subscribers = {new SubscriberAdapter<>(request.getServiceResponse())};
+        addSubscribers(request.getHash(), subscribers);
         ServiceUtils.scheduleOnIO_ObserveOnMainThread(repositoriesOb, subscribers);
     }
 }

@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.service.FetcherCallsHandler;
+
 /**
  * Created by ricar on 07/09/2016.
  */
@@ -40,5 +42,11 @@ public abstract class BaseFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         fragmentTransitionService = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        FetcherCallsHandler.unSubscribe(this);
     }
 }

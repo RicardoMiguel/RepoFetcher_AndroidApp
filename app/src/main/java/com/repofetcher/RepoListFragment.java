@@ -20,6 +20,7 @@ import com.model.bitbucket.BitBucketRepositories;
 import com.model.github.GitHubRepo;
 import com.service.FetcherCallsHandler;
 import com.service.RepoServiceResponse;
+import com.service.request.ListRepositoriesRequest;
 
 import java.util.List;
 
@@ -81,7 +82,6 @@ public class RepoListFragment extends BaseFragment{
     public void onDestroy() {
         Log.d(TAG, "onDestroy");
         super.onDestroy();
-        FetcherCallsHandler.unSubscribe(this.hashCode());
     }
 
     private void buildRepositoriesRecyclerView(@NonNull List<? extends Repo> repoList){
@@ -113,7 +113,7 @@ public class RepoListFragment extends BaseFragment{
     }
 
     private void getBitBucketRepoList(@NonNull String user){
-        FetcherCallsHandler.callListRepositories(this.hashCode(), FetcherCallsHandler.BITBUCKET, user, new RepoServiceResponse<BitBucketRepositories>() {
+        FetcherCallsHandler.callListRepositories(FetcherCallsHandler.BITBUCKET, new ListRepositoriesRequest<>(this, user, new RepoServiceResponse<BitBucketRepositories>() {
 
         @Override
         public void onSuccess(BitBucketRepositories object) {
@@ -125,11 +125,11 @@ public class RepoListFragment extends BaseFragment{
                 Toast.makeText(RepoListFragment.this.getContext(), t.toString(), Toast.LENGTH_LONG).show();
                 Log.e("LOl","",t);
             }
-        });
+        }));
     }
 
     private void getGitHubRepoList(@NonNull String user){
-        FetcherCallsHandler.callListRepositories(this.hashCode(), FetcherCallsHandler.GITHUB, user, new RepoServiceResponse<List<GitHubRepo>>() {
+        FetcherCallsHandler.callListRepositories(FetcherCallsHandler.GITHUB, new ListRepositoriesRequest<>(this, user, new RepoServiceResponse<List<GitHubRepo>>() {
             @Override
             public void onSuccess(List<GitHubRepo> object) {
                 buildRepositoriesRecyclerView(object);
@@ -139,6 +139,6 @@ public class RepoListFragment extends BaseFragment{
             public void onError(Throwable t) {
                 Toast.makeText(RepoListFragment.this.getContext(), t.toString(), Toast.LENGTH_LONG).show();
             }
-        });
+        }));
     }
 }

@@ -75,9 +75,4 @@ public class MainActivity extends AppCompatActivity implements FragmentTransitio
         transaction.commit();
         Log.d("backstack",getSupportFragmentManager().getBackStackEntryCount()+"");
     }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
 }

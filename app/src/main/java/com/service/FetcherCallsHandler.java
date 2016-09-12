@@ -4,8 +4,10 @@ import android.accounts.NetworkErrorException;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 
 import com.repofetcher.RepoFetcherApplication;
+import com.service.request.ListRepositoriesRequest;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -52,9 +54,9 @@ public class FetcherCallsHandler extends HashMap<Integer, IRepoServiceHandler>{
         return handler;
     }
 
-    public static void callListRepositories(int hash, @RepoServiceType int service, @NonNull String user, @NonNull RepoServiceResponse<?> callback){
+    public static void callListRepositories(@RepoServiceType int service, @NonNull ListRepositoriesRequest<?> request){
         IRepoServiceHandler handler = getInstance().get(service);
-        makeCallIfThereIsNetwork(() -> handler.callListRepositories(hash, user, callback), callback);
+        makeCallIfThereIsNetwork(() -> handler.callListRepositories(request), request.getServiceResponse());
     }
 
     private static void makeCallIfThereIsNetwork(@NonNull Runnable runnable, @NonNull RepoServiceResponse<?> callback){
@@ -66,7 +68,8 @@ public class FetcherCallsHandler extends HashMap<Integer, IRepoServiceHandler>{
         }
     }
 
-    public static void unSubscribe(int id){
+    public static void unSubscribe(Fragment fragment){
+        int id = System.identityHashCode(fragment);
         for (IRepoServiceHandler serviceHandler: getInstance().values())
         {
             if(serviceHandler instanceof SubscriberService){
