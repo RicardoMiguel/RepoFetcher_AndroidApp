@@ -2,6 +2,7 @@ package com.service;
 
 import android.support.annotation.NonNull;
 
+import com.service.request.ExchangeTokenRequest;
 import com.service.request.ListRepositoriesRequest;
 
 /**
@@ -9,4 +10,5 @@ import com.service.request.ListRepositoriesRequest;
  */
 public interface IRepoServiceHandler {
     void callListRepositories(@NonNull ListRepositoriesRequest<?> request);
+    void exchangeToken(@NonNull ExchangeTokenRequest<?> request);
 }

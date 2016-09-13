@@ -20,6 +20,11 @@ public class LoginCenterFragment extends BaseFragment{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         gitHubButton = (Button)view.findViewById(R.id.login_github_button);
+        gitHubButton.setOnClickListener( v -> goToWebViewFragment());
+    }
+
+    private void goToWebViewFragment() {
+        switchFragment(WebViewFragment.class, null);
     }
 
     @Override

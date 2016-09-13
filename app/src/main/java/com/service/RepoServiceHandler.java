@@ -3,6 +3,8 @@ package com.service;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.service.interceptor.JsonInterceptor;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -28,9 +30,10 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberS
 
     protected T getService(){
         if(service == null){
-            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-            OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+                    .addInterceptor(new JsonInterceptor())
+                    .build();
 
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(getServiceBaseUrl())

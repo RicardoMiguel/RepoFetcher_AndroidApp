@@ -2,9 +2,11 @@ package com.service;
 
 import android.support.annotation.NonNull;
 
+import com.model.github.GitHubAccessToken;
 import com.model.github.GitHubRepo;
 import com.repofetcher.R;
 import com.repofetcher.RepoFetcherApplication;
+import com.service.request.ExchangeTokenRequest;
 import com.service.request.ListRepositoriesRequest;
 
 import java.util.ArrayList;
@@ -41,5 +43,14 @@ class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
         Subscriber[] subscribers = {new SubscriberAdapter<>(request.getServiceResponse())};
         addSubscribers(request.getHash(), subscribers);
         ServiceUtils.scheduleOnIO_ObserveOnMainThread(repositoriesOb, subscribers);
+    }
+
+    @Override
+    public void exchangeToken(@NonNull ExchangeTokenRequest<?> request) {
+        Observable<GitHubAccessToken> accessTokenObservable = getService().exchangeToken("https://github.com/login/oauth/access_token", request.getParams());
+
+        Subscriber[] subscribers = {new SubscriberAdapter<>(request.getServiceResponse())};
+        addSubscribers(request.getHash(), subscribers);
+        ServiceUtils.scheduleOnIO_ObserveOnMainThread(accessTokenObservable, subscribers);
     }
 }

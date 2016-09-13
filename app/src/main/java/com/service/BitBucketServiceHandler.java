@@ -6,6 +6,7 @@ import com.model.bitbucket.BitBucketRepositories;
 import com.model.github.GitHubRepo;
 import com.repofetcher.R;
 import com.repofetcher.RepoFetcherApplication;
+import com.service.request.ExchangeTokenRequest;
 import com.service.request.ListRepositoriesRequest;
 
 import java.util.List;
@@ -38,5 +39,10 @@ public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService
         Subscriber[] subscribers = {new SubscriberAdapter<>(request.getServiceResponse())};
         addSubscribers(request.getHash(), subscribers);
         ServiceUtils.scheduleOnIO_ObserveOnMainThread(repositoriesOb, subscribers);
+    }
+
+    @Override
+    public void exchangeToken(@NonNull ExchangeTokenRequest<?> request) {
+        throw new UnsupportedOperationException();
     }
 }

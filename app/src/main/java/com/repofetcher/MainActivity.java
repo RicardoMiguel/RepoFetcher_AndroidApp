@@ -78,4 +78,9 @@ public class MainActivity extends AppCompatActivity implements FragmentTransitio
     // Commit the transaction
         transaction.commit();
     }
+
+    @Override
+    public void goBack() {
+        onBackPressed();
+    }
 }

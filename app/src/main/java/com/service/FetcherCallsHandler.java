@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 import com.repofetcher.RepoFetcherApplication;
+import com.service.request.ExchangeTokenRequest;
 import com.service.request.ListRepositoriesRequest;
 
 import java.lang.annotation.Retention;
@@ -57,6 +58,11 @@ public class FetcherCallsHandler extends HashMap<Integer, IRepoServiceHandler>{
     public static void callListRepositories(@RepoServiceType int service, @NonNull ListRepositoriesRequest<?> request){
         IRepoServiceHandler handler = getInstance().get(service);
         makeCallIfThereIsNetwork(() -> handler.callListRepositories(request), request.getServiceResponse());
+    }
+
+    public static void callExchangeToken(@RepoServiceType int service, @NonNull ExchangeTokenRequest<?> request){
+        IRepoServiceHandler handler = getInstance().get(service);
+        makeCallIfThereIsNetwork(() -> handler.exchangeToken(request), request.getServiceResponse());
     }
 
     private static void makeCallIfThereIsNetwork(@NonNull Runnable runnable, @NonNull RepoServiceResponse<?> callback){

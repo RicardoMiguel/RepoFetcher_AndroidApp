@@ -11,6 +11,11 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.model.github.GitHubAccessToken;
+import com.service.FetcherCallsHandler;
+import com.service.RepoServiceResponse;
+import com.service.request.ExchangeTokenRequest;
+
 /**
  * Created by ricar on 12/09/2016.
  */
@@ -32,7 +37,6 @@ public class WebViewFragment extends BaseFragment{
 
         webView.setWebViewClient(new WebViewClient() {
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                // Is this the callback url?
 
                 Uri uri= Uri.parse(url);
                 String code = uri.getQueryParameter("code");
@@ -45,6 +49,15 @@ public class WebViewFragment extends BaseFragment{
     }
 
     private void exchangeCodeForToken(@NonNull String code){
-        Log.d(TAG, code);
+        FetcherCallsHandler.callExchangeToken(FetcherCallsHandler.GITHUB, new ExchangeTokenRequest<>(this, code, new RepoServiceResponse<GitHubAccessToken>() {
+            @Override
+            public void onSuccess(GitHubAccessToken object) {
+                goBack();
+            }
+
+            @Override
+            public void onError(Throwable t) {
+            }
+        }));
     }
 }
