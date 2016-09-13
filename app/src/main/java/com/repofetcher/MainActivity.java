@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements FragmentTransitio
             fragment = new IntroFragment();
         } else if(fragmentClass == MultipleAccountRepositoriesFragment.class){
             fragment = new MultipleAccountRepositoriesFragment();
+        } else if(fragmentClass == LoginCenterFragment.class){
+            fragment = new LoginCenterFragment();
         } else if(fragmentClass == WebViewFragment.class){
             fragment = new WebViewFragment();
         }
