@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
+import com.service.Constants;
 import com.service.RepoServiceResponse;
 
 import java.util.Map;
@@ -14,23 +15,27 @@ import java.util.Map;
 public class ExchangeTokenRequest<T> extends BaseRequest<T>{
 
     private String code;
+    private String clientId;
+    private String clientSecret;
 
-    public ExchangeTokenRequest(@NonNull Fragment context, @NonNull String code, @Nullable RepoServiceResponse<T> response) {
+    public ExchangeTokenRequest(@NonNull Fragment context,
+                                @NonNull String code,
+                                @NonNull String clientId,
+                                @NonNull String clientSecret,
+                                @Nullable RepoServiceResponse<T> response) {
         setHash(context);
         setServiceResponse(response);
         this.code = code;
-    }
-
-    public String getCode() {
-        return code;
+        this.clientId = clientId;
+        this.clientSecret = clientSecret;
     }
 
     @Override
     public Map<String, String> getParams() {
         Map<String, String> map = super.getParams();
-        map.put("client_id", "6ad10b7063dcf95b3eaa");
-        map.put("client_secret", "7d511821d6c8a50e1cb44f34926eb3cc613d7273");
-        map.put("code", code);
+        map.put(Constants.CLIENT_ID, clientId);
+        map.put(Constants.CLIENT_SECRET, clientSecret);
+        map.put(Constants.CODE, code);
         return map;
     }
 }

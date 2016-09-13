@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
+import com.service.Constants;
 import com.service.RepoServiceResponse;
 
 import java.util.Map;
@@ -25,7 +26,7 @@ public class ListRepositoriesRequest<T> extends BaseRequest<T> {
     @Override
     public Map<String, String> getParams() {
         Map<String, String> map = super.getParams();
-        map.put("type", "all");
+        map.put(Constants.TYPE, Constants.ALL);
         return map;
     }
 

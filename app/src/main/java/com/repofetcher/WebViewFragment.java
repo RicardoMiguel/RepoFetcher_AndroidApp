@@ -14,6 +14,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.model.github.GitHubAccessToken;
+import com.service.Constants;
 import com.service.FetcherCallsHandler;
 import com.service.RepoServiceResponse;
 import com.service.request.ExchangeTokenRequest;
@@ -67,14 +68,18 @@ public class WebViewFragment extends BaseFragment{
     }
 
     private void configWebView(){
-        Uri url = Uri.parse(authorizationUrl).buildUpon().appendQueryParameter("client_id",clientId).build();
+        Uri url = Uri.parse(authorizationUrl)
+                .buildUpon()
+                .appendQueryParameter(Constants.CLIENT_ID, clientId)
+                .appendQueryParameter(Constants.SCOPE, Constants.REPO)
+                .build();
         webView.loadUrl(url.toString());
 
         webView.setWebViewClient(new WebViewClient() {
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
 
                 Uri uri = Uri.parse(url);
-                String code = uri.getQueryParameter("code");
+                String code = uri.getQueryParameter(Constants.CODE);
                 if (!TextUtils.isEmpty(code)) {
                     webView.stopLoading();
                     exchangeCodeForToken(code);
@@ -84,7 +89,7 @@ public class WebViewFragment extends BaseFragment{
     }
 
     private void exchangeCodeForToken(@NonNull String code){
-        FetcherCallsHandler.callExchangeToken(FetcherCallsHandler.GITHUB, new ExchangeTokenRequest<>(this, code, new RepoServiceResponse<GitHubAccessToken>() {
+        FetcherCallsHandler.callExchangeToken(FetcherCallsHandler.GITHUB, new ExchangeTokenRequest<>(this, code, clientId, clientSecret, new RepoServiceResponse<GitHubAccessToken>() {
             @Override
             public void onSuccess(GitHubAccessToken object) {
                 goBack();
