@@ -17,7 +17,7 @@ import java.util.HashMap;
 /**
  * Created by ricar on 04/09/2016.
  */
-public class FetcherCallsHandler extends HashMap<Integer, IRepoServiceHandler>{
+public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler>{
 
     public static final int GITHUB = 0;
     public static final int BITBUCKET = 1;
@@ -41,9 +41,9 @@ public class FetcherCallsHandler extends HashMap<Integer, IRepoServiceHandler>{
     }
 
     @Override
-    public IRepoServiceHandler get(Object key) {
+    public RepoServiceHandler get(Object key) {
 
-        IRepoServiceHandler handler = super.get(key);
+        RepoServiceHandler handler = super.get(key);
 
         if(handler == null){
             handler = new RepoServiceFactory().create((int)key);
@@ -63,6 +63,21 @@ public class FetcherCallsHandler extends HashMap<Integer, IRepoServiceHandler>{
     public static void callExchangeToken(@RepoServiceType int service, @NonNull ExchangeTokenRequest<?> request){
         IRepoServiceHandler handler = getInstance().get(service);
         makeCallIfThereIsNetwork(() -> handler.exchangeToken(request), request.getServiceResponse());
+    }
+
+    @NonNull
+    public static String getClientId(@RepoServiceType int service){
+        return getInstance().get(service).getClientId();
+    }
+
+    @NonNull
+    public static String getClientSecret(@RepoServiceType int service){
+        return getInstance().get(service).getClientSecret();
+    }
+
+    @NonNull
+    public static String getAuthorizationUrl(@RepoServiceType int service){
+        return getInstance().get(service).getAuthorizationUrl();
     }
 
     private static void makeCallIfThereIsNetwork(@NonNull Runnable runnable, @NonNull RepoServiceResponse<?> callback){

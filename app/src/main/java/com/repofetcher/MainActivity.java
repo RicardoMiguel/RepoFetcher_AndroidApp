@@ -75,7 +75,6 @@ public class MainActivity extends AppCompatActivity implements FragmentTransitio
         transaction.replace(R.id.fragment_container, fragment);
         transaction.addToBackStack(null);
 
-    // Commit the transaction
         transaction.commit();
     }
 

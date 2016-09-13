@@ -17,7 +17,7 @@ public class ListRepositoriesRequest<T> extends BaseRequest<T> {
     private String user;
 
     public ListRepositoriesRequest(@NonNull Fragment context, @NonNull String user, @Nullable RepoServiceResponse<T> response) {
-        setHash(System.identityHashCode(context));
+        setHash(context);
         this.user = user;
         setServiceResponse(response);
     }

@@ -1,6 +1,8 @@
 package com.service.request;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 
 import com.service.RepoServiceResponse;
 
@@ -30,8 +32,8 @@ public abstract class BaseRequest<T> {
         return hash;
     }
 
-    void setHash(int hash) {
-        this.hash = hash;
+    void setHash(@NonNull Fragment fragment) {
+        this.hash = System.identityHashCode(fragment);
     }
 
     public Map<String, String> getParams() {

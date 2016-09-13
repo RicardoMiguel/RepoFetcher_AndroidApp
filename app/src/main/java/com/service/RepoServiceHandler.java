@@ -22,9 +22,14 @@ import rx.schedulers.Schedulers;
 /**
  * Created by ricar on 04/09/2016.
  */
-abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberService {
+abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberService, OAuthClientService {
 
     private T service;
+
+    @Nullable protected String clientId;
+    @Nullable protected String clientSecret;
+    @Nullable protected String authorizationUrl;
+    @Nullable protected String exchangeTokenUrl;
 
     @Nullable private Map<Integer, List<Subscriber>> listToUnsubscribe;
 
@@ -75,4 +80,5 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberS
         }
         return listToUnsubscribe;
     }
+
 }

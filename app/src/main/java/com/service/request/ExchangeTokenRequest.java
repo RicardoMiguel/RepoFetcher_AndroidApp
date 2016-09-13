@@ -16,7 +16,7 @@ public class ExchangeTokenRequest<T> extends BaseRequest<T>{
     private String code;
 
     public ExchangeTokenRequest(@NonNull Fragment context, @NonNull String code, @Nullable RepoServiceResponse<T> response) {
-        setHash(System.identityHashCode(context));
+        setHash(context);
         setServiceResponse(response);
         this.code = code;
     }

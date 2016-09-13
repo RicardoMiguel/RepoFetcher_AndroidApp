@@ -5,6 +5,8 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
 
+import com.service.FetcherCallsHandler;
+
 /**
  * Created by ricar on 13/09/2016.
  */
@@ -20,11 +22,15 @@ public class LoginCenterFragment extends BaseFragment{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         gitHubButton = (Button)view.findViewById(R.id.login_github_button);
-        gitHubButton.setOnClickListener( v -> goToWebViewFragment());
+        gitHubButton.setOnClickListener( v -> goToWebViewFragment(FetcherCallsHandler.GITHUB));
     }
 
-    private void goToWebViewFragment() {
-        switchFragment(WebViewFragment.class, null);
+    private void goToWebViewFragment(@FetcherCallsHandler.RepoServiceType int serviceType) {
+        Bundle bundle = new Bundle();
+        bundle.putString(WebViewFragment.AUTHORIZATION_URL, FetcherCallsHandler.getAuthorizationUrl(serviceType));
+        bundle.putString(WebViewFragment.CLIENT_ID, FetcherCallsHandler.getClientId(serviceType));
+        bundle.putString(WebViewFragment.CLIENT_SECRET, FetcherCallsHandler.getClientSecret(serviceType));
+        switchFragment(WebViewFragment.class, bundle);
     }
 
     @Override

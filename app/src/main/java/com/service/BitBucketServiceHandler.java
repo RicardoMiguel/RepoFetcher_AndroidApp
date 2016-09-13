@@ -45,4 +45,28 @@ public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService
     public void exchangeToken(@NonNull ExchangeTokenRequest<?> request) {
         throw new UnsupportedOperationException();
     }
+
+    @NonNull
+    @Override
+    public String getClientId() {
+        throw new UnsupportedOperationException();
+    }
+
+    @NonNull
+    @Override
+    public String getClientSecret() {
+        throw new UnsupportedOperationException();
+    }
+
+    @NonNull
+    @Override
+    public String getAuthorizationUrl() {
+        throw new UnsupportedOperationException();
+    }
+
+    @NonNull
+    @Override
+    public String getExchangeTokenUrl() {
+        throw new UnsupportedOperationException();
+    }
 }

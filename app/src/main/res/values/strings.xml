@@ -5,8 +5,15 @@
     <string name="fetch">Fetch</string>
     <string name="login_center_label">Go to Login center</string>
     <string name="login_to_github_label">Login GitHub</string>
-    <string name="github_base_url">https://api.github.com/</string>
+
     <string name="bitbucket_base_url">https://api.bitbucket.org/2.0/</string>
     <string name="github">GitHub</string>
     <string name="bitbucket">BitBucket</string>
+
+    <string name="github_base_url">https://api.github.com/</string>
+    <string name="github_client_id">6ad10b7063dcf95b3eaa</string>
+    <string name="github_client_secret">7d511821d6c8a50e1cb44f34926eb3cc613d7273</string>
+    <string name="github_authorization_url">https://github.com/login/oauth/authorize</string>
+    <string name="github_exchange_token_url">https://github.com/login/oauth/access_token</string>
+
 </resources>

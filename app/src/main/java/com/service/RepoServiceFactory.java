@@ -8,7 +8,7 @@ import android.support.annotation.Nullable;
 class RepoServiceFactory {
 
     @Nullable
-    IRepoServiceHandler create(@FetcherCallsHandler.RepoServiceType int service){
+    RepoServiceHandler create(@FetcherCallsHandler.RepoServiceType int service){
         switch (service){
             case FetcherCallsHandler.GITHUB:
                 return new GitHubServiceHandler();
