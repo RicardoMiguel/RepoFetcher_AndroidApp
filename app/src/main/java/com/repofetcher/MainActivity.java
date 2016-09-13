@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements FragmentTransitio
             fragment = new IntroFragment();
         } else if(fragmentClass == MultipleAccountRepositoriesFragment.class){
             fragment = new MultipleAccountRepositoriesFragment();
+        } else if(fragmentClass == WebViewFragment.class){
+            fragment = new WebViewFragment();
         }
 
         if(fragment != null && bundle != null){
@@ -73,6 +75,5 @@ public class MainActivity extends AppCompatActivity implements FragmentTransitio
 
     // Commit the transaction
         transaction.commit();
-        Log.d("backstack",getSupportFragmentManager().getBackStackEntryCount()+"");
     }
 }
