@@ -7,10 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-
-import com.service.ServiceUtils;
 
 /**
  * Created by ricar on 07/09/2016.
@@ -21,7 +18,7 @@ public class IntroFragment extends BaseFragment{
     private EditText usernameEditText;
 
     public IntroFragment() {
-        super(R.layout.ask_username);
+        super(R.layout.intro);
     }
 
     @Nullable
@@ -36,8 +33,11 @@ public class IntroFragment extends BaseFragment{
         Log.d(TAG, "onViewCreated");
         super.onViewCreated(view, savedInstanceState);
         usernameEditText = (EditText)view.findViewById(R.id.username_edit_text);
-        Button fetchRepoUserListButton = (Button)view.findViewById(R.id.fetch_repo_list_button);
-        fetchRepoUserListButton.setOnClickListener( v -> sendQuery(usernameEditText.getText().toString()) );
+
+        view.findViewById(R.id.fetch_repo_list_button).setOnClickListener( v -> sendQuery(usernameEditText.getText().toString()) );
+
+        view.findViewById(R.id.login_center_button).setOnClickListener( v -> goToLoginCenter());
+
     }
 
     @Override
@@ -55,9 +55,12 @@ public class IntroFragment extends BaseFragment{
     private void sendQuery(@Nullable String text){
         Bundle bundle = new Bundle();
         bundle.putString( IntroFragment.class.getName(), text);
-        ServiceUtils.runIfInstanceNotNull(fragmentTransitionService,
-                () -> fragmentTransitionService.switchFragment(MultipleAccountRepositoriesFragment.class, bundle));
+
+        goToFragment(MultipleAccountRepositoriesFragment.class, bundle);
     }
 
+    private void goToLoginCenter(){
+        goToFragment(LoginCenterFragment.class, null);
+    }
 
 }

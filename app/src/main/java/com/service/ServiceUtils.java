@@ -37,10 +37,4 @@ public class ServiceUtils {
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
-
-    public static void runIfInstanceNotNull(@Nullable Object instance, @NonNull Runnable runnable){
-        if(instance != null){
-            runnable.run();
-        }
-    }
 }
