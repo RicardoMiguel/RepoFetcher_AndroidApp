@@ -40,29 +40,14 @@ class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
 
         Observable<List<GitHubRepo>> repositoriesOb = getService().listRepositories(request.getUser(), request.getParams());
 
-
-        request.addServiceResponse(request.getUiServiceResponse());
-        List<Subscriber> subscriberAdapterList = new ArrayList<>();
-        for(RepoServiceResponse<S> serviceResponse : request.getServiceResponseList()){
-            subscriberAdapterList.add(new SubscriberAdapter<>(serviceResponse));
-        }
-
-        addSubscribers(request.getHash(), subscriberAdapterList);
-        ServiceUtils.scheduleOnIO_ObserveOnMainThread(repositoriesOb, subscriberAdapterList);
+        makeCall(repositoriesOb, (ListRepositoriesRequest<List<GitHubRepo>>)request);
     }
 
     @Override
     public <S> void exchangeToken(@NonNull ExchangeTokenRequest<S> request) {
         Observable<GitHubAccessToken> accessTokenObservable = getService().exchangeToken(getExchangeTokenUrl(), request.getParams());
 
-        request.addServiceResponse(request.getUiServiceResponse());
-        List<Subscriber> subscriberAdapterList = new ArrayList<>();
-        for(RepoServiceResponse<S> serviceResponse : request.getServiceResponseList()){
-            subscriberAdapterList.add(new SubscriberAdapter<>(serviceResponse));
-        }
-
-        addSubscribers(request.getHash(), subscriberAdapterList);
-        ServiceUtils.scheduleOnIO_ObserveOnMainThread(accessTokenObservable, subscriberAdapterList);
+        makeCall(accessTokenObservable,(ExchangeTokenRequest<GitHubAccessToken>)request);
     }
 
     @NonNull

@@ -38,14 +38,7 @@ public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService
     public <S> void callListRepositories(@NonNull ListRepositoriesRequest<S> request) {
         Observable<BitBucketRepositories> repositoriesOb = getService().listRepositories(request.getUser());
 
-        request.addServiceResponse(request.getUiServiceResponse());
-        List<Subscriber> subscriberAdapterList = new ArrayList<>();
-        for(RepoServiceResponse<S> serviceResponse : request.getServiceResponseList()){
-            subscriberAdapterList.add(new SubscriberAdapter<>(serviceResponse));
-        }
-
-        addSubscribers(request.getHash(), subscriberAdapterList);
-        ServiceUtils.scheduleOnIO_ObserveOnMainThread(repositoriesOb, subscriberAdapterList);
+        makeCall(repositoriesOb, (ListRepositoriesRequest<BitBucketRepositories>)request);
     }
 
     @Override

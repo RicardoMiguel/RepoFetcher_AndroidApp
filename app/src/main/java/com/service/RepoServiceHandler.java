@@ -5,7 +5,9 @@ import android.support.annotation.Nullable;
 
 import com.service.interceptor.JsonInterceptor;
 import com.service.interceptor.OAuthInterceptor;
+import com.service.request.BaseRequest;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +17,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import rx.Observable;
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
 
@@ -94,6 +97,17 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberS
 
     public void setOAuthToken(String token){
         this.token = token;
+    }
+
+    protected <S> void makeCall(Observable<S> observable, BaseRequest<S> request){
+        request.addServiceResponse(request.getUiServiceResponse());
+        List<Subscriber> subscriberAdapterList = new ArrayList<>();
+        for(RepoServiceResponse<S> serviceResponse : request.getServiceResponseList()){
+            subscriberAdapterList.add(new SubscriberAdapter<>(serviceResponse));
+        }
+
+        addSubscribers(request.getHash(), subscriberAdapterList);
+        ServiceUtils.scheduleOnIO_ObserveOnMainThread(observable, subscriberAdapterList);
     }
 
 }
