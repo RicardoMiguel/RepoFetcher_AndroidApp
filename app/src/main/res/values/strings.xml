@@ -5,4 +5,6 @@
     <string name="fetch">Fetch</string>
     <string name="github_base_url">https://api.github.com/</string>
     <string name="bitbucket_base_url">https://api.bitbucket.org/2.0/</string>
+    <string name="github">GitHub</string>
+    <string name="bitbucket">BitBucket</string>
 </resources>
