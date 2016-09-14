@@ -5,7 +5,10 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 
+import com.service.request.BaseRequest;
+
 import java.util.List;
+import java.util.Map;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -30,6 +33,33 @@ public class ServiceUtils {
 
         connectableObservable.connect();
 
+    }
+
+    static <S> void scheduleAndObserve(@NonNull Observable<S> observable, BaseRequest<S> request){
+        Map<Integer, List<RepoServiceResponse<S>>> subscribers = request.getServiceResponseList();
+
+        ConnectableObservable<S> connectableObservable = observable.publish();
+
+        for (Map.Entry<Integer, List<RepoServiceResponse<S>>> entry : subscribers.entrySet())
+        {
+            for(RepoServiceResponse<S> serviceResponse: entry.getValue()){
+
+                Observable<S> obs = connectableObservable.subscribeOn(Schedulers.io());
+
+                switch (entry.getKey()){
+                    case(BaseRequest.MAIN_THREAD):
+                        obs = obs.observeOn(AndroidSchedulers.mainThread());
+                        break;
+                    case(BaseRequest.IO):
+                        obs = obs.observeOn(Schedulers.io());
+                        break;
+                }
+
+                obs.subscribe(new SubscriberAdapter<S>(serviceResponse));
+            }
+        }
+
+        connectableObservable.connect();
     }
 
     public static boolean isNetworkAvailable(@NonNull Context context) {

@@ -99,15 +99,4 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberS
         this.token = token;
     }
 
-    protected <S> void makeCall(Observable<S> observable, BaseRequest<S> request){
-        request.addServiceResponse(request.getUiServiceResponse());
-        List<Subscriber> subscriberAdapterList = new ArrayList<>();
-        for(RepoServiceResponse<S> serviceResponse : request.getServiceResponseList()){
-            subscriberAdapterList.add(new SubscriberAdapter<>(serviceResponse));
-        }
-
-        addSubscribers(request.getHash(), subscriberAdapterList);
-        ServiceUtils.scheduleOnIO_ObserveOnMainThread(observable, subscriberAdapterList);
-    }
-
 }

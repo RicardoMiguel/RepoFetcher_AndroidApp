@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -40,14 +41,15 @@ class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
 
         Observable<List<GitHubRepo>> repositoriesOb = getService().listRepositories(request.getUser(), request.getParams());
 
-        makeCall(repositoriesOb, (ListRepositoriesRequest<List<GitHubRepo>>)request);
+        ServiceUtils.scheduleAndObserve(repositoriesOb, (ListRepositoriesRequest<List<GitHubRepo>>)request);
     }
 
     @Override
     public <S> void exchangeToken(@NonNull ExchangeTokenRequest<S> request) {
         Observable<GitHubAccessToken> accessTokenObservable = getService().exchangeToken(getExchangeTokenUrl(), request.getParams());
 
-        makeCall(accessTokenObservable,(ExchangeTokenRequest<GitHubAccessToken>)request);
+
+        ServiceUtils.scheduleAndObserve(accessTokenObservable,(ExchangeTokenRequest<GitHubAccessToken>)request);
     }
 
     @NonNull

@@ -11,6 +11,7 @@ import android.text.TextUtils;
 
 import com.model.github.GitHubAccessToken;
 import com.repofetcher.RepoFetcherApplication;
+import com.service.request.BaseRequest;
 import com.service.request.ExchangeTokenRequest;
 import com.service.request.ListRepositoriesRequest;
 
@@ -68,7 +69,7 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler>{
 
     public static void callExchangeToken(@NonNull ExchangeTokenRequest<GitHubAccessToken> request){
         RepoServiceHandler handler = getInstance().get(FetcherCallsHandler.GITHUB);
-        request.addServiceResponse(new RepoServiceResponse<GitHubAccessToken>() {
+        request.addServiceResponse(BaseRequest.IO, new RepoServiceResponse<GitHubAccessToken>() {
             @Override
             public void onSuccess(GitHubAccessToken object) {
                 handler.setOAuthToken(object.getAccessToken());
@@ -116,7 +117,7 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler>{
         }
     }
 
-    private static void saveToken(String token){
+    public static void saveToken(String token){
         SharedPreferences sharedPref = RepoFetcherApplication.getContext().getSharedPreferences(TOKEN_ID, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(TOKEN_ID, token);
