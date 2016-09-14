@@ -72,8 +72,10 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberS
     @Override
     public void removeSubscribers(int id) {
         List<Subscriber> subscribers = getListToUnsubscribe().remove(id);
-        for(Subscriber subscriber : subscribers){
-            subscriber.unsubscribe();
+        if(subscribers != null) {
+            for (Subscriber subscriber : subscribers) {
+                subscriber.unsubscribe();
+            }
         }
     }
 

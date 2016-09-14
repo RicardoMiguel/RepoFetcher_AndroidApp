@@ -24,14 +24,13 @@ public class OAuthInterceptor implements Interceptor {
 
     @Override
     public Response intercept(Chain chain) throws IOException {
+        Request.Builder request = chain
+                .request()
+                .newBuilder();
+
         if(!TextUtils.isEmpty(oAuthClientService.getOAuthToken())){
-            Request request = chain
-                    .request()
-                    .newBuilder()
-                    .addHeader(Constants.AUTHORIZATION, Constants.TOKEN + " " + oAuthClientService.getOAuthToken())
-                    .build();
-            return chain.proceed(request);
+                    request.addHeader(Constants.AUTHORIZATION, Constants.TOKEN + " " + oAuthClientService.getOAuthToken());
         }
-        return chain.proceed(chain.request().newBuilder().build());
+        return chain.proceed(request.build());
     }
 }
