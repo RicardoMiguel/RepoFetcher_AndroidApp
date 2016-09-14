@@ -11,4 +11,9 @@ public final class Constants {
     public static final String ALL = "all";
     public static final String SCOPE = "scope";
     public static final String REPO = "repo";
+    public static final String CONTENT_TYPE = "Content-Type";
+    public static final String ACCEPT = "Accept";
+    public static final String APLLICATION_JSON = "application/json";
+    public static final String AUTHORIZATION = "Authorization";
+    public static final String TOKEN = "token";
 }

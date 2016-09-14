@@ -20,7 +20,7 @@ public class ListRepositoriesRequest<T> extends BaseRequest<T> {
     public ListRepositoriesRequest(@NonNull Fragment context, @NonNull String user, @Nullable RepoServiceResponse<T> response) {
         setHash(context);
         this.user = user;
-        setServiceResponse(response);
+        setUiServiceResponse(response);
     }
 
     @Override

@@ -89,7 +89,7 @@ public class WebViewFragment extends BaseFragment{
     }
 
     private void exchangeCodeForToken(@NonNull String code){
-        FetcherCallsHandler.callExchangeToken(FetcherCallsHandler.GITHUB, new ExchangeTokenRequest<>(this, code, clientId, clientSecret, new RepoServiceResponse<GitHubAccessToken>() {
+        FetcherCallsHandler.callExchangeToken(new ExchangeTokenRequest<>(this, code, clientId, clientSecret, new RepoServiceResponse<GitHubAccessToken>() {
             @Override
             public void onSuccess(GitHubAccessToken object) {
                 goBack();

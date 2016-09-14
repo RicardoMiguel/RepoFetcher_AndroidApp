@@ -1,11 +1,15 @@
 package com.service;
 
 import android.accounts.NetworkErrorException;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 
+import com.model.github.GitHubAccessToken;
 import com.repofetcher.RepoFetcherApplication;
 import com.service.request.ExchangeTokenRequest;
 import com.service.request.ListRepositoriesRequest;
@@ -18,6 +22,8 @@ import java.util.HashMap;
  * Created by ricar on 04/09/2016.
  */
 public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler>{
+
+    private static final String TOKEN_ID = "TOKEN_ID";
 
     public static final int GITHUB = 0;
     public static final int BITBUCKET = 1;
@@ -57,12 +63,25 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler>{
 
     public static void callListRepositories(@RepoServiceType int service, @NonNull ListRepositoriesRequest<?> request){
         IRepoServiceHandler handler = getInstance().get(service);
-        makeCallIfThereIsNetwork(() -> handler.callListRepositories(request), request.getServiceResponse());
+        makeCallIfThereIsNetwork(() -> handler.callListRepositories(request), request.getUiServiceResponse());
     }
 
-    public static void callExchangeToken(@RepoServiceType int service, @NonNull ExchangeTokenRequest<?> request){
-        IRepoServiceHandler handler = getInstance().get(service);
-        makeCallIfThereIsNetwork(() -> handler.exchangeToken(request), request.getServiceResponse());
+    public static void callExchangeToken(@NonNull ExchangeTokenRequest<GitHubAccessToken> request){
+        RepoServiceHandler handler = getInstance().get(FetcherCallsHandler.GITHUB);
+        request.addServiceResponse(new RepoServiceResponse<GitHubAccessToken>() {
+            @Override
+            public void onSuccess(GitHubAccessToken object) {
+                handler.setOAuthToken(object.getAccessToken());
+                saveToken(object.getAccessToken());
+            }
+
+            @Override
+            public void onError(Throwable t) {
+
+            }
+        });
+
+        makeCallIfThereIsNetwork(() -> handler.exchangeToken(request), request.getUiServiceResponse());
     }
 
     @NonNull
@@ -80,10 +99,10 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler>{
         return getInstance().get(service).getAuthorizationUrl();
     }
 
-    private static void makeCallIfThereIsNetwork(@NonNull Runnable runnable, @NonNull RepoServiceResponse<?> callback){
+    private static void makeCallIfThereIsNetwork(@NonNull Runnable runnable, @Nullable RepoServiceResponse<?> callback){
         if(ServiceUtils.isNetworkAvailable(RepoFetcherApplication.getContext())){
             runnable.run();
-        } else {
+        } else if(callback != null){
             SubscriberAdapter<?> subscriberAdapter = new SubscriberAdapter<>(callback);
             subscriberAdapter.onError(new NetworkErrorException());
         }
@@ -91,11 +110,20 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler>{
 
     public static void unSubscribe(Fragment fragment){
         int id = System.identityHashCode(fragment);
-        for (IRepoServiceHandler serviceHandler: getInstance().values())
+        for (RepoServiceHandler serviceHandler: getInstance().values())
         {
-            if(serviceHandler instanceof SubscriberService){
-                ((SubscriberService) serviceHandler).removeSubscribers(id);
-            }
+            serviceHandler.removeSubscribers(id);
         }
+    }
+
+    private static void saveToken(String token){
+        SharedPreferences sharedPref = RepoFetcherApplication.getContext().getSharedPreferences(TOKEN_ID, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(TOKEN_ID, token);
+        editor.commit();
+    }
+
+    private static boolean hasToken(){
+        return !TextUtils.isEmpty(RepoFetcherApplication.getContext().getSharedPreferences(TOKEN_ID, Context.MODE_PRIVATE).getString(TOKEN_ID,null));
     }
 }

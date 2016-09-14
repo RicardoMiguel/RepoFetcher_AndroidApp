@@ -24,7 +24,7 @@ public class ExchangeTokenRequest<T> extends BaseRequest<T>{
                                 @NonNull String clientSecret,
                                 @Nullable RepoServiceResponse<T> response) {
         setHash(context);
-        setServiceResponse(response);
+        setUiServiceResponse(response);
         this.code = code;
         this.clientId = clientId;
         this.clientSecret = clientSecret;

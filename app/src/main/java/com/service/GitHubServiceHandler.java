@@ -36,22 +36,33 @@ class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
         return RepoFetcherApplication.getContext().getString(R.string.github_base_url);
     }
 
-    public void callListRepositories(@NonNull ListRepositoriesRequest<?> request){
+    public <S> void callListRepositories(@NonNull ListRepositoriesRequest<S> request){
 
         Observable<List<GitHubRepo>> repositoriesOb = getService().listRepositories(request.getUser(), request.getParams());
 
-        Subscriber[] subscribers = {new SubscriberAdapter<>(request.getServiceResponse())};
-        addSubscribers(request.getHash(), subscribers);
-        ServiceUtils.scheduleOnIO_ObserveOnMainThread(repositoriesOb, subscribers);
+
+        request.addServiceResponse(request.getUiServiceResponse());
+        List<Subscriber> subscriberAdapterList = new ArrayList<>();
+        for(RepoServiceResponse<S> serviceResponse : request.getServiceResponseList()){
+            subscriberAdapterList.add(new SubscriberAdapter<>(serviceResponse));
+        }
+
+        addSubscribers(request.getHash(), subscriberAdapterList);
+        ServiceUtils.scheduleOnIO_ObserveOnMainThread(repositoriesOb, subscriberAdapterList);
     }
 
     @Override
-    public void exchangeToken(@NonNull ExchangeTokenRequest<?> request) {
+    public <S> void exchangeToken(@NonNull ExchangeTokenRequest<S> request) {
         Observable<GitHubAccessToken> accessTokenObservable = getService().exchangeToken(getExchangeTokenUrl(), request.getParams());
 
-        Subscriber[] subscribers = {new SubscriberAdapter<>(request.getServiceResponse())};
-        addSubscribers(request.getHash(), subscribers);
-        ServiceUtils.scheduleOnIO_ObserveOnMainThread(accessTokenObservable, subscribers);
+        request.addServiceResponse(request.getUiServiceResponse());
+        List<Subscriber> subscriberAdapterList = new ArrayList<>();
+        for(RepoServiceResponse<S> serviceResponse : request.getServiceResponseList()){
+            subscriberAdapterList.add(new SubscriberAdapter<>(serviceResponse));
+        }
+
+        addSubscribers(request.getHash(), subscriberAdapterList);
+        ServiceUtils.scheduleOnIO_ObserveOnMainThread(accessTokenObservable, subscriberAdapterList);
     }
 
     @NonNull

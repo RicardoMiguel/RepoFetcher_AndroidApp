@@ -4,9 +4,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.service.interceptor.JsonInterceptor;
+import com.service.interceptor.OAuthInterceptor;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +29,7 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberS
     @Nullable protected String clientSecret;
     @Nullable protected String authorizationUrl;
     @Nullable protected String exchangeTokenUrl;
+    @Nullable private String token;
 
     @Nullable private Map<Integer, List<Subscriber>> listToUnsubscribe;
 
@@ -38,6 +38,7 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberS
             OkHttpClient client = new OkHttpClient.Builder()
                     .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
                     .addInterceptor(new JsonInterceptor())
+                    .addInterceptor(new OAuthInterceptor(this))
                     .build();
 
             Retrofit retrofit = new Retrofit.Builder()
@@ -58,13 +59,13 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberS
 
 
     @Override
-    public void addSubscribers(int id, Subscriber... subscribers) {
+    public void addSubscribers(int id, List<Subscriber> subscribers) {
         Map<Integer, List<Subscriber>> listMap = getListToUnsubscribe();
         List<Subscriber> subscriber = listMap.get(id);
         if(subscriber == null){
-            listMap.put(id, new ArrayList<>(Arrays.asList(subscribers)));
+            listMap.put(id, subscribers);
         } else {
-            subscriber.addAll(Arrays.asList(subscribers));
+            subscriber.addAll(subscribers);
         }
     }
 
@@ -79,6 +80,15 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberS
             listToUnsubscribe = new HashMap<>();
         }
         return listToUnsubscribe;
+    }
+
+    @Nullable
+    public String getOAuthToken(){
+        return token;
+    }
+
+    public void setOAuthToken(String token){
+        this.token = token;
     }
 
 }

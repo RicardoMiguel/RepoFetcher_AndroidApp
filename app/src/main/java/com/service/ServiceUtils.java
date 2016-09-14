@@ -4,7 +4,8 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+
+import java.util.List;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -17,7 +18,7 @@ import rx.schedulers.Schedulers;
  */
 public class ServiceUtils {
 
-    static void scheduleOnIO_ObserveOnMainThread(@NonNull Observable<?> observable, @NonNull Subscriber<?>... subscribers){
+    static void scheduleOnIO_ObserveOnMainThread(@NonNull Observable<?> observable, @NonNull List<Subscriber> subscribers){
         ConnectableObservable<?> connectableObservable = observable.publish();
 
         for(Subscriber subscriber: subscribers){

@@ -9,6 +9,6 @@ import com.service.request.ListRepositoriesRequest;
  * Created by ricar on 04/09/2016.
  */
 public interface IRepoServiceHandler {
-    void callListRepositories(@NonNull ListRepositoriesRequest<?> request);
-    void exchangeToken(@NonNull ExchangeTokenRequest<?> request);
+    <S> void callListRepositories(@NonNull ListRepositoriesRequest<S> request);
+    <S> void exchangeToken(@NonNull ExchangeTokenRequest<S> request);
 }

@@ -9,6 +9,7 @@ import com.repofetcher.RepoFetcherApplication;
 import com.service.request.ExchangeTokenRequest;
 import com.service.request.ListRepositoriesRequest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
@@ -34,15 +35,21 @@ public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService
     }
 
     @Override
-    public void callListRepositories(@NonNull ListRepositoriesRequest<?> request) {
+    public <S> void callListRepositories(@NonNull ListRepositoriesRequest<S> request) {
         Observable<BitBucketRepositories> repositoriesOb = getService().listRepositories(request.getUser());
-        Subscriber[] subscribers = {new SubscriberAdapter<>(request.getServiceResponse())};
-        addSubscribers(request.getHash(), subscribers);
-        ServiceUtils.scheduleOnIO_ObserveOnMainThread(repositoriesOb, subscribers);
+
+        request.addServiceResponse(request.getUiServiceResponse());
+        List<Subscriber> subscriberAdapterList = new ArrayList<>();
+        for(RepoServiceResponse<S> serviceResponse : request.getServiceResponseList()){
+            subscriberAdapterList.add(new SubscriberAdapter<>(serviceResponse));
+        }
+
+        addSubscribers(request.getHash(), subscriberAdapterList);
+        ServiceUtils.scheduleOnIO_ObserveOnMainThread(repositoriesOb, subscriberAdapterList);
     }
 
     @Override
-    public void exchangeToken(@NonNull ExchangeTokenRequest<?> request) {
+    public <S> void exchangeToken(@NonNull ExchangeTokenRequest<S> request) {
         throw new UnsupportedOperationException();
     }
 

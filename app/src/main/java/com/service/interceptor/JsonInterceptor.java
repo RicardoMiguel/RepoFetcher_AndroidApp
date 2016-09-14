@@ -1,5 +1,7 @@
 package com.service.interceptor;
 
+import com.service.Constants;
+
 import java.io.IOException;
 
 import okhttp3.Interceptor;
@@ -15,8 +17,8 @@ public class JsonInterceptor implements Interceptor {
         Request request = chain
                 .request()
                 .newBuilder()
-                .addHeader("Content-Type", "application/json")
-                .addHeader("Accept", "application/json")
+                .addHeader(Constants.CONTENT_TYPE, Constants.APLLICATION_JSON)
+                .addHeader(Constants.ACCEPT, Constants.APLLICATION_JSON)
                 .build();
         return chain.proceed(request);
     }
