@@ -5,11 +5,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 import com.service.RepoServiceResponse;
-import com.service.RxJavaController;
+import com.service.rx.RxJavaController;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,7 +17,7 @@ public abstract class BaseRequest<T> {
 
     private RepoServiceResponse<T> uiServiceResponse;
     @Nullable
-    private Map<Integer,List<RepoServiceResponse<T>>> serviceResponseList;
+    private ServiceResponseMapAdapter<T> responseMap;
     private int hash;
     private Map<String, String> params;
 
@@ -39,25 +37,16 @@ public abstract class BaseRequest<T> {
         }
     }
 
-    public void addServiceResponse(@RxJavaController.SchedulerType int type, @Nullable RepoServiceResponse<T> serviceResponse) {
-        Map<Integer, List<RepoServiceResponse<T>>> serviceResponseList = getServiceResponseList();
-
-        List<RepoServiceResponse<T>> list = serviceResponseList.get(type);
-
-        if(list == null){
-            list = new ArrayList<>();
-        }
-
-        list.add(serviceResponse);
-        serviceResponseList.put(type, list);
+    public void addServiceResponse(@RxJavaController.SchedulerType int type, @NonNull RepoServiceResponse<T> serviceResponse){
+        getServiceResponseList().add(type, serviceResponse);
     }
 
     @NonNull
-    public Map<Integer, List<RepoServiceResponse<T>>> getServiceResponseList(){
-        if(this.serviceResponseList == null){
-            this.serviceResponseList = new HashMap<>();
+    public ServiceResponseMapAdapter<T> getServiceResponseList(){
+        if(this.responseMap == null){
+            this.responseMap = new ServiceResponseMapAdapter<>();
         }
-        return serviceResponseList;
+        return responseMap;
     }
 
     public int getHash() {

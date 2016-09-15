@@ -1,8 +1,10 @@
-package com.service;
+package com.service.rx;
 
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 
+import com.service.RepoServiceResponse;
+import com.service.SubscriberAdapter;
 import com.service.request.BaseRequest;
 
 import java.lang.annotation.Retention;
@@ -43,18 +45,12 @@ public class RxJavaController<T> {
 
     }
 
-    void scheduleAndObserve(@NonNull Observable<T> observable, BaseRequest<T> request){
-        Map<Integer, List<RepoServiceResponse<T>>> subscribers = request.getServiceResponseList();
-
-        scheduleAndObserve(observable,subscribers);
-    }
-
-    void scheduleAndObserve(@NonNull Observable<T> observable, Map<Integer, List<RepoServiceResponse<T>>> subscribers){
+    public void scheduleAndObserve(@NonNull Observable<T> observable, @NonNull SubscribersMap<T> subscribersMap){
         ConnectableObservable<T> connectableObservable = observable.publish();
 
-        for (Map.Entry<Integer, List<RepoServiceResponse<T>>> entry : subscribers.entrySet())
+        for (Map.Entry<Integer, List<Subscriber<T>>> entry : subscribersMap.getSubscribersList().entrySet())
         {
-            for(RepoServiceResponse<T> serviceResponse: entry.getValue()){
+            for(Subscriber<T> subscriber: entry.getValue()){
 
                 Observable<T> obs = connectableObservable.subscribeOn(Schedulers.io());
 
@@ -67,7 +63,7 @@ public class RxJavaController<T> {
                         break;
                 }
 
-                obs.subscribe(new SubscriberAdapter<T>(serviceResponse));
+                obs.subscribe(subscriber);
             }
         }
 

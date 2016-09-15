@@ -7,6 +7,9 @@ import com.repofetcher.R;
 import com.repofetcher.RepoFetcherApplication;
 import com.service.request.ExchangeTokenRequest;
 import com.service.request.ListRepositoriesRequest;
+import com.service.request.ServiceResponseMapAdapter;
+import com.service.rx.RxJavaController;
+
 import rx.Observable;
 
 /**
@@ -32,7 +35,7 @@ public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService
     public <S> void callListRepositories(@NonNull ListRepositoriesRequest<S> request) {
         Observable<BitBucketRepositories> repositoriesOb = getService().listRepositories(request.getUser());
 
-        new RxJavaController<BitBucketRepositories>().scheduleAndObserve(repositoriesOb, (ListRepositoriesRequest<BitBucketRepositories>)request);
+        new RxJavaController<BitBucketRepositories>().scheduleAndObserve(repositoriesOb, (ServiceResponseMapAdapter<BitBucketRepositories>)request.getServiceResponseList());
     }
 
     @Override

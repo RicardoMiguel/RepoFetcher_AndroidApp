@@ -11,9 +11,9 @@ import android.text.TextUtils;
 
 import com.model.github.GitHubAccessToken;
 import com.repofetcher.RepoFetcherApplication;
-import com.service.request.BaseRequest;
 import com.service.request.ExchangeTokenRequest;
 import com.service.request.ListRepositoriesRequest;
+import com.service.rx.RxJavaController;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -69,7 +69,7 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler>{
 
     public static void callExchangeToken(@NonNull ExchangeTokenRequest<GitHubAccessToken> request){
         RepoServiceHandler handler = getInstance().get(FetcherCallsHandler.GITHUB);
-        request.addServiceResponse(BaseRequest.IO, new RepoServiceResponse<GitHubAccessToken>() {
+        request.addServiceResponse(RxJavaController.IO, new RepoServiceResponse<GitHubAccessToken>() {
             @Override
             public void onSuccess(GitHubAccessToken object) {
                 handler.setOAuthToken(object.getAccessToken());

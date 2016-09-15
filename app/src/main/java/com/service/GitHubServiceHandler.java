@@ -8,15 +8,12 @@ import com.repofetcher.R;
 import com.repofetcher.RepoFetcherApplication;
 import com.service.request.ExchangeTokenRequest;
 import com.service.request.ListRepositoriesRequest;
+import com.service.request.ServiceResponseMapAdapter;
+import com.service.rx.RxJavaController;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import rx.Observable;
-import rx.Subscriber;
 
 /**
  * Created by ricar on 02/09/2016.
@@ -40,14 +37,14 @@ class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
     public <S> void callListRepositories(@NonNull ListRepositoriesRequest<S> request){
         Observable<List<GitHubRepo>> repositoriesOb = getService().listRepositories(request.getUser(), request.getParams());
 
-        new RxJavaController<List<GitHubRepo>>().scheduleAndObserve(repositoriesOb, (ListRepositoriesRequest<List<GitHubRepo>>)request);
+        new RxJavaController<List<GitHubRepo>>().scheduleAndObserve(repositoriesOb, (ServiceResponseMapAdapter<List<GitHubRepo>>)request.getServiceResponseList());
     }
 
     @Override
     public <S> void exchangeToken(@NonNull ExchangeTokenRequest<S> request) {
         Observable<GitHubAccessToken> accessTokenObservable = getService().exchangeToken(getExchangeTokenUrl(), request.getParams());
 
-        new RxJavaController<GitHubAccessToken>().scheduleAndObserve(accessTokenObservable,(ExchangeTokenRequest<GitHubAccessToken>)request);
+        new RxJavaController<GitHubAccessToken>().scheduleAndObserve(accessTokenObservable,(ServiceResponseMapAdapter<GitHubAccessToken>)request.getServiceResponseList());
     }
 
     @NonNull
