@@ -10,6 +10,7 @@ import android.text.TextUtils;
 
 import com.model.AccessToken;
 import com.service.request.ExchangeTokenRequest;
+import com.service.request.ListOwnRepositoriesRequest;
 import com.service.request.ListRepositoriesRequest;
 import com.service.rx.RxJavaController;
 
@@ -70,6 +71,11 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
     }
 
     public static void callListRepositories(@RepoServiceType int service, @NonNull ListRepositoriesRequest<?> request){
+        IRepoServiceHandler handler = getInstance().get(service);
+        makeCallIfThereIsNetwork(() -> handler.callListRepositories(request), request.getUiServiceResponse());
+    }
+
+    public static void callListRepositories(@RepoServiceType int service, @NonNull ListOwnRepositoriesRequest<?> request){
         IRepoServiceHandler handler = getInstance().get(service);
         makeCallIfThereIsNetwork(() -> handler.callListRepositories(request), request.getUiServiceResponse());
     }

@@ -13,21 +13,13 @@ import java.util.Map;
 /**
  * Created by ricar on 12/09/2016.
  */
-public class ListRepositoriesRequest<T> extends BaseRequest<T> {
+public class ListRepositoriesRequest<T> extends ListOwnRepositoriesRequest<T> {
 
     private String user;
 
     public ListRepositoriesRequest(@NonNull Fragment context, @NonNull String user, @Nullable RepoServiceResponse<T> response) {
-        setHash(context);
+        super(context,response);
         this.user = user;
-        setUiServiceResponse(response);
-    }
-
-    @Override
-    public Map<String, String> getParams() {
-        Map<String, String> map = super.getParams();
-        map.put(Constants.TYPE, Constants.ALL);
-        return map;
     }
 
     public String getUser() {

@@ -8,6 +8,7 @@ import com.model.bitbucket.BitBucketRepositories;
 import com.repofetcher.R;
 import com.repofetcher.RepoFetcherApplication;
 import com.service.request.ExchangeTokenRequest;
+import com.service.request.ListOwnRepositoriesRequest;
 import com.service.request.ListRepositoriesRequest;
 import com.service.request.ServiceResponseMapAdapter;
 import com.service.rx.RxJavaController;
@@ -39,6 +40,11 @@ public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService
         Observable<BitBucketRepositories> repositoriesOb = getService().listRepositories(request.getUser());
 
         new RxJavaController<BitBucketRepositories>().scheduleAndObserve(repositoriesOb, (ServiceResponseMapAdapter<BitBucketRepositories>)request.getServiceResponseList());
+    }
+
+    @Override
+    public <S> void callListRepositories(@NonNull ListOwnRepositoriesRequest<S> request) {
+//        throw new UnsupportedOperationException();
     }
 
     @Override

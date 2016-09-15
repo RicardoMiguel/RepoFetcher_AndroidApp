@@ -20,6 +20,7 @@ import com.model.bitbucket.BitBucketRepositories;
 import com.model.github.GitHubRepo;
 import com.service.FetcherCallsHandler;
 import com.service.RepoServiceResponse;
+import com.service.request.ListOwnRepositoriesRequest;
 import com.service.request.ListRepositoriesRequest;
 
 import java.util.List;
@@ -49,7 +50,7 @@ public class RepoListFragment extends BaseFragment{
         Log.d(TAG, "onCreateView");
         Bundle args = getArguments();
         if(args != null){
-            user = args.getString(IntroFragment.class.getName());
+            user = args.getString(IntroFragment.class.getName(), null);
             repo = args.getInt(MultipleAccountRepositoriesFragment.class.getName());
         }
         return super.onCreateView(inflater, container, savedInstanceState);
@@ -67,9 +68,7 @@ public class RepoListFragment extends BaseFragment{
         Log.d(TAG, "onResume");
         super.onResume();
 
-        if(!TextUtils.isEmpty(user)) {
-            getRepoList(user, repo);
-        }
+        getRepoList(user, repo);
     }
 
     @Override
@@ -112,33 +111,63 @@ public class RepoListFragment extends BaseFragment{
         }
     }
 
-    private void getBitBucketRepoList(@NonNull String user){
-        FetcherCallsHandler.callListRepositories(FetcherCallsHandler.BITBUCKET, new ListRepositoriesRequest<>(this, user, new RepoServiceResponse<BitBucketRepositories>() {
+    private void getBitBucketRepoList(@Nullable String user){
+        if(user != null) {
+            FetcherCallsHandler.callListRepositories(FetcherCallsHandler.BITBUCKET, new ListRepositoriesRequest<>(this, user, new RepoServiceResponse<BitBucketRepositories>() {
 
-        @Override
-        public void onSuccess(BitBucketRepositories object) {
-            buildRepositoriesRecyclerView(object.getValues());
+                @Override
+                public void onSuccess(BitBucketRepositories object) {
+                    buildRepositoriesRecyclerView(object.getValues());
+                }
+
+                @Override
+                public void onError(Throwable t) {
+                    Toast.makeText(RepoListFragment.this.getContext(), t.toString(), Toast.LENGTH_LONG).show();
+                    Log.e("LOl", "", t);
+                }
+            }));
+        } else {
+            FetcherCallsHandler.callListRepositories(FetcherCallsHandler.BITBUCKET, new ListOwnRepositoriesRequest<>(this, new RepoServiceResponse<BitBucketRepositories>() {
+
+                @Override
+                public void onSuccess(BitBucketRepositories object) {
+                    buildRepositoriesRecyclerView(object.getValues());
+                }
+
+                @Override
+                public void onError(Throwable t) {
+                    Toast.makeText(RepoListFragment.this.getContext(), t.toString(), Toast.LENGTH_LONG).show();
+                    Log.e("LOl", "", t);
+                }
+            }));
         }
-
-        @Override
-        public void onError(Throwable t) {
-                Toast.makeText(RepoListFragment.this.getContext(), t.toString(), Toast.LENGTH_LONG).show();
-                Log.e("LOl","",t);
-            }
-        }));
     }
 
-    private void getGitHubRepoList(@NonNull String user){
-        FetcherCallsHandler.callListRepositories(FetcherCallsHandler.GITHUB, new ListRepositoriesRequest<>(this, user, new RepoServiceResponse<List<GitHubRepo>>() {
-            @Override
-            public void onSuccess(List<GitHubRepo> object) {
-                buildRepositoriesRecyclerView(object);
-            }
+    private void getGitHubRepoList(@Nullable String user){
+        if(user != null) {
+            FetcherCallsHandler.callListRepositories(FetcherCallsHandler.GITHUB, new ListRepositoriesRequest<>(this, user, new RepoServiceResponse<List<GitHubRepo>>() {
+                @Override
+                public void onSuccess(List<GitHubRepo> object) {
+                    buildRepositoriesRecyclerView(object);
+                }
 
-            @Override
-            public void onError(Throwable t) {
-                Toast.makeText(RepoListFragment.this.getContext(), t.toString(), Toast.LENGTH_LONG).show();
-            }
-        }));
+                @Override
+                public void onError(Throwable t) {
+                    Toast.makeText(RepoListFragment.this.getContext(), t.toString(), Toast.LENGTH_LONG).show();
+                }
+            }));
+        } else {
+            FetcherCallsHandler.callListRepositories(FetcherCallsHandler.GITHUB, new ListOwnRepositoriesRequest<>(this, new RepoServiceResponse<List<GitHubRepo>>() {
+                @Override
+                public void onSuccess(List<GitHubRepo> object) {
+                    buildRepositoriesRecyclerView(object);
+                }
+
+                @Override
+                public void onError(Throwable t) {
+                    Toast.makeText(RepoListFragment.this.getContext(), t.toString(), Toast.LENGTH_LONG).show();
+                }
+            }));
+        }
     }
 }
