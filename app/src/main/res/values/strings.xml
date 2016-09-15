@@ -4,7 +4,8 @@
     <string name="default_username">RicardoMiguel</string>
     <string name="fetch">Fetch</string>
     <string name="login_center_label">Go to Login center</string>
-    <string name="login_to_github_label">Login GitHub</string>
+    <string name="login_to_github_label">Login to GitHub</string>
+    <string name="logged_in_github_label">Already logged into GitHub</string>
 
     <string name="bitbucket_base_url">https://api.bitbucket.org/2.0/</string>
     <string name="github">GitHub</string>

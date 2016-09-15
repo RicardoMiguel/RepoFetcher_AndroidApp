@@ -6,6 +6,7 @@ import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 
 import com.model.AccessToken;
 import com.service.request.ExchangeTokenRequest;
@@ -145,5 +146,19 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
                 }
             }
         }
+    }
+
+    public static boolean hasSessions(){
+        boolean tokenFound = false;
+        for(RepoServiceHandler repoServiceHandler : getInstance().values()){
+            if(!TextUtils.isEmpty(repoServiceHandler.getOAuthToken())){
+                tokenFound = true;
+            }
+        }
+        return tokenFound;
+    }
+
+    public static boolean hasSession(@RepoServiceType int service){
+        return !TextUtils.isEmpty(getInstance().get(service).getOAuthToken());
     }
 }

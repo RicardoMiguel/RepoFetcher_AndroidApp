@@ -38,5 +38,12 @@ public class LoginCenterFragment extends BaseFragment{
     }
 
     private void setGitHubButton() {
+        if(FetcherCallsHandler.hasSession(FetcherCallsHandler.GITHUB)){
+            gitHubButton.setEnabled(false);
+            gitHubButton.setText(R.string.logged_in_github_label);
+        } else {
+            gitHubButton.setEnabled(true);
+            gitHubButton.setText(R.string.login_to_github_label);
+        }
     }
 }
