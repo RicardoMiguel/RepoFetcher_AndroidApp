@@ -3,6 +3,7 @@ package com.repofetcher;
 import android.app.Application;
 import android.content.Context;
 
+import com.service.FetcherCallsHandler;
 import com.squareup.leakcanary.LeakCanary;
 
 /**
@@ -15,6 +16,7 @@ public class RepoFetcherApplication extends Application{
     public void onCreate() {
         super.onCreate();
         LeakCanary.install(this);
+        FetcherCallsHandler.init(this);
         context = this;
     }
 
