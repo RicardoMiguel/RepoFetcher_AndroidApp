@@ -15,8 +15,9 @@ import com.service.FetcherCallsHandler;
 /**
  * Created by ricar on 07/09/2016.
  */
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment implements FragmentTransitionService{
 
+    @Nullable
     private FragmentTransitionService fragmentTransitionService;
 
     @LayoutRes protected int layoutRes;
@@ -51,9 +52,15 @@ public abstract class BaseFragment extends Fragment {
         FetcherCallsHandler.unSubscribe(this);
     }
 
-    protected void goToFragment(@NonNull Class<? extends BaseFragment> fragment, @Nullable Bundle bundle){
+    public void switchFragment(@NonNull Class<? extends BaseFragment> fragment, @Nullable Bundle bundle){
         if(fragmentTransitionService != null){
             fragmentTransitionService.switchFragment(fragment, bundle);
+        }
+    }
+
+    public void goBack(){
+        if(fragmentTransitionService != null){
+            fragmentTransitionService.goBack();
         }
     }
 }

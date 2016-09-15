@@ -1,10 +1,11 @@
 package com.service;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import com.service.interceptor.JsonInterceptor;
+import com.service.interceptor.OAuthInterceptor;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,17 +21,34 @@ import rx.schedulers.Schedulers;
 /**
  * Created by ricar on 04/09/2016.
  */
-abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberService {
+abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberService, OAuthClientService {
 
     private T service;
 
+    @NonNull protected Context context;
+
+    @Nullable protected String clientId;
+    @Nullable protected String clientSecret;
+    @Nullable protected String authorizationUrl;
+    @Nullable protected String exchangeTokenUrl;
+    @Nullable private String token;
+
     @Nullable private Map<Integer, List<Subscriber>> listToUnsubscribe;
+
+    @Nullable OAuthClientRequester oAuthClientRequester;
+
+    protected RepoServiceHandler(@NonNull Context context, @Nullable OAuthClientRequester oAuthClientRequester){
+        this.context = context;
+        this.oAuthClientRequester = oAuthClientRequester;
+    }
 
     protected T getService(){
         if(service == null){
-            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-            OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+                    .addInterceptor(new JsonInterceptor())
+                    .addInterceptor(new OAuthInterceptor(this))
+                    .build();
 
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(getServiceBaseUrl())
@@ -50,21 +68,23 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberS
 
 
     @Override
-    public void addSubscribers(int id, Subscriber... subscribers) {
+    public void addSubscribers(int id, List<Subscriber> subscribers) {
         Map<Integer, List<Subscriber>> listMap = getListToUnsubscribe();
         List<Subscriber> subscriber = listMap.get(id);
         if(subscriber == null){
-            listMap.put(id, new ArrayList<>(Arrays.asList(subscribers)));
+            listMap.put(id, subscribers);
         } else {
-            subscriber.addAll(Arrays.asList(subscribers));
+            subscriber.addAll(subscribers);
         }
     }
 
     @Override
     public void removeSubscribers(int id) {
         List<Subscriber> subscribers = getListToUnsubscribe().remove(id);
-        for(Subscriber subscriber : subscribers){
-            subscriber.unsubscribe();
+        if(subscribers != null) {
+            for (Subscriber subscriber : subscribers) {
+                subscriber.unsubscribe();
+            }
         }
     }
 
@@ -75,4 +95,17 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberS
         }
         return listToUnsubscribe;
     }
+
+    @Nullable
+    public String getOAuthToken(){
+        return token;
+    }
+
+    public void setOAuthToken(String token){
+        this.token = token;
+        if(oAuthClientRequester != null){
+            oAuthClientRequester.onTokenChanged(this);
+        }
+    }
+
 }

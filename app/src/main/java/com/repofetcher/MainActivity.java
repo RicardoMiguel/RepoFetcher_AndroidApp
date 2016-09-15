@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements FragmentTransitio
             fragment = new MultipleAccountRepositoriesFragment();
         } else if(fragmentClass == LoginCenterFragment.class){
             fragment = new LoginCenterFragment();
+        } else if(fragmentClass == WebViewFragment.class){
+            fragment = new WebViewFragment();
         }
 
         if(fragment != null && bundle != null){
@@ -73,8 +75,11 @@ public class MainActivity extends AppCompatActivity implements FragmentTransitio
         transaction.replace(R.id.fragment_container, fragment);
         transaction.addToBackStack(null);
 
-    // Commit the transaction
         transaction.commit();
-        Log.d("backstack",getSupportFragmentManager().getBackStackEntryCount()+"");
+    }
+
+    @Override
+    public void goBack() {
+        onBackPressed();
     }
 }

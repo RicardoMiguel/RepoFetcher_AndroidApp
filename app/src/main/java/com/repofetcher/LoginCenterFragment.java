@@ -5,6 +5,8 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
 
+import com.service.FetcherCallsHandler;
+
 /**
  * Created by ricar on 13/09/2016.
  */
@@ -20,6 +22,13 @@ public class LoginCenterFragment extends BaseFragment{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         gitHubButton = (Button)view.findViewById(R.id.login_github_button);
+        gitHubButton.setOnClickListener( v -> goToWebViewFragment(FetcherCallsHandler.GITHUB));
+    }
+
+    private void goToWebViewFragment(@FetcherCallsHandler.RepoServiceType int serviceType) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(WebViewFragment.class.getName(), new SerializableInteger(serviceType));
+        switchFragment(WebViewFragment.class, bundle);
     }
 
     @Override
@@ -29,5 +38,12 @@ public class LoginCenterFragment extends BaseFragment{
     }
 
     private void setGitHubButton() {
+        if(FetcherCallsHandler.hasSession(FetcherCallsHandler.GITHUB)){
+            gitHubButton.setEnabled(false);
+            gitHubButton.setText(R.string.logged_in_github_label);
+        } else {
+            gitHubButton.setEnabled(true);
+            gitHubButton.setText(R.string.login_to_github_label);
+        }
     }
 }

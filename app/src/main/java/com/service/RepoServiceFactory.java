@@ -1,5 +1,7 @@
 package com.service;
 
+import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 /**
@@ -7,13 +9,22 @@ import android.support.annotation.Nullable;
  */
 class RepoServiceFactory {
 
+    private Context context;
+    private OAuthClientRequester requester;
+
+
+    public RepoServiceFactory(@NonNull Context context, @Nullable OAuthClientRequester requester) {
+        this.context = context;
+        this.requester = requester;
+    }
+
     @Nullable
-    IRepoServiceHandler create(@FetcherCallsHandler.RepoServiceType int service){
+    RepoServiceHandler create(@FetcherCallsHandler.RepoServiceType int service){
         switch (service){
             case FetcherCallsHandler.GITHUB:
-                return new GitHubServiceHandler();
+                return new GitHubServiceHandler(context, requester);
             case FetcherCallsHandler.BITBUCKET:
-                return new BitBucketServiceHandler();
+                return new BitBucketServiceHandler(context, requester);
         }
         return null;
     }

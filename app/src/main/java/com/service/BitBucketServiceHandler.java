@@ -1,24 +1,26 @@
 package com.service;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.model.bitbucket.BitBucketRepositories;
-import com.model.github.GitHubRepo;
 import com.repofetcher.R;
 import com.repofetcher.RepoFetcherApplication;
+import com.service.request.ExchangeTokenRequest;
 import com.service.request.ListRepositoriesRequest;
-
-import java.util.List;
+import com.service.request.ServiceResponseMapAdapter;
+import com.service.rx.RxJavaController;
 
 import rx.Observable;
-import rx.Subscriber;
 
 /**
  * Created by ricar on 06/09/2016.
  */
 public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService>{
 
-    BitBucketServiceHandler() {
+    public BitBucketServiceHandler(@NonNull Context context, @Nullable OAuthClientRequester oAuthClientRequester) {
+        super(context, oAuthClientRequester);
     }
 
     @Override
@@ -29,14 +31,42 @@ public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService
     @NonNull
     @Override
     protected String getServiceBaseUrl() {
-        return RepoFetcherApplication.getContext().getString(R.string.bitbucket_base_url);
+        return context.getString(R.string.bitbucket_base_url);
     }
 
     @Override
-    public void callListRepositories(@NonNull ListRepositoriesRequest<?> request) {
+    public <S> void callListRepositories(@NonNull ListRepositoriesRequest<S> request) {
         Observable<BitBucketRepositories> repositoriesOb = getService().listRepositories(request.getUser());
-        Subscriber[] subscribers = {new SubscriberAdapter<>(request.getServiceResponse())};
-        addSubscribers(request.getHash(), subscribers);
-        ServiceUtils.scheduleOnIO_ObserveOnMainThread(repositoriesOb, subscribers);
+
+        new RxJavaController<BitBucketRepositories>().scheduleAndObserve(repositoriesOb, (ServiceResponseMapAdapter<BitBucketRepositories>)request.getServiceResponseList());
+    }
+
+    @Override
+    public <S> void exchangeToken(@NonNull ExchangeTokenRequest<S> request) {
+        throw new UnsupportedOperationException();
+    }
+
+    @NonNull
+    @Override
+    public String getClientId() {
+        throw new UnsupportedOperationException();
+    }
+
+    @NonNull
+    @Override
+    public String getClientSecret() {
+        throw new UnsupportedOperationException();
+    }
+
+    @NonNull
+    @Override
+    public String getAuthorizationUrl() {
+        throw new UnsupportedOperationException();
+    }
+
+    @NonNull
+    @Override
+    public String getExchangeTokenUrl() {
+        throw new UnsupportedOperationException();
     }
 }

@@ -56,11 +56,11 @@ public class IntroFragment extends BaseFragment{
         Bundle bundle = new Bundle();
         bundle.putString( IntroFragment.class.getName(), text);
 
-        goToFragment(MultipleAccountRepositoriesFragment.class, bundle);
+        switchFragment(MultipleAccountRepositoriesFragment.class, bundle);
     }
 
     private void goToLoginCenter(){
-        goToFragment(LoginCenterFragment.class, null);
+        switchFragment(LoginCenterFragment.class, null);
     }
 
 }
