@@ -1,6 +1,8 @@
 package com.service;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.model.github.GitHubAccessToken;
 import com.model.github.GitHubRepo;
@@ -20,7 +22,8 @@ import rx.Observable;
  */
 class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
 
-    GitHubServiceHandler() {
+    public GitHubServiceHandler(@NonNull Context context, @Nullable OAuthClientRequester oAuthClientRequester) {
+        super(context, oAuthClientRequester);
     }
 
     @Override
@@ -31,7 +34,7 @@ class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
     @NonNull
     @Override
     protected String getServiceBaseUrl() {
-        return RepoFetcherApplication.getContext().getString(R.string.github_base_url);
+        return context.getString(R.string.github_base_url);
     }
 
     public <S> void callListRepositories(@NonNull ListRepositoriesRequest<S> request){
@@ -51,7 +54,7 @@ class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
     @Override
     public String getClientId() {
         if(clientId == null){
-            clientId = RepoFetcherApplication.getContext().getString(R.string.github_client_id);
+            clientId = context.getString(R.string.github_client_id);
         }
 
         return clientId;
@@ -61,7 +64,7 @@ class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
     @Override
     public String getClientSecret() {
         if(clientSecret == null){
-            clientSecret = RepoFetcherApplication.getContext().getString(R.string.github_client_secret);
+            clientSecret = context.getString(R.string.github_client_secret);
         }
 
         return clientSecret;
@@ -71,7 +74,7 @@ class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
     @Override
     public String getAuthorizationUrl() {
         if(authorizationUrl == null){
-            authorizationUrl = RepoFetcherApplication.getContext().getString(R.string.github_authorization_url);
+            authorizationUrl = context.getString(R.string.github_authorization_url);
         }
 
         return authorizationUrl;
@@ -81,7 +84,7 @@ class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
     @Override
     public String getExchangeTokenUrl() {
         if(exchangeTokenUrl == null){
-            exchangeTokenUrl = RepoFetcherApplication.getContext().getString(R.string.github_exchange_token_url);
+            exchangeTokenUrl = context.getString(R.string.github_exchange_token_url);
         }
 
         return exchangeTokenUrl;

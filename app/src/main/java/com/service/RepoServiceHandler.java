@@ -1,13 +1,11 @@
 package com.service;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.service.interceptor.JsonInterceptor;
 import com.service.interceptor.OAuthInterceptor;
-import com.service.request.BaseRequest;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +15,6 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Observable;
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
 
@@ -28,6 +25,8 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberS
 
     private T service;
 
+    @NonNull protected Context context;
+
     @Nullable protected String clientId;
     @Nullable protected String clientSecret;
     @Nullable protected String authorizationUrl;
@@ -35,6 +34,13 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberS
     @Nullable private String token;
 
     @Nullable private Map<Integer, List<Subscriber>> listToUnsubscribe;
+
+    @Nullable OAuthClientRequester oAuthClientRequester;
+
+    protected RepoServiceHandler(@NonNull Context context, @Nullable OAuthClientRequester oAuthClientRequester){
+        this.context = context;
+        this.oAuthClientRequester = oAuthClientRequester;
+    }
 
     protected T getService(){
         if(service == null){
@@ -97,6 +103,9 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberS
 
     public void setOAuthToken(String token){
         this.token = token;
+        if(oAuthClientRequester != null){
+            oAuthClientRequester.onTokenChanged(this);
+        }
     }
 
 }

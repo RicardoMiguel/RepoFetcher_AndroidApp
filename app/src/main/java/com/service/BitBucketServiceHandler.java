@@ -1,6 +1,8 @@
 package com.service;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.model.bitbucket.BitBucketRepositories;
 import com.repofetcher.R;
@@ -17,7 +19,8 @@ import rx.Observable;
  */
 public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService>{
 
-    BitBucketServiceHandler() {
+    public BitBucketServiceHandler(@NonNull Context context, @Nullable OAuthClientRequester oAuthClientRequester) {
+        super(context, oAuthClientRequester);
     }
 
     @Override
@@ -28,7 +31,7 @@ public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService
     @NonNull
     @Override
     protected String getServiceBaseUrl() {
-        return RepoFetcherApplication.getContext().getString(R.string.bitbucket_base_url);
+        return context.getString(R.string.bitbucket_base_url);
     }
 
     @Override

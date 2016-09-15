@@ -22,9 +22,7 @@ import java.util.HashMap;
 /**
  * Created by ricar on 04/09/2016.
  */
-public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler>{
-
-    private static final String TOKEN_ID = "TOKEN_ID";
+public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> implements OAuthClientRequester{
 
     public static final int GITHUB = 0;
     public static final int BITBUCKET = 1;
@@ -53,13 +51,23 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler>{
         RepoServiceHandler handler = super.get(key);
 
         if(handler == null){
-            handler = new RepoServiceFactory().create((int)key);
+            handler = new RepoServiceFactory(RepoFetcherApplication.getContext(), this).create((int)key);
             if(handler != null) {
                 put((int) key, handler);
             }
         }
 
         return handler;
+    }
+
+    @Override
+    public void onTokenChanged(OAuthClientService oAuthClientService) {
+        if(oAuthClientService instanceof GitHubServiceHandler) {
+            saveToken(GitHubServiceHandler.class.getName(), oAuthClientService.getOAuthToken());
+        } else if(oAuthClientService instanceof BitBucketServiceHandler){
+            saveToken(BitBucketServiceHandler.class.getName(), oAuthClientService.getOAuthToken());
+        }
+
     }
 
     public static void callListRepositories(@RepoServiceType int service, @NonNull ListRepositoriesRequest<?> request){
@@ -73,7 +81,6 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler>{
             @Override
             public void onSuccess(GitHubAccessToken object) {
                 handler.setOAuthToken(object.getAccessToken());
-                saveToken(object.getAccessToken());
             }
 
             @Override
@@ -117,14 +124,14 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler>{
         }
     }
 
-    public static void saveToken(String token){
-        SharedPreferences sharedPref = RepoFetcherApplication.getContext().getSharedPreferences(TOKEN_ID, Context.MODE_PRIVATE);
+    private static void saveToken(String file, String token){
+        SharedPreferences sharedPref = RepoFetcherApplication.getContext().getSharedPreferences(file, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(TOKEN_ID, token);
+        editor.putString(Constants.TOKEN, token);
         editor.commit();
     }
 
     private static boolean hasToken(){
-        return !TextUtils.isEmpty(RepoFetcherApplication.getContext().getSharedPreferences(TOKEN_ID, Context.MODE_PRIVATE).getString(TOKEN_ID,null));
+        return !TextUtils.isEmpty(RepoFetcherApplication.getContext().getSharedPreferences(Constants.TOKEN, Context.MODE_PRIVATE).getString(Constants.TOKEN,null));
     }
 }
