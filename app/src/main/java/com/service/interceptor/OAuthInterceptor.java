@@ -31,6 +31,12 @@ public class OAuthInterceptor implements Interceptor {
         if(!TextUtils.isEmpty(oAuthClientService.getOAuthToken())){
                     request.addHeader(Constants.AUTHORIZATION, Constants.TOKEN + " " + oAuthClientService.getOAuthToken());
         }
-        return chain.proceed(request.build());
+        Response response = chain.proceed(request.build());
+
+        if(response.code() == 401){
+            oAuthClientService.setOAuthToken(null);
+        }
+
+        return response;
     }
 }
