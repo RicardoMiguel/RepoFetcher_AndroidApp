@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +18,6 @@ import com.service.FetcherCallsHandler;
 import com.service.RepoServiceResponse;
 import com.service.request.ExchangeTokenRequest;
 
-import org.w3c.dom.Text;
-
 /**
  * Created by ricar on 12/09/2016.
  */
@@ -28,15 +25,12 @@ public class WebViewFragment extends BaseFragment{
 
     private static final String TAG = WebViewFragment.class.getName();
 
-    public static final String AUTHORIZATION_URL = "AUTHORIZATION_URL";
-    public static final String CLIENT_ID = "CLIENT_ID";
-    public static final String CLIENT_SECRET = "CLIENT_SECRET";
-
     private WebView webView;
 
     private String authorizationUrl;
     private String clientId;
     private String clientSecret;
+    @FetcherCallsHandler.RepoServiceType private int serviceType;
 
     public WebViewFragment() {
         super(R.layout.web_view);
@@ -46,10 +40,12 @@ public class WebViewFragment extends BaseFragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Bundle bundle = getArguments();
-        if(bundle != null){
-            authorizationUrl = bundle.getString(AUTHORIZATION_URL);
-            clientId = bundle.getString(CLIENT_ID);
-            clientSecret = bundle.getString(CLIENT_SECRET);
+        if(bundle != null && bundle.getSerializable(TAG) instanceof SerializableInteger){
+            serviceType = ((SerializableInteger)bundle.getSerializable(TAG)).service;
+
+            authorizationUrl = FetcherCallsHandler.getAuthorizationUrl(serviceType);
+            clientId = FetcherCallsHandler.getClientId(serviceType);
+            clientSecret = FetcherCallsHandler.getClientSecret(serviceType);
         }
 
         return super.onCreateView(inflater, container, savedInstanceState);
@@ -89,7 +85,7 @@ public class WebViewFragment extends BaseFragment{
     }
 
     private void exchangeCodeForToken(@NonNull String code){
-        FetcherCallsHandler.callExchangeToken(new ExchangeTokenRequest<>(this, code, clientId, clientSecret, new RepoServiceResponse<GitHubAccessToken>() {
+        FetcherCallsHandler.callExchangeToken(serviceType, new ExchangeTokenRequest<>(this, code, clientId, clientSecret, new RepoServiceResponse<GitHubAccessToken>() {
             @Override
             public void onSuccess(GitHubAccessToken object) {
                 goBack();

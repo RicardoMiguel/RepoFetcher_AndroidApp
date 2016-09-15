@@ -2,11 +2,12 @@ package com.model.github;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.model.AccessToken;
 
 /**
  * Created by ricar on 13/09/2016.
  */
-public class GitHubAccessToken {
+public class GitHubAccessToken implements AccessToken{
 
     @SerializedName("access_token")
     @Expose

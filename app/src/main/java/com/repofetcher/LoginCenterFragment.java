@@ -27,9 +27,7 @@ public class LoginCenterFragment extends BaseFragment{
 
     private void goToWebViewFragment(@FetcherCallsHandler.RepoServiceType int serviceType) {
         Bundle bundle = new Bundle();
-        bundle.putString(WebViewFragment.AUTHORIZATION_URL, FetcherCallsHandler.getAuthorizationUrl(serviceType));
-        bundle.putString(WebViewFragment.CLIENT_ID, FetcherCallsHandler.getClientId(serviceType));
-        bundle.putString(WebViewFragment.CLIENT_SECRET, FetcherCallsHandler.getClientSecret(serviceType));
+        bundle.putSerializable(WebViewFragment.class.getName(), new SerializableInteger(serviceType));
         switchFragment(WebViewFragment.class, bundle);
     }
 

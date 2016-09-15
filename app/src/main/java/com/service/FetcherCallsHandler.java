@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
-import com.model.github.GitHubAccessToken;
+import com.model.AccessToken;
 import com.service.request.ExchangeTokenRequest;
 import com.service.request.ListRepositoriesRequest;
 import com.service.rx.RxJavaController;
@@ -73,12 +73,14 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
         makeCallIfThereIsNetwork(() -> handler.callListRepositories(request), request.getUiServiceResponse());
     }
 
-    public static void callExchangeToken(@NonNull ExchangeTokenRequest<GitHubAccessToken> request){
-        RepoServiceHandler handler = getInstance().get(FetcherCallsHandler.GITHUB);
-        request.addServiceResponse(RxJavaController.IO, new RepoServiceResponse<GitHubAccessToken>() {
+    public static <S> void callExchangeToken(@RepoServiceType int service, @NonNull ExchangeTokenRequest<S> request){
+        RepoServiceHandler handler = getInstance().get(service);
+        request.addServiceResponse(RxJavaController.IO, new RepoServiceResponse<S>() {
             @Override
-            public void onSuccess(GitHubAccessToken object) {
-                handler.setOAuthToken(object.getAccessToken());
+            public void onSuccess(S object) {
+                if(object instanceof AccessToken) {
+                    handler.setOAuthToken(((AccessToken) object).getAccessToken());
+                }
             }
 
             @Override
