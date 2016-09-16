@@ -25,7 +25,7 @@ public abstract class AccessTokenWebViewFragment extends BaseFragment{
 
     private static final String TAG = AccessTokenWebViewFragment.class.getName();
 
-    private WebView webView;
+    protected WebView webView;
 
     protected String authorizationUrl;
     protected String clientId;
@@ -58,9 +58,8 @@ public abstract class AccessTokenWebViewFragment extends BaseFragment{
         }
     }
 
-    private void configWebView(){
+    protected void configWebView(){
 
-        webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl(getQuery());
 
         webView.setWebViewClient(new WebViewClient() {

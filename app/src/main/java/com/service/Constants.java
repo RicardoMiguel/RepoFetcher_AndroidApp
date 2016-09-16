@@ -17,4 +17,5 @@ public final class Constants {
     public static final String AUTHORIZATION = "Authorization";
     public static final String TOKEN = "token";
     public static final String RESPONSE_TYPE = "response_type";
+    public static final String ACCESS_TOKEN = "access_token";
 }
