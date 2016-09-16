@@ -21,32 +21,27 @@ import com.service.request.ExchangeTokenRequest;
 /**
  * Created by ricar on 12/09/2016.
  */
-public class WebViewFragment extends BaseFragment{
+public abstract class AccessTokenWebViewFragment extends BaseFragment{
 
-    private static final String TAG = WebViewFragment.class.getName();
+    private static final String TAG = AccessTokenWebViewFragment.class.getName();
 
     private WebView webView;
 
-    private String authorizationUrl;
-    private String clientId;
-    private String clientSecret;
-    @FetcherCallsHandler.RepoServiceType private int serviceType;
+    protected String authorizationUrl;
+    protected String clientId;
+    protected String clientSecret;
 
-    public WebViewFragment() {
+    public AccessTokenWebViewFragment() {
         super(R.layout.web_view);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Bundle bundle = getArguments();
-        if(bundle != null && bundle.getSerializable(TAG) instanceof SerializableInteger){
-            serviceType = ((SerializableInteger)bundle.getSerializable(TAG)).service;
 
-            authorizationUrl = FetcherCallsHandler.getAuthorizationUrl(serviceType);
-            clientId = FetcherCallsHandler.getClientId(serviceType);
-            clientSecret = FetcherCallsHandler.getClientSecret(serviceType);
-        }
+        authorizationUrl = FetcherCallsHandler.getAuthorizationUrl(getType());
+        clientId = FetcherCallsHandler.getClientId(getType());
+        clientSecret = FetcherCallsHandler.getClientSecret(getType());
 
         return super.onCreateView(inflater, container, savedInstanceState);
     }
@@ -64,12 +59,9 @@ public class WebViewFragment extends BaseFragment{
     }
 
     private void configWebView(){
-        Uri url = Uri.parse(authorizationUrl)
-                .buildUpon()
-                .appendQueryParameter(Constants.CLIENT_ID, clientId)
-                .appendQueryParameter(Constants.SCOPE, Constants.REPO)
-                .build();
-        webView.loadUrl(url.toString());
+
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.loadUrl(getQuery());
 
         webView.setWebViewClient(new WebViewClient() {
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -84,16 +76,9 @@ public class WebViewFragment extends BaseFragment{
         });
     }
 
-    private void exchangeCodeForToken(@NonNull String code){
-        FetcherCallsHandler.callExchangeToken(serviceType, new ExchangeTokenRequest<>(this, code, clientId, clientSecret, new RepoServiceResponse<GitHubAccessToken>() {
-            @Override
-            public void onSuccess(GitHubAccessToken object) {
-                goBack();
-            }
+    protected abstract String getQuery();
 
-            @Override
-            public void onError(Throwable t) {
-            }
-        }));
-    }
+    protected abstract void exchangeCodeForToken(@NonNull String code);
+
+    protected abstract @FetcherCallsHandler.RepoServiceType int getType();
 }

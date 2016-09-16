@@ -6,8 +6,9 @@
     <string name="login_center_label">Go to Login center</string>
     <string name="login_to_github_label">Login to GitHub</string>
     <string name="logged_in_github_label">Already logged into GitHub</string>
+    <string name="login_to_bitbucket_label">Login to BitBucket</string>
+    <string name="logged_in_bitbucket_label">Already logged into BitBucket</string>
 
-    <string name="bitbucket_base_url">https://api.bitbucket.org/2.0/</string>
     <string name="github">GitHub</string>
     <string name="bitbucket">BitBucket</string>
 
@@ -17,4 +18,9 @@
     <string name="github_authorization_url">https://github.com/login/oauth/authorize</string>
     <string name="github_exchange_token_url">https://github.com/login/oauth/access_token</string>
 
+    <string name="bitbucket_base_url">https://api.bitbucket.org/2.0/</string>
+    <string name="bitbucket_client_id">eut66Ru5G54K8LAwCV</string>
+    <string name="bitbucket_client_secret">VLznEp7vtk5MBZ3VRpCA37RMGr6SJHHX</string>
+    <string name="bitbucket_authorization_url">https://bitbucket.org/site/oauth2/authorize</string>
+    <string name="bitbucket_exchange_token_url">https://bitbucket.org/site/oauth2/access_token</string>
 </resources>

@@ -49,24 +49,40 @@ public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService
     @NonNull
     @Override
     public String getClientId() {
-        throw new UnsupportedOperationException();
+        if(clientId == null){
+            clientId = context.getString(R.string.bitbucket_client_id);
+        }
+
+        return clientId;
     }
 
     @NonNull
     @Override
     public String getClientSecret() {
-        throw new UnsupportedOperationException();
+        if(clientSecret == null){
+            clientSecret = context.getString(R.string.bitbucket_client_secret);
+        }
+
+        return clientSecret;
     }
 
     @NonNull
     @Override
     public String getAuthorizationUrl() {
-        throw new UnsupportedOperationException();
+        if(authorizationUrl == null){
+            authorizationUrl = context.getString(R.string.bitbucket_authorization_url);
+        }
+
+        return authorizationUrl;
     }
 
     @NonNull
     @Override
     public String getExchangeTokenUrl() {
-        throw new UnsupportedOperationException();
+        if(exchangeTokenUrl == null){
+            exchangeTokenUrl = context.getString(R.string.bitbucket_exchange_token_url);
+        }
+
+        return exchangeTokenUrl;
     }
 }

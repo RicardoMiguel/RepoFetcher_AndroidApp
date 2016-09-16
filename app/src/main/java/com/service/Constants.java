@@ -16,4 +16,5 @@ public final class Constants {
     public static final String APLLICATION_JSON = "application/json";
     public static final String AUTHORIZATION = "Authorization";
     public static final String TOKEN = "token";
+    public static final String RESPONSE_TYPE = "response_type";
 }
