@@ -7,8 +7,11 @@ import android.text.TextUtils;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.model.bitbucket.BitBucketAccessToken;
 import com.service.Constants;
 import com.service.FetcherCallsHandler;
+import com.service.RepoServiceResponse;
+import com.service.request.BitbucketExchangeTokenRequest;
 
 /**
  * Created by ricar on 16/09/2016.
@@ -20,7 +23,7 @@ public class BitbucketAccessTokenWebViewFragment extends AccessTokenWebViewFragm
         return Uri.parse(authorizationUrl)
                 .buildUpon()
                 .appendQueryParameter(Constants.CLIENT_ID, clientId)
-                .appendQueryParameter(Constants.RESPONSE_TYPE, Constants.TOKEN)
+                .appendQueryParameter(Constants.RESPONSE_TYPE, Constants.CODE)
                 .build().toString();
     }
 
@@ -32,7 +35,7 @@ public class BitbucketAccessTokenWebViewFragment extends AccessTokenWebViewFragm
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
 
                 Uri uri = Uri.parse(url);
-                String code = uri.getQueryParameter(Constants.ACCESS_TOKEN);
+                String code = uri.getQueryParameter(Constants.CODE);
                 if (!TextUtils.isEmpty(code)) {
                     webView.stopLoading();
                     exchangeCodeForToken(code);
@@ -43,7 +46,21 @@ public class BitbucketAccessTokenWebViewFragment extends AccessTokenWebViewFragm
 
     @Override
     protected void exchangeCodeForToken(@NonNull String code) {
+        FetcherCallsHandler.callBitbucketExchangeToken(new BitbucketExchangeTokenRequest(this,
+                code,
+                clientId,
+                clientSecret,
+                new RepoServiceResponse<BitBucketAccessToken>() {
+                    @Override
+                    public void onSuccess(BitBucketAccessToken object) {
+                        goBack();
+                    }
 
+                    @Override
+                    public void onError(Throwable t) {
+
+                    }
+                }));
     }
 
     @Override

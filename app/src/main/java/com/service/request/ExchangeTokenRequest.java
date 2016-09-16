@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
+import com.model.github.GitHubAccessToken;
 import com.service.Constants;
 import com.service.RepoServiceResponse;
 
@@ -12,11 +13,11 @@ import java.util.Map;
 /**
  * Created by ricar on 13/09/2016.
  */
-public class ExchangeTokenRequest<T> extends BaseRequest<T>{
+public class ExchangeTokenRequest<T> extends BaseRequest<T> implements IExchangeToken{
 
-    private String code;
-    private String clientId;
-    private String clientSecret;
+    protected String code;
+    protected String clientId;
+    protected String clientSecret;
 
     public ExchangeTokenRequest(@NonNull Fragment context,
                                 @NonNull String code,

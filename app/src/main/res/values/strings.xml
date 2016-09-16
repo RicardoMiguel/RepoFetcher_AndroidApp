@@ -19,8 +19,8 @@
     <string name="github_exchange_token_url">https://github.com/login/oauth/access_token</string>
 
     <string name="bitbucket_base_url">https://api.bitbucket.org/2.0/</string>
-    <string name="bitbucket_client_id">eut66Ru5G54K8LAwCV</string>
-    <string name="bitbucket_client_secret">VLznEp7vtk5MBZ3VRpCA37RMGr6SJHHX</string>
+    <string name="bitbucket_client_id">D9W2k84m3z34ygLXdx</string>
+    <string name="bitbucket_client_secret">wFKVBB52nrsNWT8XTzvPM6gfWBfBcVYe</string>
     <string name="bitbucket_authorization_url">https://bitbucket.org/site/oauth2/authorize</string>
     <string name="bitbucket_exchange_token_url">https://bitbucket.org/site/oauth2/access_token</string>
 </resources>

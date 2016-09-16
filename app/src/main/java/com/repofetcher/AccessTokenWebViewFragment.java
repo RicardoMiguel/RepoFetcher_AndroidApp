@@ -12,11 +12,8 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.model.github.GitHubAccessToken;
 import com.service.Constants;
 import com.service.FetcherCallsHandler;
-import com.service.RepoServiceResponse;
-import com.service.request.ExchangeTokenRequest;
 
 /**
  * Created by ricar on 12/09/2016.

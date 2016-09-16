@@ -3,11 +3,13 @@ package com.service;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Base64;
 
+import com.model.bitbucket.BitBucketAccessToken;
 import com.model.bitbucket.BitBucketRepositories;
 import com.repofetcher.R;
-import com.repofetcher.RepoFetcherApplication;
-import com.service.request.ExchangeTokenRequest;
+import com.service.request.BitbucketExchangeTokenRequest;
+import com.service.request.IExchangeToken;
 import com.service.request.ListRepositoriesRequest;
 import com.service.request.ServiceResponseMapAdapter;
 import com.service.rx.RxJavaController;
@@ -42,8 +44,17 @@ public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService
     }
 
     @Override
-    public <S> void exchangeToken(@NonNull ExchangeTokenRequest<S> request) {
-        throw new UnsupportedOperationException();
+    public void exchangeToken(@NonNull IExchangeToken request) {
+        if(request instanceof BitbucketExchangeTokenRequest) {
+            BitbucketExchangeTokenRequest castedRequest = (BitbucketExchangeTokenRequest) request;
+
+            Observable<BitBucketAccessToken> accessTokenObservable = getService().exchangeToken(getExchangeTokenUrl(),
+                    castedRequest.getBasicAuthorization(),
+                    castedRequest.getAuthorizationGrant(),
+                    castedRequest.getCode());
+
+            new RxJavaController<BitBucketAccessToken>().scheduleAndObserve(accessTokenObservable, castedRequest.getServiceResponseList());
+        }
     }
 
     @NonNull
