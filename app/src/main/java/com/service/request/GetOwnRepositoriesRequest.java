@@ -12,9 +12,9 @@ import java.util.Map;
 /**
  * Created by ricar on 15/09/2016.
  */
-public class ListOwnRepositoriesRequest<T> extends BaseRequest<T> {
+public class GetOwnRepositoriesRequest<T> extends BaseRequest<T> {
 
-    public ListOwnRepositoriesRequest(@NonNull Fragment context, @Nullable RepoServiceResponse<T> response) {
+    public GetOwnRepositoriesRequest(@NonNull Fragment context, @Nullable RepoServiceResponse<T> response) {
         setHash(context);
         setUiServiceResponse(response);
     }

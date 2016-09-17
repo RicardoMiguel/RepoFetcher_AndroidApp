@@ -9,10 +9,9 @@ import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 
 import com.model.AccessToken;
-import com.model.github.GitHubAccessToken;
 import com.service.request.ExchangeTokenRequest;
-import com.service.request.ListOwnRepositoriesRequest;
-import com.service.request.ListRepositoriesRequest;
+import com.service.request.GetOwnRepositoriesRequest;
+import com.service.request.GetRepositoriesRequest;
 import com.service.rx.RxJavaController;
 
 import java.lang.annotation.Retention;
@@ -71,12 +70,12 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
         return handler;
     }
 
-    public static void callListRepositories(@RepoServiceType int service, @NonNull ListRepositoriesRequest<?> request){
+    public static void callListRepositories(@RepoServiceType int service, @NonNull GetRepositoriesRequest<?> request){
         IRepoServiceHandler handler = getInstance().get(service);
         makeCallIfThereIsNetwork(() -> handler.callListRepositories(request), request.getUiServiceResponse());
     }
 
-    public static void callListRepositories(@RepoServiceType int service, @NonNull ListOwnRepositoriesRequest<?> request){
+    public static void callListRepositories(@RepoServiceType int service, @NonNull GetOwnRepositoriesRequest<?> request){
         IRepoServiceHandler handler = getInstance().get(service);
         makeCallIfThereIsNetwork(() -> handler.callListRepositories(request), request.getUiServiceResponse());
     }

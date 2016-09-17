@@ -9,8 +9,8 @@ import com.model.github.GitHubAccessToken;
 import com.model.github.GitHubRepo;
 import com.repofetcher.R;
 import com.service.request.ExchangeTokenRequest;
-import com.service.request.ListOwnRepositoriesRequest;
-import com.service.request.ListRepositoriesRequest;
+import com.service.request.GetOwnRepositoriesRequest;
+import com.service.request.GetRepositoriesRequest;
 import com.service.request.ServiceResponseMapAdapter;
 import com.service.rx.RxJavaController;
 
@@ -38,14 +38,14 @@ class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
         return context.getString(R.string.github_base_url);
     }
 
-    public <S> void callListRepositories(@NonNull ListRepositoriesRequest<S> request){
+    public <S> void callListRepositories(@NonNull GetRepositoriesRequest<S> request){
         Observable<List<GitHubRepo>> repositoriesOb = getService().listRepositories(request.getUser(), request.getParams());
 
         new RxJavaController<List<GitHubRepo>>().scheduleAndObserve(repositoriesOb, (ServiceResponseMapAdapter<List<GitHubRepo>>)request.getServiceResponseList());
     }
 
     @Override
-    public <S> void callListRepositories(@NonNull ListOwnRepositoriesRequest<S> request) {
+    public <S> void callListRepositories(@NonNull GetOwnRepositoriesRequest<S> request) {
         Observable<List<GitHubRepo>> repositoriesOb = getService().listRepositories(request.getParams());
 
         new RxJavaController<List<GitHubRepo>>().scheduleAndObserve(repositoriesOb, (ServiceResponseMapAdapter<List<GitHubRepo>>)request.getServiceResponseList());

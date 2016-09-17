@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,8 +19,8 @@ import com.model.bitbucket.BitBucketRepositories;
 import com.model.github.GitHubRepo;
 import com.service.FetcherCallsHandler;
 import com.service.RepoServiceResponse;
-import com.service.request.ListOwnRepositoriesRequest;
-import com.service.request.ListRepositoriesRequest;
+import com.service.request.GetOwnRepositoriesRequest;
+import com.service.request.GetRepositoriesRequest;
 
 import java.util.List;
 
@@ -112,7 +111,7 @@ public class RepoListFragment extends BaseFragment{
     }
 
     private void getBitBucketRepoList(@Nullable String user){
-        FetcherCallsHandler.callListRepositories(FetcherCallsHandler.BITBUCKET, new ListRepositoriesRequest<>(this, user, new RepoServiceResponse<BitBucketRepositories>() {
+        FetcherCallsHandler.callListRepositories(FetcherCallsHandler.BITBUCKET, new GetRepositoriesRequest<>(this, user, new RepoServiceResponse<BitBucketRepositories>() {
 
             @Override
             public void onSuccess(BitBucketRepositories object) {
@@ -129,7 +128,7 @@ public class RepoListFragment extends BaseFragment{
 
     private void getGitHubRepoList(@Nullable String user){
         if(user != null) {
-            FetcherCallsHandler.callListRepositories(FetcherCallsHandler.GITHUB, new ListRepositoriesRequest<>(this, user, new RepoServiceResponse<List<GitHubRepo>>() {
+            FetcherCallsHandler.callListRepositories(FetcherCallsHandler.GITHUB, new GetRepositoriesRequest<>(this, user, new RepoServiceResponse<List<GitHubRepo>>() {
                 @Override
                 public void onSuccess(List<GitHubRepo> object) {
                     buildRepositoriesRecyclerView(object);
@@ -141,7 +140,7 @@ public class RepoListFragment extends BaseFragment{
                 }
             }));
         } else {
-            FetcherCallsHandler.callListRepositories(FetcherCallsHandler.GITHUB, new ListOwnRepositoriesRequest<>(this, new RepoServiceResponse<List<GitHubRepo>>() {
+            FetcherCallsHandler.callListRepositories(FetcherCallsHandler.GITHUB, new GetOwnRepositoriesRequest<>(this, new RepoServiceResponse<List<GitHubRepo>>() {
                 @Override
                 public void onSuccess(List<GitHubRepo> object) {
                     buildRepositoriesRecyclerView(object);

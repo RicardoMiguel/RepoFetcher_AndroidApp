@@ -10,8 +10,8 @@ import com.model.bitbucket.BitBucketRepositories;
 import com.repofetcher.R;
 import com.service.request.BitbucketExchangeTokenRequest;
 import com.service.request.ExchangeTokenRequest;
-import com.service.request.ListOwnRepositoriesRequest;
-import com.service.request.ListRepositoriesRequest;
+import com.service.request.GetOwnRepositoriesRequest;
+import com.service.request.GetRepositoriesRequest;
 import com.service.request.ServiceResponseMapAdapter;
 import com.service.rx.RxJavaController;
 
@@ -38,16 +38,16 @@ public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService
     }
 
     @Override
-    public <S> void callListRepositories(@NonNull ListRepositoriesRequest<S> request) {
+    public <S> void callListRepositories(@NonNull GetRepositoriesRequest<S> request) {
         Observable<BitBucketRepositories> repositoriesOb = getService().listRepositories(request.getUser());
 
         new RxJavaController<BitBucketRepositories>().scheduleAndObserve(repositoriesOb, (ServiceResponseMapAdapter<BitBucketRepositories>)request.getServiceResponseList());
     }
 
     @Override
-    public <S> void callListRepositories(@NonNull ListOwnRepositoriesRequest<S> request) {
-        if(request instanceof ListRepositoriesRequest) {
-            callListRepositories((ListRepositoriesRequest<S>) request);
+    public <S> void callListRepositories(@NonNull GetOwnRepositoriesRequest<S> request) {
+        if(request instanceof GetRepositoriesRequest) {
+            callListRepositories((GetRepositoriesRequest<S>) request);
         }
     }
 

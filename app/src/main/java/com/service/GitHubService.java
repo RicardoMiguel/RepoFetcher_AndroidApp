@@ -1,6 +1,7 @@
 package com.service;
 
 import com.model.github.GitHubAccessToken;
+import com.model.github.GitHubOwner;
 import com.model.github.GitHubRepo;
 
 import java.util.List;
@@ -25,5 +26,8 @@ interface GitHubService {
 
     @POST
     Observable<GitHubAccessToken> exchangeToken(@Url String url, @QueryMap Map<String, String> params);
+
+    @GET("user")
+    Observable<GitHubOwner> getOwner();
 }
 
