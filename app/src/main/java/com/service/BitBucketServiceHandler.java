@@ -45,7 +45,9 @@ public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService
 
     @Override
     public <S> void callListRepositories(@NonNull ListOwnRepositoriesRequest<S> request) {
-//        throw new UnsupportedOperationException();
+        if(request instanceof ListRepositoriesRequest) {
+            callListRepositories((ListRepositoriesRequest<S>) request);
+        }
     }
 
     @Override
