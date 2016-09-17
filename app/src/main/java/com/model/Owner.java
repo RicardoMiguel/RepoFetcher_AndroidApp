@@ -6,4 +6,5 @@ package com.model;
 public interface Owner {
     String getLogin();
     String getAvatarUrl();
+    void setLogin(String login);
 }

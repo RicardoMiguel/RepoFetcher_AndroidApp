@@ -143,7 +143,7 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
 
     public static <S extends Owner> void callGetOwner(@RepoServiceType int service, @NonNull GetOwnerRequest<S> request){
         RepoServiceHandler handler = getInstance().get(service);
-        request.addServiceResponse(RxJavaController.MAIN_THREAD, new RepoServiceResponse<S>() {
+        request.addServiceResponse(RxJavaController.IO, new RepoServiceResponse<S>() {
             @Override
             public void onSuccess(S object) {
                 handler.setOwner(object);
@@ -199,14 +199,37 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
 
     }
 
+    @Override
+    public void onOwnerChanged(OAuthClientService oAuthClientService) {
+        if(oAuthClientService.getOwner() != null) {
+            if (oAuthClientService instanceof GitHubServiceHandler) {
+                new SessionSharedPrefs(context).saveOwner(SessionSharedPrefs.GITHUB.getName(), oAuthClientService.getOwner());
+            } else if (oAuthClientService instanceof BitBucketServiceHandler) {
+                new SessionSharedPrefs(context).saveOwner(SessionSharedPrefs.BITBUCKET.getName(), oAuthClientService.getOwner());
+            }
+        }
+    }
+
     private static void loadSessions(){
-        Map<Class, String> map = new SessionSharedPrefs(context).getTokens();
+        SessionSharedPrefs prefs = new SessionSharedPrefs(context);
+        Map<Class, String> map = prefs.getTokens();
         if(map != null){
             for(Map.Entry<Class, String> entry : map.entrySet()){
                 if(entry.getKey() == SessionSharedPrefs.GITHUB){
                     getInstance().get(GITHUB).setOAuthToken(entry.getValue());
                 } else if(entry.getKey() == SessionSharedPrefs.BITBUCKET){
                     getInstance().get(BITBUCKET).setOAuthToken(entry.getValue());
+                }
+            }
+        }
+
+        Map<Class, Owner> ownerMap = prefs.getOwners();
+        if(ownerMap != null){
+            for(Map.Entry<Class, Owner> entry : ownerMap.entrySet()){
+                if(entry.getKey() == SessionSharedPrefs.GITHUB){
+                    getInstance().get(GITHUB).setOwner(entry.getValue());
+                } else if(entry.getKey() == SessionSharedPrefs.BITBUCKET){
+                    getInstance().get(BITBUCKET).setOwner(entry.getValue());
                 }
             }
         }

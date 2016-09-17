@@ -113,5 +113,14 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberS
     @Override
     public void setOwner(@Nullable Owner owner) {
         this.owner = owner;
+        if(oAuthClientRequester != null){
+            oAuthClientRequester.onOwnerChanged(this);
+        }
+    }
+
+    @Override
+    @Nullable
+    public Owner getOwner() {
+        return owner;
     }
 }

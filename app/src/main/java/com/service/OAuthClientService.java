@@ -17,4 +17,5 @@ public interface OAuthClientService {
     @Nullable String getOAuthToken();
     void setOAuthToken(@Nullable String token);
     void setOwner(@Nullable Owner owner);
+    @Nullable Owner getOwner();
 }
