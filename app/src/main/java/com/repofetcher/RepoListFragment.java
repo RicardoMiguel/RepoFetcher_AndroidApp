@@ -49,8 +49,8 @@ public class RepoListFragment extends BaseFragment{
         Log.d(TAG, "onCreateView");
         Bundle args = getArguments();
         if(args != null){
-            user = args.getString(IntroFragment.class.getName(), null);
-            repo = args.getInt(MultipleAccountRepositoriesFragment.class.getName());
+            user = args.getString(MultipleAccountRepositoriesFragment.TEXT, null);
+            repo = args.getInt(MultipleAccountRepositoriesFragment.SERVICE_ALIAS);
         }
         return super.onCreateView(inflater, container, savedInstanceState);
     }

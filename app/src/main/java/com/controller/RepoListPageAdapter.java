@@ -27,7 +27,7 @@ public class RepoListPageAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        int repo = repos[position].getInt(MultipleAccountRepositoriesFragment.class.getName());
+        int repo = repos[position].getInt(MultipleAccountRepositoriesFragment.SERVICE_ALIAS);
         switch (repo){
             case FetcherCallsHandler.GITHUB:
                 return context.getResources().getString(R.string.github);

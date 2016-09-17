@@ -22,7 +22,9 @@ import com.service.rx.RxJavaController;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -247,5 +249,22 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
 
     public static boolean hasSession(@RepoServiceType int service){
         return !TextUtils.isEmpty(getInstance().get(service).getOAuthToken());
+    }
+
+    private static int[] getServicesAlias(){
+        int[] classes = {GITHUB, BITBUCKET};
+        return classes;
+    }
+
+    @NonNull
+    public static ArrayList<Integer> getSessionsServicesAlias(){
+        ArrayList<Integer> list = new ArrayList<>();
+        int[] services = getServicesAlias();
+        for(int alias: services){
+            if(hasSession(alias)) {
+                list.add(alias);
+            }
+        }
+        return list;
     }
 }

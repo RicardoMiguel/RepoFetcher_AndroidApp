@@ -10,7 +10,7 @@
     <string name="logged_in_bitbucket_label">Already logged into BitBucket</string>
 
     <string name="github">GitHub</string>
-    <string name="bitbucket">BitBucket</string>
+    <string name="bitbucket">Bitbucket</string>
 
     <string name="github_base_url">https://api.github.com/</string>
     <string name="github_client_id">6ad10b7063dcf95b3eaa</string>
