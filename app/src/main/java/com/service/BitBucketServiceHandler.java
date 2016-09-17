@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.model.AccessToken;
 import com.model.bitbucket.BitBucketAccessToken;
 import com.model.bitbucket.BitBucketRepositories;
 import com.repofetcher.R;
@@ -51,7 +52,7 @@ public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService
     }
 
     @Override
-    public <S> void exchangeToken(@NonNull ExchangeTokenRequest<S> request) {
+    public <S extends AccessToken> void exchangeToken(@NonNull ExchangeTokenRequest<S> request) {
         if(request instanceof BitbucketExchangeTokenRequest) {
             BitbucketExchangeTokenRequest castedRequest = (BitbucketExchangeTokenRequest) request;
 

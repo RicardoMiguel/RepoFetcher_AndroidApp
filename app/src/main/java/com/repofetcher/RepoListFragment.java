@@ -112,35 +112,19 @@ public class RepoListFragment extends BaseFragment{
     }
 
     private void getBitBucketRepoList(@Nullable String user){
-        if(user != null) {
-            FetcherCallsHandler.callListRepositories(FetcherCallsHandler.BITBUCKET, new ListRepositoriesRequest<>(this, user, new RepoServiceResponse<BitBucketRepositories>() {
+        FetcherCallsHandler.callListRepositories(FetcherCallsHandler.BITBUCKET, new ListRepositoriesRequest<>(this, user, new RepoServiceResponse<BitBucketRepositories>() {
 
-                @Override
-                public void onSuccess(BitBucketRepositories object) {
-                    buildRepositoriesRecyclerView(object.getValues());
-                }
+            @Override
+            public void onSuccess(BitBucketRepositories object) {
+                buildRepositoriesRecyclerView(object.getValues());
+            }
 
-                @Override
-                public void onError(Throwable t) {
-                    Toast.makeText(RepoListFragment.this.getContext(), t.toString(), Toast.LENGTH_LONG).show();
-                    Log.e("LOl", "", t);
-                }
-            }));
-        } else {
-            FetcherCallsHandler.callListRepositories(FetcherCallsHandler.BITBUCKET, new ListOwnRepositoriesRequest<>(this, new RepoServiceResponse<BitBucketRepositories>() {
-
-                @Override
-                public void onSuccess(BitBucketRepositories object) {
-                    buildRepositoriesRecyclerView(object.getValues());
-                }
-
-                @Override
-                public void onError(Throwable t) {
-                    Toast.makeText(RepoListFragment.this.getContext(), t.toString(), Toast.LENGTH_LONG).show();
-                    Log.e("LOl", "", t);
-                }
-            }));
-        }
+            @Override
+            public void onError(Throwable t) {
+                Toast.makeText(RepoListFragment.this.getContext(), t.toString(), Toast.LENGTH_LONG).show();
+                Log.e("LOl", "", t);
+            }
+        }));
     }
 
     private void getGitHubRepoList(@Nullable String user){

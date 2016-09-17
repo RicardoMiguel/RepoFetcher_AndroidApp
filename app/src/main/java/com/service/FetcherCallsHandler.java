@@ -81,14 +81,12 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
         makeCallIfThereIsNetwork(() -> handler.callListRepositories(request), request.getUiServiceResponse());
     }
 
-    public static <S> void callExchangeToken(@RepoServiceType int service, @NonNull ExchangeTokenRequest<S> request) {
+    public static <S extends AccessToken> void callExchangeToken(@RepoServiceType int service, @NonNull ExchangeTokenRequest<S> request) {
         RepoServiceHandler handler = getInstance().get(service);
         request.addServiceResponse(RxJavaController.IO, new RepoServiceResponse<S>() {
             @Override
-            public void onSuccess(Object object) {
-                if (object instanceof AccessToken) {
-                    handler.setOAuthToken(((AccessToken) object).getAccessToken());
-                }
+            public void onSuccess(S object) {
+                handler.setOAuthToken(object.getAccessToken());
             }
 
             @Override

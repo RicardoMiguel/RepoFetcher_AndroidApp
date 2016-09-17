@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.model.AccessToken;
 import com.model.github.GitHubAccessToken;
 import com.model.github.GitHubRepo;
 import com.repofetcher.R;
@@ -51,7 +52,7 @@ class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
     }
 
     @Override
-    public <S> void exchangeToken(@NonNull ExchangeTokenRequest<S> request) {
+    public <S extends AccessToken> void exchangeToken(@NonNull ExchangeTokenRequest<S> request) {
         Observable<GitHubAccessToken> accessTokenObservable = getService().exchangeToken(getExchangeTokenUrl(), request.getParams());
 
         new RxJavaController<GitHubAccessToken>().scheduleAndObserve(accessTokenObservable, (ServiceResponseMapAdapter<GitHubAccessToken>)request.getServiceResponseList());
