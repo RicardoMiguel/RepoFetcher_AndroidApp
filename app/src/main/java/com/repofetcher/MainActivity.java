@@ -19,17 +19,13 @@ public class MainActivity extends AppCompatActivity implements FragmentTransitio
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
         setContentView(R.layout.activity_main);
-        if(!FetcherCallsHandler.hasSessions()){
-            switchFragment(IntroFragment.class,null);
-        } else {
-            switchFragment(MultipleAccountRepositoriesFragment.class,null);
-        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume");
+        switchFragment(IntroFragment.class,null);
     }
 
     @Override

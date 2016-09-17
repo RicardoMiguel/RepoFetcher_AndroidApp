@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.service.FetcherCallsHandler;
+
 /**
  * Created by ricar on 07/09/2016.
  */
@@ -38,6 +40,15 @@ public class IntroFragment extends BaseFragment{
 
         view.findViewById(R.id.login_center_button).setOnClickListener( v -> goToLoginCenter());
 
+    }
+
+    @Override
+    public void onResume() {
+        Log.d(TAG, "onResume");
+        super.onResume();
+        if(FetcherCallsHandler.hasSessions()){
+            switchFragment(MultipleAccountRepositoriesFragment.class, null);
+        }
     }
 
     @Override
