@@ -3,11 +3,13 @@ package com.service;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Base64;
 
+import com.model.bitbucket.BitBucketAccessToken;
 import com.model.bitbucket.BitBucketRepositories;
 import com.repofetcher.R;
-import com.repofetcher.RepoFetcherApplication;
-import com.service.request.ExchangeTokenRequest;
+import com.service.request.BitbucketExchangeTokenRequest;
+import com.service.request.IExchangeToken;
 import com.service.request.ListRepositoriesRequest;
 import com.service.request.ServiceResponseMapAdapter;
 import com.service.rx.RxJavaController;
@@ -42,31 +44,56 @@ public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService
     }
 
     @Override
-    public <S> void exchangeToken(@NonNull ExchangeTokenRequest<S> request) {
-        throw new UnsupportedOperationException();
+    public void exchangeToken(@NonNull IExchangeToken request) {
+        if(request instanceof BitbucketExchangeTokenRequest) {
+            BitbucketExchangeTokenRequest castedRequest = (BitbucketExchangeTokenRequest) request;
+
+            Observable<BitBucketAccessToken> accessTokenObservable = getService().exchangeToken(getExchangeTokenUrl(),
+                    castedRequest.getBasicAuthorization(),
+                    castedRequest.getAuthorizationGrant(),
+                    castedRequest.getCode());
+
+            new RxJavaController<BitBucketAccessToken>().scheduleAndObserve(accessTokenObservable, castedRequest.getServiceResponseList());
+        }
     }
 
     @NonNull
     @Override
     public String getClientId() {
-        throw new UnsupportedOperationException();
+        if(clientId == null){
+            clientId = context.getString(R.string.bitbucket_client_id);
+        }
+
+        return clientId;
     }
 
     @NonNull
     @Override
     public String getClientSecret() {
-        throw new UnsupportedOperationException();
+        if(clientSecret == null){
+            clientSecret = context.getString(R.string.bitbucket_client_secret);
+        }
+
+        return clientSecret;
     }
 
     @NonNull
     @Override
     public String getAuthorizationUrl() {
-        throw new UnsupportedOperationException();
+        if(authorizationUrl == null){
+            authorizationUrl = context.getString(R.string.bitbucket_authorization_url);
+        }
+
+        return authorizationUrl;
     }
 
     @NonNull
     @Override
     public String getExchangeTokenUrl() {
-        throw new UnsupportedOperationException();
+        if(exchangeTokenUrl == null){
+            exchangeTokenUrl = context.getString(R.string.bitbucket_exchange_token_url);
+        }
+
+        return exchangeTokenUrl;
     }
 }

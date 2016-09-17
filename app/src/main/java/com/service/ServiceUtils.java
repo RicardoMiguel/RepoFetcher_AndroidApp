@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
+import android.util.Base64;
 
 /**
  * Created by ricar on 04/09/2016.
@@ -15,5 +16,10 @@ public class ServiceUtils {
                 = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    public static String getBasicAuthorization(String firstParameter, String secondParameter){
+        String credentials = firstParameter + ":" + secondParameter;
+        return Constants.BASIC + " " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
     }
 }
