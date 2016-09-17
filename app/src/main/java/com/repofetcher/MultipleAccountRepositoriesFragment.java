@@ -52,7 +52,9 @@ public class MultipleAccountRepositoriesFragment extends BaseFragment{
         github.putInt(MultipleAccountRepositoriesFragment.class.getName(), FetcherCallsHandler.GITHUB);
 
         Bundle bitbucket = new Bundle();
-        bitbucket.putString(IntroFragment.class.getName(), "1111114_ricardo");
+        if(!TextUtils.isEmpty(text)) {
+            bitbucket.putString(IntroFragment.class.getName(), "1111114_ricardo");
+        }
         bitbucket.putInt(MultipleAccountRepositoriesFragment.class.getName(), FetcherCallsHandler.BITBUCKET);
         //
 

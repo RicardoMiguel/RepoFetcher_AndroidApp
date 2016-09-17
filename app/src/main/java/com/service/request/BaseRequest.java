@@ -25,12 +25,19 @@ public abstract class BaseRequest<T> {
 
     }
 
+    BaseRequest(@NonNull BaseRequest<T> baseRequest){
+        this.uiServiceResponse = baseRequest.uiServiceResponse;
+        this.responseMap = baseRequest.responseMap;
+        this.hash = baseRequest.hash;
+        this.params = baseRequest.params;
+    }
+
     @Nullable
     public RepoServiceResponse<T> getUiServiceResponse() {
         return uiServiceResponse;
     }
 
-    protected void setUiServiceResponse(@Nullable RepoServiceResponse<T> serviceResponse) {
+    void setUiServiceResponse(@Nullable RepoServiceResponse<T> serviceResponse) {
         if(serviceResponse != null) {
             this.uiServiceResponse = serviceResponse;
             addServiceResponse(RxJavaController.MAIN_THREAD, serviceResponse);
@@ -55,6 +62,10 @@ public abstract class BaseRequest<T> {
 
     void setHash(@NonNull Fragment fragment) {
         this.hash = System.identityHashCode(fragment);
+    }
+
+    void setHash(int hash){
+        this.hash = hash;
     }
 
     public Map<String, String> getParams() {

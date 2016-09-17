@@ -49,8 +49,10 @@ public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService
 
     @Override
     public <S> void callListRepositories(@NonNull GetOwnRepositoriesRequest<S> request) {
-        if(request instanceof GetRepositoriesRequest) {
-            callListRepositories((GetRepositoriesRequest<S>) request);
+        if(owner != null) {
+            Observable<BitBucketRepositories> repositoriesOb = getService().listRepositories(owner.getLogin());
+
+            new RxJavaController<BitBucketRepositories>().scheduleAndObserve(repositoriesOb, (ServiceResponseMapAdapter<BitBucketRepositories>) request.getServiceResponseList());
         }
     }
 

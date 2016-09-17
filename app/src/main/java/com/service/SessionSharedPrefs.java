@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Created by ricar on 15/09/2016.
  */
-public class TokenSharedPrefs {
+public class SessionSharedPrefs {
 
     public static final Class GITHUB = GitHubServiceHandler.class;
 
@@ -25,7 +25,7 @@ public class TokenSharedPrefs {
 
     private Context context;
 
-    TokenSharedPrefs(@NonNull Context context){
+    SessionSharedPrefs(@NonNull Context context){
         this.context = context;
     }
 

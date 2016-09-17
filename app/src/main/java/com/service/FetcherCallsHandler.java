@@ -10,10 +10,14 @@ import android.text.TextUtils;
 
 import com.model.AccessToken;
 import com.model.Owner;
+import com.model.bitbucket.BitBucketAccessToken;
+import com.model.bitbucket.BitBucketOwner;
+import com.service.request.BitbucketExchangeTokenRequest;
 import com.service.request.ExchangeTokenRequest;
 import com.service.request.GetOwnRepositoriesRequest;
 import com.service.request.GetOwnerRequest;
 import com.service.request.GetRepositoriesRequest;
+import com.service.request.RedefineUiCallbackVisitor;
 import com.service.rx.RxJavaController;
 
 import java.lang.annotation.Retention;
@@ -96,12 +100,60 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
             }
         });
 
+        if(service == BITBUCKET){
+            callGetOwnerBitbucketCase((BitbucketExchangeTokenRequest) request);
+        }
+
         makeCallIfThereIsNetwork(() -> handler.exchangeToken(request), request.getUiServiceResponse());
 
     }
 
+    private static void callGetOwnerBitbucketCase(@NonNull BitbucketExchangeTokenRequest request){
+        RepoServiceResponse<BitBucketAccessToken> oldResponse = request.getUiServiceResponse();
+        RepoServiceResponse<BitBucketAccessToken> newResponse = new RepoServiceResponse<BitBucketAccessToken>() {
+            @Override
+            public void onSuccess(BitBucketAccessToken accessToken) {
+                callGetOwner(BITBUCKET, new GetOwnerRequest<>(request.getHash(), new RepoServiceResponse<BitBucketOwner>() {
+                    @Override
+                    public void onSuccess(BitBucketOwner owner) {
+                        if(oldResponse != null) {
+                            oldResponse.onSuccess(accessToken);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        if(oldResponse != null) {
+                            oldResponse.onError(t);
+                        }
+                    }
+                }));
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                if(oldResponse != null) {
+                    oldResponse.onError(t);
+                }
+            }
+        };
+
+        new RedefineUiCallbackVisitor().redefine( request, newResponse);
+    }
+
     public static <S extends Owner> void callGetOwner(@RepoServiceType int service, @NonNull GetOwnerRequest<S> request){
         RepoServiceHandler handler = getInstance().get(service);
+        request.addServiceResponse(RxJavaController.MAIN_THREAD, new RepoServiceResponse<S>() {
+            @Override
+            public void onSuccess(S object) {
+                handler.setOwner(object);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+
+            }
+        });
         makeCallIfThereIsNetwork(() -> handler.callGetOwner(request), request.getUiServiceResponse());
     }
 
@@ -140,20 +192,20 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
     @Override
     public void onTokenChanged(OAuthClientService oAuthClientService) {
         if(oAuthClientService instanceof GitHubServiceHandler) {
-            new TokenSharedPrefs(context).saveToken(TokenSharedPrefs.GITHUB.getName(), oAuthClientService.getOAuthToken());
+            new SessionSharedPrefs(context).saveToken(SessionSharedPrefs.GITHUB.getName(), oAuthClientService.getOAuthToken());
         } else if(oAuthClientService instanceof BitBucketServiceHandler){
-            new TokenSharedPrefs(context).saveToken(TokenSharedPrefs.BITBUCKET.getName(), oAuthClientService.getOAuthToken());
+            new SessionSharedPrefs(context).saveToken(SessionSharedPrefs.BITBUCKET.getName(), oAuthClientService.getOAuthToken());
         }
 
     }
 
     private static void loadSessions(){
-        Map<Class, String> map = new TokenSharedPrefs(context).getTokens();
+        Map<Class, String> map = new SessionSharedPrefs(context).getTokens();
         if(map != null){
             for(Map.Entry<Class, String> entry : map.entrySet()){
-                if(entry.getKey() == TokenSharedPrefs.GITHUB){
+                if(entry.getKey() == SessionSharedPrefs.GITHUB){
                     getInstance().get(GITHUB).setOAuthToken(entry.getValue());
-                } else if(entry.getKey() == TokenSharedPrefs.BITBUCKET){
+                } else if(entry.getKey() == SessionSharedPrefs.BITBUCKET){
                     getInstance().get(BITBUCKET).setOAuthToken(entry.getValue());
                 }
             }

@@ -16,4 +16,9 @@ public class GetOwnerRequest<T extends Owner> extends BaseRequest<T> {
         setHash(context);
         setUiServiceResponse(response);
     }
+
+    public GetOwnerRequest(int hash, @Nullable RepoServiceResponse<T> response) {
+        setHash(hash);
+        setUiServiceResponse(response);
+    }
 }

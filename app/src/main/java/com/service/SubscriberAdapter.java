@@ -45,4 +45,9 @@ public class SubscriberAdapter<T> extends Subscriber<T> {
             this.response.onSuccess(t);
         }
     }
+
+    @Nullable
+    public RepoServiceResponse<T> getResponse() {
+        return response;
+    }
 }
