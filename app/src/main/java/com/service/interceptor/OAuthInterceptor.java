@@ -29,7 +29,7 @@ public class OAuthInterceptor implements Interceptor {
                 .newBuilder();
 
         if(!TextUtils.isEmpty(oAuthClientService.getOAuthToken())){
-                    request.addHeader(Constants.AUTHORIZATION, Constants.TOKEN + " " + oAuthClientService.getOAuthToken());
+                    request.addHeader(Constants.AUTHORIZATION, Constants.BEARER + " " + oAuthClientService.getOAuthToken());
         }
         Response response = chain.proceed(request.build());
 

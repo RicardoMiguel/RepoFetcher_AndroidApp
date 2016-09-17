@@ -5,4 +5,5 @@ package com.service;
  */
 public interface OAuthClientRequester {
     void onTokenChanged(OAuthClientService oAuthClientService);
+    void onOwnerChanged(OAuthClientService oAuthClientService);
 }

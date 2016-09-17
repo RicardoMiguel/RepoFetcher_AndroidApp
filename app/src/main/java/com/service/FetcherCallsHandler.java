@@ -9,15 +9,18 @@ import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 
 import com.model.AccessToken;
-import com.model.bitbucket.BitBucketAccessToken;
-import com.model.github.GitHubAccessToken;
-import com.service.request.BitbucketExchangeTokenRequest;
+import com.model.Owner;
+import com.model.bitbucket.BitBucketOwner;
 import com.service.request.ExchangeTokenRequest;
-import com.service.request.ListRepositoriesRequest;
+import com.service.request.GetOwnRepositoriesRequest;
+import com.service.request.GetOwnerRequest;
+import com.service.request.GetRepositoriesRequest;
+import com.service.request.RedefineUiCallbackVisitor;
 import com.service.rx.RxJavaController;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -72,34 +75,22 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
         return handler;
     }
 
-    public static void callListRepositories(@RepoServiceType int service, @NonNull ListRepositoriesRequest<?> request){
+    public static void callListRepositories(@RepoServiceType int service, @NonNull GetRepositoriesRequest<?> request){
         IRepoServiceHandler handler = getInstance().get(service);
         makeCallIfThereIsNetwork(() -> handler.callListRepositories(request), request.getUiServiceResponse());
     }
 
-    public static void callGitHubExchangeToken(@NonNull ExchangeTokenRequest<GitHubAccessToken> request){
-        RepoServiceHandler handler = getInstance().get(GITHUB);
-        request.addServiceResponse(RxJavaController.IO, new RepoServiceResponse<GitHubAccessToken>() {
-                @Override
-                public void onSuccess(GitHubAccessToken object) {
-                    handler.setOAuthToken((object).getAccessToken());
-                }
-
-                @Override
-                public void onError(Throwable t) {
-
-                }
-            });
-
-            makeCallIfThereIsNetwork(() -> handler.exchangeToken(request), request.getUiServiceResponse());
+    public static void callListRepositories(@RepoServiceType int service, @NonNull GetOwnRepositoriesRequest<?> request){
+        IRepoServiceHandler handler = getInstance().get(service);
+        makeCallIfThereIsNetwork(() -> handler.callListRepositories(request), request.getUiServiceResponse());
     }
 
-    public static void callBitbucketExchangeToken(@NonNull BitbucketExchangeTokenRequest exchangeTokenBodyRequest){
-        RepoServiceHandler handler = getInstance().get(BITBUCKET);
-        exchangeTokenBodyRequest.addServiceResponse(RxJavaController.IO, new RepoServiceResponse<BitBucketAccessToken>() {
+    public static <S extends AccessToken> void callExchangeToken(@RepoServiceType int service, @NonNull ExchangeTokenRequest<S> request) {
+        RepoServiceHandler handler = getInstance().get(service);
+        request.addServiceResponse(RxJavaController.IO, new RepoServiceResponse<S>() {
             @Override
-            public void onSuccess(BitBucketAccessToken object) {
-                    handler.setOAuthToken(object.getAccessToken());
+            public void onSuccess(S object) {
+                handler.setOAuthToken(object.getAccessToken());
             }
 
             @Override
@@ -107,7 +98,62 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
 
             }
         });
-        makeCallIfThereIsNetwork(() -> handler.exchangeToken(exchangeTokenBodyRequest), exchangeTokenBodyRequest.getUiServiceResponse());
+
+        if(service == BITBUCKET){
+            callGetOwnerAfterTokenExchange(request);
+        }
+
+        makeCallIfThereIsNetwork(() -> handler.exchangeToken(request), request.getUiServiceResponse());
+
+    }
+
+    private static <S extends AccessToken> void callGetOwnerAfterTokenExchange(@NonNull ExchangeTokenRequest<S> request){
+        RepoServiceResponse<S> oldResponse = request.getUiServiceResponse();
+        RepoServiceResponse<S> newResponse = new RepoServiceResponse<S>() {
+            @Override
+            public void onSuccess(S accessToken) {
+                callGetOwner(BITBUCKET, new GetOwnerRequest<>(request.getHash(), new RepoServiceResponse<BitBucketOwner>() {
+                    @Override
+                    public void onSuccess(BitBucketOwner owner) {
+                        if(oldResponse != null) {
+                            oldResponse.onSuccess(accessToken);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        if(oldResponse != null) {
+                            oldResponse.onError(t);
+                        }
+                    }
+                }));
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                if(oldResponse != null) {
+                    oldResponse.onError(t);
+                }
+            }
+        };
+
+        new RedefineUiCallbackVisitor().swap(request, newResponse);
+    }
+
+    public static <S extends Owner> void callGetOwner(@RepoServiceType int service, @NonNull GetOwnerRequest<S> request){
+        RepoServiceHandler handler = getInstance().get(service);
+        request.addServiceResponse(RxJavaController.IO, new RepoServiceResponse<S>() {
+            @Override
+            public void onSuccess(S object) {
+                handler.setOwner(object);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+
+            }
+        });
+        makeCallIfThereIsNetwork(() -> handler.callGetOwner(request), request.getUiServiceResponse());
     }
 
     @NonNull
@@ -145,21 +191,44 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
     @Override
     public void onTokenChanged(OAuthClientService oAuthClientService) {
         if(oAuthClientService instanceof GitHubServiceHandler) {
-            new TokenSharedPrefs(context).saveToken(TokenSharedPrefs.GITHUB.getName(), oAuthClientService.getOAuthToken());
+            new SessionSharedPrefs(context).saveToken(SessionSharedPrefs.GITHUB.getName(), oAuthClientService.getOAuthToken());
         } else if(oAuthClientService instanceof BitBucketServiceHandler){
-            new TokenSharedPrefs(context).saveToken(TokenSharedPrefs.BITBUCKET.getName(), oAuthClientService.getOAuthToken());
+            new SessionSharedPrefs(context).saveToken(SessionSharedPrefs.BITBUCKET.getName(), oAuthClientService.getOAuthToken());
         }
 
     }
 
+    @Override
+    public void onOwnerChanged(OAuthClientService oAuthClientService) {
+        if(oAuthClientService.getOwner() != null) {
+            if (oAuthClientService instanceof GitHubServiceHandler) {
+                new SessionSharedPrefs(context).saveOwner(SessionSharedPrefs.GITHUB.getName(), oAuthClientService.getOwner());
+            } else if (oAuthClientService instanceof BitBucketServiceHandler) {
+                new SessionSharedPrefs(context).saveOwner(SessionSharedPrefs.BITBUCKET.getName(), oAuthClientService.getOwner());
+            }
+        }
+    }
+
     private static void loadSessions(){
-        Map<Class, String> map = new TokenSharedPrefs(context).getTokens();
+        SessionSharedPrefs prefs = new SessionSharedPrefs(context);
+        Map<Class, String> map = prefs.getTokens();
         if(map != null){
             for(Map.Entry<Class, String> entry : map.entrySet()){
-                if(entry.getKey() == TokenSharedPrefs.GITHUB){
+                if(entry.getKey() == SessionSharedPrefs.GITHUB){
                     getInstance().get(GITHUB).setOAuthToken(entry.getValue());
-                } else if(entry.getKey() == TokenSharedPrefs.BITBUCKET){
+                } else if(entry.getKey() == SessionSharedPrefs.BITBUCKET){
                     getInstance().get(BITBUCKET).setOAuthToken(entry.getValue());
+                }
+            }
+        }
+
+        Map<Class, Owner> ownerMap = prefs.getOwners();
+        if(ownerMap != null){
+            for(Map.Entry<Class, Owner> entry : ownerMap.entrySet()){
+                if(entry.getKey() == SessionSharedPrefs.GITHUB){
+                    getInstance().get(GITHUB).setOwner(entry.getValue());
+                } else if(entry.getKey() == SessionSharedPrefs.BITBUCKET){
+                    getInstance().get(BITBUCKET).setOwner(entry.getValue());
                 }
             }
         }
@@ -177,5 +246,22 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
 
     public static boolean hasSession(@RepoServiceType int service){
         return !TextUtils.isEmpty(getInstance().get(service).getOAuthToken());
+    }
+
+    private static int[] getServicesAlias(){
+        int[] classes = {GITHUB, BITBUCKET};
+        return classes;
+    }
+
+    @NonNull
+    public static ArrayList<Integer> getSessionsServicesAlias(){
+        ArrayList<Integer> list = new ArrayList<>();
+        int[] services = getServicesAlias();
+        for(int alias: services){
+            if(hasSession(alias)) {
+                list.add(alias);
+            }
+        }
+        return list;
     }
 }

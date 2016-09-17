@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.service.FetcherCallsHandler;
+
 public class MainActivity extends AppCompatActivity implements FragmentTransitionService{
 
     private static final String TAG = MainActivity.class.getName();
@@ -17,13 +19,13 @@ public class MainActivity extends AppCompatActivity implements FragmentTransitio
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
         setContentView(R.layout.activity_main);
-        switchFragment(IntroFragment.class,null);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume");
+        switchFragment(IntroFragment.class,null);
     }
 
     @Override

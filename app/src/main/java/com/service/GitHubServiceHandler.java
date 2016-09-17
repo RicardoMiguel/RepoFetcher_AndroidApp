@@ -4,12 +4,16 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.model.AccessToken;
+import com.model.Owner;
 import com.model.github.GitHubAccessToken;
+import com.model.github.GitHubOwner;
 import com.model.github.GitHubRepo;
 import com.repofetcher.R;
 import com.service.request.ExchangeTokenRequest;
-import com.service.request.IExchangeToken;
-import com.service.request.ListRepositoriesRequest;
+import com.service.request.GetOwnRepositoriesRequest;
+import com.service.request.GetOwnerRequest;
+import com.service.request.GetRepositoriesRequest;
 import com.service.request.ServiceResponseMapAdapter;
 import com.service.rx.RxJavaController;
 
@@ -37,21 +41,33 @@ class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
         return context.getString(R.string.github_base_url);
     }
 
-    public <S> void callListRepositories(@NonNull ListRepositoriesRequest<S> request){
+    public <S> void callListRepositories(@NonNull GetRepositoriesRequest<S> request){
         Observable<List<GitHubRepo>> repositoriesOb = getService().listRepositories(request.getUser(), request.getParams());
 
         new RxJavaController<List<GitHubRepo>>().scheduleAndObserve(repositoriesOb, (ServiceResponseMapAdapter<List<GitHubRepo>>)request.getServiceResponseList());
     }
 
     @Override
-    public void exchangeToken(@NonNull IExchangeToken request) {
-        if(request instanceof ExchangeTokenRequest) {
-            ExchangeTokenRequest<GitHubAccessToken> castedRequest = (ExchangeTokenRequest<GitHubAccessToken>) request;
-            Observable<GitHubAccessToken> accessTokenObservable = getService().exchangeToken(getExchangeTokenUrl(), castedRequest.getParams());
+    public <S> void callListRepositories(@NonNull GetOwnRepositoriesRequest<S> request) {
+        Observable<List<GitHubRepo>> repositoriesOb = getService().listRepositories(request.getParams());
 
-            new RxJavaController<GitHubAccessToken>().scheduleAndObserve(accessTokenObservable, castedRequest.getServiceResponseList());
-        }
+        new RxJavaController<List<GitHubRepo>>().scheduleAndObserve(repositoriesOb, (ServiceResponseMapAdapter<List<GitHubRepo>>)request.getServiceResponseList());
     }
+
+    @Override
+    public <S extends AccessToken> void exchangeToken(@NonNull ExchangeTokenRequest<S> request) {
+        Observable<GitHubAccessToken> accessTokenObservable = getService().exchangeToken(getExchangeTokenUrl(), request.getParams());
+
+        new RxJavaController<GitHubAccessToken>().scheduleAndObserve(accessTokenObservable, (ServiceResponseMapAdapter<GitHubAccessToken>)request.getServiceResponseList());
+    }
+
+    @Override
+    public <S extends Owner> void callGetOwner(@NonNull GetOwnerRequest<S> request) {
+        Observable<GitHubOwner> accessTokenObservable = getService().getOwner();
+
+        new RxJavaController<GitHubOwner>().scheduleAndObserve(accessTokenObservable, (ServiceResponseMapAdapter<GitHubOwner>)request.getServiceResponseList());
+    }
+
 
     @NonNull
     @Override

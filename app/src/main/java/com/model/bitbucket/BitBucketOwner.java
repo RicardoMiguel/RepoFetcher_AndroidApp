@@ -29,24 +29,6 @@ public class BitBucketOwner implements Owner{
     /**
      *
      * @return
-     * The username
-     */
-    public String getUsername() {
-        return username;
-    }
-
-    /**
-     *
-     * @param username
-     * The username
-     */
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    /**
-     *
-     * @return
      * The displayName
      */
     public String getDisplayName() {
@@ -106,6 +88,11 @@ public class BitBucketOwner implements Owner{
     @Override
     public String getAvatarUrl() {
         return links.avatar.href;
+    }
+
+    @Override
+    public void setLogin(String login) {
+        this.username = login;
     }
 
     private class Links {

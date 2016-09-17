@@ -3,6 +3,8 @@ package com.service;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.model.Owner;
+
 /**
  * Created by ricar on 13/09/2016.
  */
@@ -13,5 +15,7 @@ public interface OAuthClientService {
     @NonNull String getExchangeTokenUrl();
 
     @Nullable String getOAuthToken();
-    void setOAuthToken(String token);
+    void setOAuthToken(@Nullable String token);
+    void setOwner(@Nullable Owner owner);
+    @Nullable Owner getOwner();
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.model.Owner;
 import com.service.interceptor.JsonInterceptor;
 import com.service.interceptor.OAuthInterceptor;
 import java.util.HashMap;
@@ -32,6 +33,7 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberS
     @Nullable protected String authorizationUrl;
     @Nullable protected String exchangeTokenUrl;
     @Nullable private String token;
+    @Nullable protected Owner owner;
 
     @Nullable private Map<Integer, List<Subscriber>> listToUnsubscribe;
 
@@ -101,11 +103,24 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberS
         return token;
     }
 
-    public void setOAuthToken(String token){
+    public void setOAuthToken(@Nullable String token){
         this.token = token;
         if(oAuthClientRequester != null){
             oAuthClientRequester.onTokenChanged(this);
         }
     }
 
+    @Override
+    public void setOwner(@Nullable Owner owner) {
+        this.owner = owner;
+        if(oAuthClientRequester != null){
+            oAuthClientRequester.onOwnerChanged(this);
+        }
+    }
+
+    @Override
+    @Nullable
+    public Owner getOwner() {
+        return owner;
+    }
 }

@@ -9,6 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.service.FetcherCallsHandler;
+
+import java.util.ArrayList;
+
 /**
  * Created by ricar on 07/09/2016.
  */
@@ -41,6 +45,17 @@ public class IntroFragment extends BaseFragment{
     }
 
     @Override
+    public void onResume() {
+        Log.d(TAG, "onResume");
+        super.onResume();
+        if(FetcherCallsHandler.hasSessions()){
+            Bundle bundle = new Bundle();
+            bundle.putIntegerArrayList(MultipleAccountRepositoriesFragment.SERVICE_ALIAS, FetcherCallsHandler.getSessionsServicesAlias());
+            switchFragment(MultipleAccountRepositoriesFragment.class, bundle);
+        }
+    }
+
+    @Override
     public void onDestroyView() {
         Log.d(TAG, "onDestroyView");
         super.onDestroyView();
@@ -54,8 +69,12 @@ public class IntroFragment extends BaseFragment{
 
     private void sendQuery(@Nullable String text){
         Bundle bundle = new Bundle();
-        bundle.putString( IntroFragment.class.getName(), text);
+        bundle.putString( MultipleAccountRepositoriesFragment.TEXT, text);
 
+        ArrayList<Integer> list = new ArrayList<>();
+        list.add(FetcherCallsHandler.GITHUB);
+        list.add(FetcherCallsHandler.BITBUCKET);
+        bundle.putIntegerArrayList(MultipleAccountRepositoriesFragment.SERVICE_ALIAS, list);
         switchFragment(MultipleAccountRepositoriesFragment.class, bundle);
     }
 

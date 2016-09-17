@@ -9,17 +9,13 @@ import com.service.RepoServiceResponse;
 
 import java.util.Map;
 
-
 /**
- * Created by ricar on 12/09/2016.
+ * Created by ricar on 15/09/2016.
  */
-public class ListRepositoriesRequest<T> extends BaseRequest<T> {
+public class GetOwnRepositoriesRequest<T> extends BaseRequest<T> {
 
-    private String user;
-
-    public ListRepositoriesRequest(@NonNull Fragment context, @NonNull String user, @Nullable RepoServiceResponse<T> response) {
+    public GetOwnRepositoriesRequest(@NonNull Fragment context, @Nullable RepoServiceResponse<T> response) {
         setHash(context);
-        this.user = user;
         setUiServiceResponse(response);
     }
 
@@ -29,9 +25,4 @@ public class ListRepositoriesRequest<T> extends BaseRequest<T> {
         map.put(Constants.TYPE, Constants.ALL);
         return map;
     }
-
-    public String getUser() {
-        return user;
-    }
-
 }
