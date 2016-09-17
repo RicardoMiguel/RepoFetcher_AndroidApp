@@ -1,5 +1,6 @@
 package com.service.request;
 
+import com.model.AccessToken;
 import com.model.bitbucket.BitBucketAccessToken;
 import com.service.RepoServiceResponse;
 import com.service.SubscriberAdapter;
@@ -14,7 +15,7 @@ import rx.Subscriber;
  */
 public class RedefineUiCallbackVisitor {
 
-    public void redefine(BitbucketExchangeTokenRequest request, RepoServiceResponse<BitBucketAccessToken> uiCallback){
+    public <S extends AccessToken> void swap(ExchangeTokenRequest<S> request, RepoServiceResponse<S> uiCallback){
         removeAndRedefine(request, uiCallback);
     }
 

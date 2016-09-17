@@ -10,9 +10,7 @@ import android.text.TextUtils;
 
 import com.model.AccessToken;
 import com.model.Owner;
-import com.model.bitbucket.BitBucketAccessToken;
 import com.model.bitbucket.BitBucketOwner;
-import com.service.request.BitbucketExchangeTokenRequest;
 import com.service.request.ExchangeTokenRequest;
 import com.service.request.GetOwnRepositoriesRequest;
 import com.service.request.GetOwnerRequest;
@@ -24,7 +22,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -103,18 +100,18 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
         });
 
         if(service == BITBUCKET){
-            callGetOwnerBitbucketCase((BitbucketExchangeTokenRequest) request);
+            callGetOwnerAfterTokenExchange(request);
         }
 
         makeCallIfThereIsNetwork(() -> handler.exchangeToken(request), request.getUiServiceResponse());
 
     }
 
-    private static void callGetOwnerBitbucketCase(@NonNull BitbucketExchangeTokenRequest request){
-        RepoServiceResponse<BitBucketAccessToken> oldResponse = request.getUiServiceResponse();
-        RepoServiceResponse<BitBucketAccessToken> newResponse = new RepoServiceResponse<BitBucketAccessToken>() {
+    private static <S extends AccessToken> void callGetOwnerAfterTokenExchange(@NonNull ExchangeTokenRequest<S> request){
+        RepoServiceResponse<S> oldResponse = request.getUiServiceResponse();
+        RepoServiceResponse<S> newResponse = new RepoServiceResponse<S>() {
             @Override
-            public void onSuccess(BitBucketAccessToken accessToken) {
+            public void onSuccess(S accessToken) {
                 callGetOwner(BITBUCKET, new GetOwnerRequest<>(request.getHash(), new RepoServiceResponse<BitBucketOwner>() {
                     @Override
                     public void onSuccess(BitBucketOwner owner) {
@@ -140,7 +137,7 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
             }
         };
 
-        new RedefineUiCallbackVisitor().redefine( request, newResponse);
+        new RedefineUiCallbackVisitor().swap(request, newResponse);
     }
 
     public static <S extends Owner> void callGetOwner(@RepoServiceType int service, @NonNull GetOwnerRequest<S> request){
