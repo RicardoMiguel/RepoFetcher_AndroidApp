@@ -8,7 +8,7 @@ import com.model.bitbucket.BitBucketAccessToken;
 import com.model.bitbucket.BitBucketRepositories;
 import com.repofetcher.R;
 import com.service.request.BitbucketExchangeTokenRequest;
-import com.service.request.IExchangeToken;
+import com.service.request.ExchangeTokenRequest;
 import com.service.request.ListOwnRepositoriesRequest;
 import com.service.request.ListRepositoriesRequest;
 import com.service.request.ServiceResponseMapAdapter;
@@ -49,7 +49,7 @@ public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService
     }
 
     @Override
-    public void exchangeToken(@NonNull IExchangeToken request) {
+    public <S> void exchangeToken(@NonNull ExchangeTokenRequest<S> request) {
         if(request instanceof BitbucketExchangeTokenRequest) {
             BitbucketExchangeTokenRequest castedRequest = (BitbucketExchangeTokenRequest) request;
 
@@ -61,6 +61,7 @@ public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService
             new RxJavaController<BitBucketAccessToken>().scheduleAndObserve(accessTokenObservable, castedRequest.getServiceResponseList());
         }
     }
+
 
     @NonNull
     @Override

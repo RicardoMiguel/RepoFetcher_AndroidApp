@@ -46,7 +46,7 @@ public class BitbucketAccessTokenWebViewFragment extends AccessTokenWebViewFragm
 
     @Override
     protected void exchangeCodeForToken(@NonNull String code) {
-        FetcherCallsHandler.callBitbucketExchangeToken(new BitbucketExchangeTokenRequest(this,
+        FetcherCallsHandler.callExchangeToken(getType(), new BitbucketExchangeTokenRequest(this,
                 code,
                 clientId,
                 clientSecret,

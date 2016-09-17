@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * Created by ricar on 13/09/2016.
  */
-public class ExchangeTokenRequest<T> extends BaseRequest<T> implements IExchangeToken{
+public class ExchangeTokenRequest<T> extends BaseRequest<T>{
 
     protected String code;
     protected String clientId;

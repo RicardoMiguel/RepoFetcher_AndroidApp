@@ -24,7 +24,7 @@ public class GitHubAccessTokenWebViewFragment extends AccessTokenWebViewFragment
     }
 
     protected void exchangeCodeForToken(@NonNull String code){
-        FetcherCallsHandler.callGitHubExchangeToken(new ExchangeTokenRequest(this, code, clientId, clientSecret, new RepoServiceResponse<GitHubAccessToken>() {
+        FetcherCallsHandler.callExchangeToken(getType(), new ExchangeTokenRequest<GitHubAccessToken>(this, code, clientId, clientSecret, new RepoServiceResponse<GitHubAccessToken>() {
             @Override
             public void onSuccess(GitHubAccessToken object) {
                 goBack();
