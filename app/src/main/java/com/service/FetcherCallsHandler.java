@@ -8,7 +8,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 
-import com.model.AccessToken;
+import com.model.bitbucket.BitBucketAccessToken;
+import com.model.github.GitHubAccessToken;
+import com.service.request.BitbucketExchangeTokenRequest;
 import com.service.request.ExchangeTokenRequest;
 import com.service.request.ListOwnRepositoriesRequest;
 import com.service.request.ListRepositoriesRequest;
@@ -80,14 +82,29 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
         makeCallIfThereIsNetwork(() -> handler.callListRepositories(request), request.getUiServiceResponse());
     }
 
-    public static <S> void callExchangeToken(@RepoServiceType int service, @NonNull ExchangeTokenRequest<S> request){
-        RepoServiceHandler handler = getInstance().get(service);
-        request.addServiceResponse(RxJavaController.IO, new RepoServiceResponse<S>() {
-            @Override
-            public void onSuccess(S object) {
-                if(object instanceof AccessToken) {
-                    handler.setOAuthToken(((AccessToken) object).getAccessToken());
+    public static void callGitHubExchangeToken(@NonNull ExchangeTokenRequest<GitHubAccessToken> request){
+        RepoServiceHandler handler = getInstance().get(GITHUB);
+        request.addServiceResponse(RxJavaController.IO, new RepoServiceResponse<GitHubAccessToken>() {
+                @Override
+                public void onSuccess(GitHubAccessToken object) {
+                    handler.setOAuthToken((object).getAccessToken());
                 }
+
+                @Override
+                public void onError(Throwable t) {
+
+                }
+            });
+
+            makeCallIfThereIsNetwork(() -> handler.exchangeToken(request), request.getUiServiceResponse());
+    }
+
+    public static void callBitbucketExchangeToken(@NonNull BitbucketExchangeTokenRequest exchangeTokenBodyRequest){
+        RepoServiceHandler handler = getInstance().get(BITBUCKET);
+        exchangeTokenBodyRequest.addServiceResponse(RxJavaController.IO, new RepoServiceResponse<BitBucketAccessToken>() {
+            @Override
+            public void onSuccess(BitBucketAccessToken object) {
+                    handler.setOAuthToken(object.getAccessToken());
             }
 
             @Override
@@ -95,8 +112,7 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
 
             }
         });
-
-        makeCallIfThereIsNetwork(() -> handler.exchangeToken(request), request.getUiServiceResponse());
+        makeCallIfThereIsNetwork(() -> handler.exchangeToken(exchangeTokenBodyRequest), exchangeTokenBodyRequest.getUiServiceResponse());
     }
 
     @NonNull

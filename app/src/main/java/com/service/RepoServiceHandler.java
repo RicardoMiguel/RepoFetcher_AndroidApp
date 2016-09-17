@@ -35,7 +35,7 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberS
 
     @Nullable private Map<Integer, List<Subscriber>> listToUnsubscribe;
 
-    @Nullable OAuthClientRequester oAuthClientRequester;
+    @Nullable private OAuthClientRequester oAuthClientRequester;
 
     protected RepoServiceHandler(@NonNull Context context, @Nullable OAuthClientRequester oAuthClientRequester){
         this.context = context;

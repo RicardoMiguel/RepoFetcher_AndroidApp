@@ -14,5 +14,15 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:text="@string/login_to_github_label"
+        android:layout_marginBottom="20dp"
+        />
+
+    <Button
+        android:id="@+id/login_bitbucket_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="@string/login_to_github_label"
+        android:layout_below="@id/login_github_button"
         />
 </RelativeLayout>
