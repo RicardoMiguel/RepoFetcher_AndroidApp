@@ -9,8 +9,10 @@ import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 
 import com.model.AccessToken;
+import com.model.Owner;
 import com.service.request.ExchangeTokenRequest;
 import com.service.request.GetOwnRepositoriesRequest;
+import com.service.request.GetOwnerRequest;
 import com.service.request.GetRepositoriesRequest;
 import com.service.rx.RxJavaController;
 
@@ -96,6 +98,11 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
 
         makeCallIfThereIsNetwork(() -> handler.exchangeToken(request), request.getUiServiceResponse());
 
+    }
+
+    public static <S extends Owner> void callGetOwner(@RepoServiceType int service, @NonNull GetOwnerRequest<S> request){
+        RepoServiceHandler handler = getInstance().get(service);
+        makeCallIfThereIsNetwork(() -> handler.callGetOwner(request), request.getUiServiceResponse());
     }
 
     @NonNull

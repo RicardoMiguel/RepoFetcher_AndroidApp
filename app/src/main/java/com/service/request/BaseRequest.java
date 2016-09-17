@@ -30,7 +30,7 @@ public abstract class BaseRequest<T> {
         return uiServiceResponse;
     }
 
-    void setUiServiceResponse(@Nullable RepoServiceResponse<T> serviceResponse) {
+    protected void setUiServiceResponse(@Nullable RepoServiceResponse<T> serviceResponse) {
         if(serviceResponse != null) {
             this.uiServiceResponse = serviceResponse;
             addServiceResponse(RxJavaController.MAIN_THREAD, serviceResponse);

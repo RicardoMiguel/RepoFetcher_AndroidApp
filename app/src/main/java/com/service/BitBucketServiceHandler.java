@@ -5,12 +5,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.model.AccessToken;
+import com.model.Owner;
 import com.model.bitbucket.BitBucketAccessToken;
+import com.model.bitbucket.BitBucketOwner;
 import com.model.bitbucket.BitBucketRepositories;
 import com.repofetcher.R;
 import com.service.request.BitbucketExchangeTokenRequest;
 import com.service.request.ExchangeTokenRequest;
 import com.service.request.GetOwnRepositoriesRequest;
+import com.service.request.GetOwnerRequest;
 import com.service.request.GetRepositoriesRequest;
 import com.service.request.ServiceResponseMapAdapter;
 import com.service.rx.RxJavaController;
@@ -63,6 +66,13 @@ public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService
 
             new RxJavaController<BitBucketAccessToken>().scheduleAndObserve(accessTokenObservable, castedRequest.getServiceResponseList());
         }
+    }
+
+    @Override
+    public <S extends Owner> void callGetOwner(@NonNull GetOwnerRequest<S> request) {
+        Observable<BitBucketOwner> repositoriesOb = getService().getOwner();
+
+        new RxJavaController<BitBucketOwner>().scheduleAndObserve(repositoriesOb, (ServiceResponseMapAdapter<BitBucketOwner>)request.getServiceResponseList());
     }
 
 

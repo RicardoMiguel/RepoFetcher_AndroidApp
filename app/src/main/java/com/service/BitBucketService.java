@@ -1,8 +1,8 @@
 package com.service;
 
 import com.model.bitbucket.BitBucketAccessToken;
+import com.model.bitbucket.BitBucketOwner;
 import com.model.bitbucket.BitBucketRepositories;
-import com.model.github.GitHubOwner;
 
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -25,5 +25,5 @@ public interface BitBucketService {
     Observable<BitBucketAccessToken> exchangeToken(@Url String url, @Header(Constants.AUTHORIZATION) String basic, @Field("grant_type") String grant, @Field(Constants.CODE)String code);
 
     @GET("user")
-    Observable<GitHubOwner> getOwner();
+    Observable<BitBucketOwner> getOwner();
 }
