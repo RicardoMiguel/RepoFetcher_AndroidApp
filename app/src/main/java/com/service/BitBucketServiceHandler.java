@@ -9,6 +9,7 @@ import com.model.bitbucket.BitBucketRepositories;
 import com.repofetcher.R;
 import com.service.request.BitbucketExchangeTokenRequest;
 import com.service.request.IExchangeToken;
+import com.service.request.ListOwnRepositoriesRequest;
 import com.service.request.ListRepositoriesRequest;
 import com.service.request.ServiceResponseMapAdapter;
 import com.service.rx.RxJavaController;

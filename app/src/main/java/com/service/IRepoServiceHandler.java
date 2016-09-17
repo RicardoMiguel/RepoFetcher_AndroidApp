@@ -3,6 +3,7 @@ package com.service;
 import android.support.annotation.NonNull;
 
 import com.service.request.IExchangeToken;
+import com.service.request.ListOwnRepositoriesRequest;
 import com.service.request.ListRepositoriesRequest;
 
 /**
