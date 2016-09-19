@@ -132,7 +132,6 @@ public class MainActivity extends AppCompatActivity implements FragmentTransitio
         switchFragment(LoginCenterFragment.class, null);
     }
 
-    @Override
     public void searchRepositories(@Nullable String username) {
         if(!TextUtils.isEmpty(username)){
             Bundle bundle = new Bundle();

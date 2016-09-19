@@ -81,11 +81,4 @@ public abstract class BaseFragment extends Fragment implements FragmentTransitio
             fragmentTransitionService.goToLoginCenter();
         }
     }
-
-    @Override
-    public void searchRepositories(@Nullable String username) {
-        if(fragmentTransitionService != null){
-            fragmentTransitionService.searchRepositories(username);
-        }
-    }
 }

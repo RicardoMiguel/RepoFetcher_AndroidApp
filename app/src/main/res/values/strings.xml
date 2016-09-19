@@ -4,6 +4,8 @@
     <string name="ask_username_label">Insert username: </string>
     <string name="default_username">RicardoMiguel</string>
     <string name="fetch">Fetch</string>
+    <string name="go_my_repositories_label">Go to my repositories</string>
+    <string name="to_search_label">to search</string>
     <string name="login_center">Login Center</string>
     <string name="login_center_label">Go to Login Center</string>
     <string name="login_to_github_label">Login to GitHub</string>
