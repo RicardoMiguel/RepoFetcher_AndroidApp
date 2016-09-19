@@ -68,18 +68,7 @@ public class IntroFragment extends BaseFragment{
     }
 
     private void sendQuery(@Nullable String text){
-        Bundle bundle = new Bundle();
-        bundle.putString( MultipleAccountRepositoriesFragment.TEXT, text);
-
-        ArrayList<Integer> list = new ArrayList<>();
-        list.add(FetcherCallsHandler.GITHUB);
-        list.add(FetcherCallsHandler.BITBUCKET);
-        bundle.putIntegerArrayList(MultipleAccountRepositoriesFragment.SERVICE_ALIAS, list);
-        switchFragment(MultipleAccountRepositoriesFragment.class, bundle);
-    }
-
-    private void goToLoginCenter(){
-        switchFragment(LoginCenterFragment.class, null);
+        searchRepositories(text);
     }
 
 }

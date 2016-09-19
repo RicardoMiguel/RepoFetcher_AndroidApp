@@ -6,7 +6,10 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,6 +19,8 @@ import com.service.FetcherCallsHandler;
  * Created by ricar on 07/09/2016.
  */
 public abstract class BaseFragment extends Fragment implements FragmentTransitionService{
+
+    private static final String TAG = BaseFragment.class.getName();
 
     @Nullable
     private FragmentTransitionService fragmentTransitionService;
@@ -41,6 +46,12 @@ public abstract class BaseFragment extends Fragment implements FragmentTransitio
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        Log.d(TAG, "onCreateOptionsMenu");
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         fragmentTransitionService = null;
@@ -61,6 +72,20 @@ public abstract class BaseFragment extends Fragment implements FragmentTransitio
     public void goBack(){
         if(fragmentTransitionService != null){
             fragmentTransitionService.goBack();
+        }
+    }
+
+    @Override
+    public void goToLoginCenter() {
+        if(fragmentTransitionService != null){
+            fragmentTransitionService.goToLoginCenter();
+        }
+    }
+
+    @Override
+    public void searchRepositories(@Nullable String username) {
+        if(fragmentTransitionService != null){
+            fragmentTransitionService.searchRepositories(username);
         }
     }
 }

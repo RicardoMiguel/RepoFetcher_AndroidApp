@@ -4,14 +4,19 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.service.FetcherCallsHandler;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements FragmentTransitionService{
 
@@ -29,7 +34,23 @@ public class MainActivity extends AppCompatActivity implements FragmentTransitio
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        Log.d(TAG, "onCreateOptionsMenu");
         getMenuInflater().inflate(R.menu.menu, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchItem.collapseActionView();
+                searchRepositories(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -44,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements FragmentTransitio
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_settings:
+                goToLoginCenter();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -103,6 +125,25 @@ public class MainActivity extends AppCompatActivity implements FragmentTransitio
         transaction.addToBackStack(null);
 
         transaction.commit();
+    }
+
+    @Override
+    public void goToLoginCenter() {
+        switchFragment(LoginCenterFragment.class, null);
+    }
+
+    @Override
+    public void searchRepositories(@Nullable String username) {
+        if(!TextUtils.isEmpty(username)){
+            Bundle bundle = new Bundle();
+            bundle.putString( MultipleAccountRepositoriesFragment.TEXT, username);
+
+            ArrayList<Integer> list = new ArrayList<>();
+            list.add(FetcherCallsHandler.GITHUB);
+            list.add(FetcherCallsHandler.BITBUCKET);
+            bundle.putIntegerArrayList(MultipleAccountRepositoriesFragment.SERVICE_ALIAS, list);
+            switchFragment(MultipleAccountRepositoriesFragment.class, bundle);
+        }
     }
 
     @Override
