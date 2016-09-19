@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -18,7 +19,7 @@ import com.service.FetcherCallsHandler;
 /**
  * Created by ricar on 07/09/2016.
  */
-public abstract class BaseFragment extends Fragment implements FragmentTransitionService{
+public abstract class BaseFragment extends Fragment{
 
     private static final String TAG = BaseFragment.class.getName();
 
@@ -34,6 +35,7 @@ public abstract class BaseFragment extends Fragment implements FragmentTransitio
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         return inflater.inflate(layoutRes, container, false);
     }
 
@@ -48,6 +50,9 @@ public abstract class BaseFragment extends Fragment implements FragmentTransitio
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         Log.d(TAG, "onCreateOptionsMenu");
+        if(fragmentTransitionService != null){
+            fragmentTransitionService.setActionBar(this, menu);
+        }
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -75,7 +80,6 @@ public abstract class BaseFragment extends Fragment implements FragmentTransitio
         }
     }
 
-    @Override
     public void goToLoginCenter() {
         if(fragmentTransitionService != null){
             fragmentTransitionService.goToLoginCenter();

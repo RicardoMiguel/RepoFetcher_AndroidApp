@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.controller.ActionBarController;
 import com.service.FetcherCallsHandler;
 
 import java.util.ArrayList;
@@ -22,6 +23,8 @@ public class MainActivity extends AppCompatActivity implements FragmentTransitio
 
     private static final String TAG = MainActivity.class.getName();
 
+    private ActionBarController actionBarController;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,29 +32,18 @@ public class MainActivity extends AppCompatActivity implements FragmentTransitio
         setContentView(R.layout.activity_main);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-
+        actionBarController = new ActionBarController(getSupportActionBar(), this);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Log.d(TAG, "onCreateOptionsMenu");
-        getMenuInflater().inflate(R.menu.menu, menu);
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                searchItem.collapseActionView();
-                searchRepositories(query);
-                return true;
-            }
+        return actionBarController.onMainCreateOptionsMenu(menu, getMenuInflater());
+    }
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-        return super.onCreateOptionsMenu(menu);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return actionBarController.onMainOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -59,18 +51,6 @@ public class MainActivity extends AppCompatActivity implements FragmentTransitio
         super.onResume();
         Log.d(TAG, "onResume");
         switchFragment(IntroFragment.class,null);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_settings:
-                goToLoginCenter();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-
     }
 
     @Override
@@ -148,5 +128,10 @@ public class MainActivity extends AppCompatActivity implements FragmentTransitio
     @Override
     public void goBack() {
         onBackPressed();
+    }
+
+    @Override
+    public void setActionBar(BaseFragment baseFragment, Menu menu) {
+        actionBarController.setActionBar(baseFragment, menu);
     }
 }
