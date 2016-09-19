@@ -1,9 +1,11 @@
 <resources>
     <string name="app_name">RepoFetcher</string>
+    <string name="search">Search</string>
     <string name="ask_username_label">Insert username: </string>
     <string name="default_username">RicardoMiguel</string>
     <string name="fetch">Fetch</string>
-    <string name="login_center_label">Go to Login center</string>
+    <string name="login_center">Login Center</string>
+    <string name="login_center_label">Go to Login Center</string>
     <string name="login_to_github_label">Login to GitHub</string>
     <string name="logged_in_github_label">Already logged into GitHub</string>
     <string name="login_to_bitbucket_label">Login to BitBucket</string>
