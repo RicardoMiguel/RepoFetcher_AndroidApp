@@ -3,7 +3,7 @@ package com.repofetcher;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.controller.ActionBarController;
+import com.controller.FragmentController;
 import com.service.FetcherCallsHandler;
 
 import java.util.ArrayList;
@@ -23,14 +24,20 @@ public class MainActivity extends AppCompatActivity implements FragmentTransitio
 
     private ActionBarController actionBarController;
 
+    private FragmentController fragmentController;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+
         actionBarController = new ActionBarController(getSupportActionBar(), this);
+
+        fragmentController = new FragmentController(this);
+        fragmentController.restoreState(savedInstanceState);
     }
 
     @Override
@@ -48,7 +55,16 @@ public class MainActivity extends AppCompatActivity implements FragmentTransitio
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume");
-        switchFragment(IntroFragment.class,null);
+        if(!fragmentController.hasFragments()) {
+            switchFragment(IntroFragment.class, null);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        Log.d(TAG, "onSaveInstanceState");
+        super.onSaveInstanceState(outState);
+        fragmentController.saveBackStack(outState);
     }
 
     @Override
@@ -91,18 +107,18 @@ public class MainActivity extends AppCompatActivity implements FragmentTransitio
             fragment = new BitbucketAccessTokenWebViewFragment();
         }
 
-        if(fragment != null && bundle != null){
-            fragment.setArguments(bundle);
+        if(fragment != null) {
+            fragmentController.addToFragmentManager(fragment, bundle);
+            findViewById(R.id.fragment_container).post(this::printFragment);
         }
+    }
 
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+    private void printFragment(){
+        FragmentManager fm = getSupportFragmentManager();
 
-        // Replace whatever is in the fragment_container view with this fragment,
-        // and add the transaction to the back stack so the user can navigate back
-        transaction.replace(R.id.fragment_container, fragment);
-        transaction.addToBackStack(null);
-
-        transaction.commit();
+        for(int entry = 0; entry < fm.getBackStackEntryCount(); entry++){
+            Log.i(TAG, "Found fragment: " + fm.getBackStackEntryAt(entry).getName());
+        }
     }
 
     @Override
@@ -136,5 +152,13 @@ public class MainActivity extends AppCompatActivity implements FragmentTransitio
     @Override
     public void setActionBar(BaseFragment baseFragment, Menu menu) {
         actionBarController.onFragmentCreateOptionsMenu(baseFragment, menu);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(fragmentController.stackSize() == 1) {
+            fragmentController.popBackStackImmediate();
+        }
+        super.onBackPressed();
     }
 }
