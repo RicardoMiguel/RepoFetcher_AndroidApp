@@ -2,6 +2,7 @@ package com.repofetcher;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -12,6 +13,8 @@ import com.service.FetcherCallsHandler;
  */
 public class LoginCenterFragment extends BaseFragment{
 
+    private static final String TAG = LoginCenterFragment.class.getName();
+
     private Button gitHubButton;
     private Button bitbucketButton;
 
@@ -19,14 +22,22 @@ public class LoginCenterFragment extends BaseFragment{
         super(R.layout.login_center);
     }
 
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onViewCreated");
         super.onViewCreated(view, savedInstanceState);
         gitHubButton = (Button)view.findViewById(R.id.login_github_button);
         gitHubButton.setOnClickListener( v -> goToWebViewFragment(FetcherCallsHandler.GITHUB));
 
         bitbucketButton = (Button)view.findViewById(R.id.login_bitbucket_button);
         bitbucketButton.setOnClickListener(v -> goToWebViewFragment(FetcherCallsHandler.BITBUCKET));
+    }
+
+    @Override
+    public void onDestroyView() {
+        Log.d(TAG, "OnDestroyView");
+        super.onDestroyView();
     }
 
     private void goToWebViewFragment(@FetcherCallsHandler.RepoServiceType int serviceType) {

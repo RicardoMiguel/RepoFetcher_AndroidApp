@@ -6,7 +6,11 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -15,7 +19,9 @@ import com.service.FetcherCallsHandler;
 /**
  * Created by ricar on 07/09/2016.
  */
-public abstract class BaseFragment extends Fragment implements FragmentTransitionService{
+public abstract class BaseFragment extends Fragment{
+
+    private static final String TAG = BaseFragment.class.getName();
 
     @Nullable
     private FragmentTransitionService fragmentTransitionService;
@@ -26,18 +32,28 @@ public abstract class BaseFragment extends Fragment implements FragmentTransitio
         this.layoutRes = layoutRes;
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(layoutRes, container, false);
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if(context instanceof FragmentTransitionService){
             fragmentTransitionService = (FragmentTransitionService)context;
         }
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(fragmentTransitionService != null && fragmentTransitionService.hasToBuildActionBar(this));
+        return inflater.inflate(layoutRes, container, false);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        Log.d(TAG, "onCreateOptionsMenu");
+        if(fragmentTransitionService != null){
+            fragmentTransitionService.setActionBar(this, menu);
+        }
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -61,6 +77,12 @@ public abstract class BaseFragment extends Fragment implements FragmentTransitio
     public void goBack(){
         if(fragmentTransitionService != null){
             fragmentTransitionService.goBack();
+        }
+    }
+
+    public void goToLoginCenter() {
+        if(fragmentTransitionService != null){
+            fragmentTransitionService.goToLoginCenter();
         }
     }
 }

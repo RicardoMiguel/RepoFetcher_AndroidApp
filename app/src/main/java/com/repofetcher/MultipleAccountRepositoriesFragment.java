@@ -9,13 +9,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.controller.RepoListPageAdapter;
-import com.service.FetcherCallsHandler;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by ricar on 08/09/2016.
@@ -30,7 +27,6 @@ public class MultipleAccountRepositoriesFragment extends BaseFragment{
     private String text;
     @Nullable
     private ArrayList<Integer> servicesAlias;
-    private ViewPager viewPager;
 
     public MultipleAccountRepositoriesFragment() {
         super(R.layout.multiple_account_repos);
@@ -52,11 +48,8 @@ public class MultipleAccountRepositoriesFragment extends BaseFragment{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onViewCreated");
         super.onViewCreated(view, savedInstanceState);
-        viewPager = (ViewPager) view.findViewById(R.id.viewPager);
-        if(!TextUtils.isEmpty(text)) {
-            TextView toolbarTitle = (TextView) view.findViewById(R.id.toolbar_title);
-            toolbarTitle.setText(text);
-        }
+        ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewPager);
+
 
         viewPager.setAdapter(new RepoListPageAdapter(this.getContext(), getChildFragmentManager(), workViewPagerData()));
 

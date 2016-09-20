@@ -6,19 +6,42 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
+import com.controller.ActionBarController;
 import com.service.FetcherCallsHandler;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements FragmentTransitionService{
 
     private static final String TAG = MainActivity.class.getName();
+
+    private ActionBarController actionBarController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
         setContentView(R.layout.activity_main);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        actionBarController = new ActionBarController(getSupportActionBar(), this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        Log.d(TAG, "onCreateOptionsMenu");
+        return actionBarController.onMainCreateOptionsMenu(menu, getMenuInflater());
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return actionBarController.onMainOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -83,7 +106,35 @@ public class MainActivity extends AppCompatActivity implements FragmentTransitio
     }
 
     @Override
+    public void goToLoginCenter() {
+        switchFragment(LoginCenterFragment.class, null);
+    }
+
+    public void searchRepositories(@Nullable String username) {
+        if(!TextUtils.isEmpty(username)){
+            Bundle bundle = new Bundle();
+            bundle.putString( MultipleAccountRepositoriesFragment.TEXT, username);
+
+            ArrayList<Integer> list = new ArrayList<>();
+            list.add(FetcherCallsHandler.GITHUB);
+            list.add(FetcherCallsHandler.BITBUCKET);
+            bundle.putIntegerArrayList(MultipleAccountRepositoriesFragment.SERVICE_ALIAS, list);
+            switchFragment(MultipleAccountRepositoriesFragment.class, bundle);
+        }
+    }
+
+    @Override
     public void goBack() {
         onBackPressed();
+    }
+
+    @Override
+    public boolean hasToBuildActionBar(@NonNull BaseFragment baseFragment) {
+        return actionBarController.hasToBuildActionBar(baseFragment);
+    }
+
+    @Override
+    public void setActionBar(BaseFragment baseFragment, Menu menu) {
+        actionBarController.onFragmentCreateOptionsMenu(baseFragment, menu);
     }
 }
