@@ -12,6 +12,7 @@ public interface FragmentTransitionService {
     void switchFragment(@NonNull Class<? extends BaseFragment> fragment, @Nullable Bundle bundle);
     void goToLoginCenter();
     void goBack();
+    boolean hasToBuildActionBar(@NonNull BaseFragment baseFragment);
     void setActionBar(@NonNull BaseFragment baseFragment, @NonNull Menu menu);
     void searchRepositories(@Nullable String username);
 }

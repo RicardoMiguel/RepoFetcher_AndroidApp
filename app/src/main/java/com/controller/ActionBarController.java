@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,6 +14,7 @@ import com.repofetcher.FragmentTransitionService;
 import com.repofetcher.IntroFragment;
 import com.repofetcher.LoginCenterFragment;
 import com.repofetcher.R;
+import com.repofetcher.RepoListFragment;
 
 /**
  * Created by ricar on 19/09/2016.
@@ -63,13 +63,15 @@ public class ActionBarController {
     }
 
 
-    public void setActionBar(@NonNull BaseFragment baseFragment, @NonNull Menu menu) {
+    public void onFragmentCreateOptionsMenu(@NonNull BaseFragment baseFragment, @NonNull Menu menu) {
 
         menu.findItem(R.id.action_settings).setVisible(!(baseFragment instanceof LoginCenterFragment || baseFragment instanceof AccessTokenWebViewFragment));
         menu.findItem(R.id.action_search).setVisible(!(baseFragment instanceof AccessTokenWebViewFragment));
 
         actionBar.setDisplayHomeAsUpEnabled(!(baseFragment instanceof IntroFragment));
+    }
 
-
+    public boolean hasToBuildActionBar(@NonNull BaseFragment baseFragment){
+        return !(baseFragment instanceof RepoListFragment);
     }
 }

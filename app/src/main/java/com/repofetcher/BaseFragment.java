@@ -32,19 +32,19 @@ public abstract class BaseFragment extends Fragment{
         this.layoutRes = layoutRes;
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
-        return inflater.inflate(layoutRes, container, false);
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if(context instanceof FragmentTransitionService){
             fragmentTransitionService = (FragmentTransitionService)context;
         }
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(fragmentTransitionService != null && fragmentTransitionService.hasToBuildActionBar(this));
+        return inflater.inflate(layoutRes, container, false);
     }
 
     @Override
