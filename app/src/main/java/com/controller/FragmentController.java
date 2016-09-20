@@ -42,7 +42,7 @@ public class FragmentController {
 
     public void restoreState(@Nullable Bundle state){
         if(state != null) {
-            backStack = state.getStringArrayList(FragmentController.class.getName());
+            backStack.addAll(state.getStringArrayList(FragmentController.class.getName()));
 //            Log.d("Fragment", backStack.toString());
         }
     }
@@ -51,12 +51,12 @@ public class FragmentController {
         return !backStack.isEmpty();
     }
 
-    public void addToStack(@NonNull Fragment fragment){
+    public void pushToStack(@NonNull Fragment fragment){
         backStack.add(fragment.getClass().getName());
     }
 
-    public void removeFromStack(){
-        backStack.remove(backStack.size());
+    public void popFromStack(){
+        backStack.remove(backStack.size()-1);
     }
 
     public int stackSize(){
@@ -73,13 +73,14 @@ public class FragmentController {
         // Replace whatever is in the fragment_container view with this fragment,
         // and add the transaction to the back stack so the user can navigate back
         transaction.replace(R.id.fragment_container, fragment, fragment.getClass().getName());
-        addToStack(fragment);
+        pushToStack(fragment);
         transaction.addToBackStack(fragment.getClass().getName());
 
         transaction.commit();
     }
 
     public boolean popBackStackImmediate(){
+
         return fragmentManager.popBackStackImmediate();
     }
 }

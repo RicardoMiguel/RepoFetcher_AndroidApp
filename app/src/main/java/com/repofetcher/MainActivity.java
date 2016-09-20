@@ -159,6 +159,8 @@ public class MainActivity extends AppCompatActivity implements FragmentTransitio
         if(fragmentController.stackSize() == 1) {
             fragmentController.popBackStackImmediate();
         }
+
+        fragmentController.popFromStack();
         super.onBackPressed();
     }
 }
