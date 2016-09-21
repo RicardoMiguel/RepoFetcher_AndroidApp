@@ -137,6 +137,7 @@ gradle-app.setting
 /local.properties
 /.idea/workspace.xml
 /.idea/libraries
+ProjectFilesBackup/
 .DS_Store
 /build
 /captures
