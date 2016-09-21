@@ -47,6 +47,7 @@ public class RepoListFragment extends BaseFragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
+        setHasOptionsMenu(false);
         Bundle args = getArguments();
         if(args != null){
             user = args.getString(MultipleAccountRepositoriesFragment.TEXT, null);
