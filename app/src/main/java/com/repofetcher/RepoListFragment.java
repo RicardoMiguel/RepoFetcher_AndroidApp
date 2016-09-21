@@ -24,7 +24,6 @@ import com.service.request.GetOwnRepositoriesRequest;
 import com.service.request.GetRepositoriesRequest;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.AnimationAdapter;
@@ -47,16 +46,22 @@ public class RepoListFragment extends BaseFragment{
         super(R.layout.repo_list);
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView");
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate");
         Bundle args = savedInstanceState != null ? savedInstanceState : getArguments();
         if(args != null){
             user = args.getString(MultipleAccountRepositoriesFragment.TEXT, null);
             repo = args.getInt(MultipleAccountRepositoriesFragment.SERVICE_ALIAS);
             repositoriesList = args.getParcelableArrayList(REPOSITOES_LIST);
         }
+        super.onCreate(savedInstanceState);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView");
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 

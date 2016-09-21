@@ -35,10 +35,10 @@ public class MultipleAccountRepositoriesFragment extends BaseFragment{
         fragments = new ArrayList<>();
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView");
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate");
+        super.onCreate(savedInstanceState);
         Bundle bundle = savedInstanceState != null ? savedInstanceState : getArguments();
         if(bundle != null){
             text = bundle.getString(TEXT, null);
@@ -52,6 +52,12 @@ public class MultipleAccountRepositoriesFragment extends BaseFragment{
                 }
             }
         }
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView");
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
