@@ -1,11 +1,14 @@
 package com.model.bitbucket;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.model.Owner;
 import com.model.Repo;
 
-public class BitBucketRepo implements Repo{
+public class BitBucketRepo implements Repo {
 
     @SerializedName("name")
     @Expose
@@ -25,6 +28,9 @@ public class BitBucketRepo implements Repo{
     @SerializedName("description")
     @Expose
     private String description;
+
+    public BitBucketRepo() {
+    }
 
     /**
      *
@@ -106,4 +112,39 @@ public class BitBucketRepo implements Repo{
     public void setDescription(String description) {
         this.description = description;
     }
+
+    protected BitBucketRepo(Parcel in) {
+        name = in.readString();
+        createdOn = in.readString();
+        fullName = in.readString();
+        owner = (BitBucketOwner) in.readValue(BitBucketOwner.class.getClassLoader());
+        description = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(createdOn);
+        dest.writeString(fullName);
+        dest.writeValue(owner);
+        dest.writeString(description);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<BitBucketRepo> CREATOR = new Parcelable.Creator<BitBucketRepo>() {
+        @Override
+        public BitBucketRepo createFromParcel(Parcel in) {
+            return new BitBucketRepo(in);
+        }
+
+        @Override
+        public BitBucketRepo[] newArray(int size) {
+            return new BitBucketRepo[size];
+        }
+    };
 }

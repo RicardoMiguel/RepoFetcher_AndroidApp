@@ -4,11 +4,14 @@ package com.model.bitbucket;
  * Created by ricar on 07/09/2016.
  */
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.model.Owner;
 
-public class BitBucketOwner implements Owner{
+public class BitBucketOwner implements Owner {
 
     @SerializedName("username")
     @Expose
@@ -25,6 +28,9 @@ public class BitBucketOwner implements Owner{
     @SerializedName("links")
     @Expose
     private Links links;
+
+    public BitBucketOwner() {
+    }
 
     /**
      *
@@ -95,19 +101,39 @@ public class BitBucketOwner implements Owner{
         this.username = login;
     }
 
-    private class Links {
 
-        @SerializedName("avatar")
-        @Expose
-        Avatar avatar;
+    protected BitBucketOwner(Parcel in) {
+        username = in.readString();
+        displayName = in.readString();
+        type = in.readString();
+        uuid = in.readString();
+        links = (Links) in.readValue(Links.class.getClassLoader());
     }
 
-    private class Avatar{
-
-        @SerializedName("href")
-        @Expose
-        String href;
-
-
+    @Override
+    public int describeContents() {
+        return 0;
     }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(username);
+        dest.writeString(displayName);
+        dest.writeString(type);
+        dest.writeString(uuid);
+        dest.writeValue(links);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<BitBucketOwner> CREATOR = new Parcelable.Creator<BitBucketOwner>() {
+        @Override
+        public BitBucketOwner createFromParcel(Parcel in) {
+            return new BitBucketOwner(in);
+        }
+
+        @Override
+        public BitBucketOwner[] newArray(int size) {
+            return new BitBucketOwner[size];
+        }
+    };
 }

@@ -1,6 +1,7 @@
 package com.repofetcher;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -22,7 +23,7 @@ import com.service.RepoServiceResponse;
 import com.service.request.GetOwnRepositoriesRequest;
 import com.service.request.GetRepositoriesRequest;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.AnimationAdapter;
@@ -34,25 +35,33 @@ public class RepoListFragment extends BaseFragment{
 
     private static final String TAG = RepoListFragment.class.getName();
     private static final int REPO_LIST_ANIMATION_DURATION = 300;
+    private static final String REPOSITOES_LIST = "repositories_list";
 
     private RecyclerView repoListRecyclerView;
     private String user;
     private int repo;
+    @Nullable private ArrayList<? extends Repo> repositoriesList;
 
     public RepoListFragment() {
         super(R.layout.repo_list);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate");
+        Bundle args = savedInstanceState != null ? savedInstanceState : getArguments();
+        if(args != null){
+            user = args.getString(MultipleAccountRepositoriesFragment.TEXT, null);
+            repo = args.getInt(MultipleAccountRepositoriesFragment.SERVICE_ALIAS);
+            repositoriesList = args.getParcelableArrayList(REPOSITOES_LIST);
+        }
+        super.onCreate(savedInstanceState);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
-        setHasOptionsMenu(false);
-        Bundle args = getArguments();
-        if(args != null){
-            user = args.getString(MultipleAccountRepositoriesFragment.TEXT, null);
-            repo = args.getInt(MultipleAccountRepositoriesFragment.SERVICE_ALIAS);
-        }
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -68,7 +77,22 @@ public class RepoListFragment extends BaseFragment{
         Log.d(TAG, "onResume");
         super.onResume();
 
-        getRepoList(user, repo);
+        if(repositoriesList == null) {
+            getRepoList(user, repo);
+        } else {
+            buildRepositoriesRecyclerView(repositoriesList);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        Log.d(TAG, "onSaveInstanceState");
+        super.onSaveInstanceState(outState);
+        outState.putString(MultipleAccountRepositoriesFragment.TEXT, user);
+        outState.putInt(MultipleAccountRepositoriesFragment.SERVICE_ALIAS, repo);
+        if(repositoriesList != null){
+            outState.putParcelableArrayList(REPOSITOES_LIST, repositoriesList);
+        }
     }
 
     @Override
@@ -83,13 +107,16 @@ public class RepoListFragment extends BaseFragment{
         super.onDestroy();
     }
 
-    private void buildRepositoriesRecyclerView(@NonNull List<? extends Repo> repoList){
-        RepoListAdapter adapter = new RepoListAdapter(repoList, getContext());
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-        repoListRecyclerView.setLayoutManager(mLayoutManager);
-        repoListRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        repoListRecyclerView.addItemDecoration(new VerticalSpaceItemDecoration(UIUtils.getDimenFromResources(getContext(), R.dimen.repo_list_vertical_space_decoration)));
-        repoListRecyclerView.setAdapter(buildAnimations(adapter));
+    private void buildRepositoriesRecyclerView(@NonNull ArrayList<? extends Repo> repoList){
+        if(!repoList.isEmpty()) {
+            RepoListAdapter adapter = new RepoListAdapter(repoList, getContext());
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+            repoListRecyclerView.setLayoutManager(mLayoutManager);
+            repoListRecyclerView.setItemAnimator(new DefaultItemAnimator());
+            repoListRecyclerView.addItemDecoration(new VerticalSpaceItemDecoration(UIUtils.getDimenFromResources(getContext(), R.dimen.repo_list_vertical_space_decoration)));
+            repoListRecyclerView.setAdapter(buildAnimations(adapter));
+        }
+        repositoriesList = repoList;
     }
 
     @NonNull
@@ -143,9 +170,9 @@ public class RepoListFragment extends BaseFragment{
 
     private void getGitHubRepoList(@Nullable String user){
         if(user != null) {
-            FetcherCallsHandler.callListRepositories(FetcherCallsHandler.GITHUB, new GetRepositoriesRequest<>(this, user, new RepoServiceResponse<List<GitHubRepo>>() {
+            FetcherCallsHandler.callListRepositories(FetcherCallsHandler.GITHUB, new GetRepositoriesRequest<>(this, user, new RepoServiceResponse<ArrayList<GitHubRepo>>() {
                 @Override
-                public void onSuccess(List<GitHubRepo> object) {
+                public void onSuccess(ArrayList<GitHubRepo> object) {
                     buildRepositoriesRecyclerView(object);
                 }
 
@@ -155,9 +182,9 @@ public class RepoListFragment extends BaseFragment{
                 }
             }));
         } else {
-            FetcherCallsHandler.callListRepositories(FetcherCallsHandler.GITHUB, new GetOwnRepositoriesRequest<>(this, new RepoServiceResponse<List<GitHubRepo>>() {
+            FetcherCallsHandler.callListRepositories(FetcherCallsHandler.GITHUB, new GetOwnRepositoriesRequest<>(this, new RepoServiceResponse<ArrayList<GitHubRepo>>() {
                 @Override
-                public void onSuccess(List<GitHubRepo> object) {
+                public void onSuccess(ArrayList<GitHubRepo> object) {
                     buildRepositoriesRecyclerView(object);
                 }
 

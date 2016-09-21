@@ -2,6 +2,7 @@ package com.controller;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -11,17 +12,21 @@ import com.repofetcher.R;
 import com.repofetcher.RepoListFragment;
 import com.service.FetcherCallsHandler;
 
+import java.util.List;
+
 /**
  * Created by ricar on 08/09/2016.
  */
 public class RepoListPageAdapter extends FragmentPagerAdapter {
 
     private Bundle[] repos;
+    private List<RepoListFragment> fragments;
     private Context context;
 
-    public RepoListPageAdapter(Context context, FragmentManager fm, Bundle... repos) {
+    public RepoListPageAdapter(FragmentManager fm, @NonNull Context context, @NonNull List<RepoListFragment> fragments, @NonNull Bundle[] repos) {
         super(fm);
         this.context = context;
+        this.fragments = fragments;
         this.repos = repos;
     }
 
@@ -39,10 +44,19 @@ public class RepoListPageAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+        RepoListFragment repoListFragment = null;
+        if(position < fragments.size()){
+            repoListFragment = fragments.get(position);
+        }
         Bundle dataHolder = repos[position];
-        Fragment fragment = new RepoListFragment();
-        fragment.setArguments(dataHolder);
-        return fragment;
+
+        if(repoListFragment == null){
+            repoListFragment = new RepoListFragment();
+            fragments.add(position, repoListFragment);
+        }
+
+        repoListFragment.setArguments(dataHolder);
+        return repoListFragment;
     }
 
     @Override
