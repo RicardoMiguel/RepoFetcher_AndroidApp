@@ -4,7 +4,6 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by ricar on 07/09/2016.
@@ -16,7 +15,7 @@ public class BitBucketRepositories {
     private Integer pagelen;
     @SerializedName("values")
     @Expose
-    private List<BitBucketRepo> values = new ArrayList<>();
+    private ArrayList<BitBucketRepo> values = new ArrayList<>();
     @SerializedName("page")
     @Expose
     private Integer page;
@@ -38,7 +37,7 @@ public class BitBucketRepositories {
      * @return
      * The values
      */
-    public List<BitBucketRepo> getValues() {
+    public ArrayList<BitBucketRepo> getValues() {
         return values;
     }
 
