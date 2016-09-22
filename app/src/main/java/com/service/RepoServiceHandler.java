@@ -7,6 +7,8 @@ import android.support.annotation.Nullable;
 import com.model.Owner;
 import com.service.interceptor.JsonInterceptor;
 import com.service.interceptor.OAuthInterceptor;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,7 +71,12 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberS
     protected abstract String getServiceBaseUrl();
 
 
-    @Override
+    public <S> void addSubscribers(int id, Map<Integer, List<Subscriber<S>>> subscribersMap) {
+        for (Map.Entry<Integer, List<Subscriber<S>>> entry : subscribersMap.entrySet()) {
+            addSubscribers(id, new ArrayList<>(entry.getValue()));
+        }
+    }
+
     public void addSubscribers(int id, List<Subscriber> subscribers) {
         Map<Integer, List<Subscriber>> listMap = getListToUnsubscribe();
         List<Subscriber> subscriber = listMap.get(id);
