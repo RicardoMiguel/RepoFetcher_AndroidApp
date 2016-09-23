@@ -246,9 +246,7 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
     public static boolean hasSessions(){
         boolean tokenFound = false;
         for(RepoServiceHandler repoServiceHandler : getInstance().values()){
-            if(repoServiceHandler.getToken() != null){
-                tokenFound = true;
-            }
+            tokenFound |= repoServiceHandler.getToken() != null;
         }
         return tokenFound;
     }

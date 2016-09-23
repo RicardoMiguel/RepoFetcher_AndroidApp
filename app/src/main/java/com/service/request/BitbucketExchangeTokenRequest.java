@@ -35,7 +35,7 @@ public class BitbucketExchangeTokenRequest extends ExchangeTokenRequest<BitBucke
     }
 
     public String getAuthorizationGrant(){
-        return Constants.REFRESH_TOKEN;
+        return Constants.AUTHORIZATION_CODE;
     }
 
     public String getCode(){
