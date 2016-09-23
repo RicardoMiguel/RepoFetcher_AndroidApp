@@ -70,8 +70,7 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberS
     @NonNull
     protected abstract String getServiceBaseUrl();
 
-
-    public <S> void addSubscribers(int id, Map<Integer, List<Subscriber<S>>> subscribersMap) {
+    <S> void addSubscribers(int id, Map<Integer, List<Subscriber<S>>> subscribersMap) {
         for (Map.Entry<Integer, List<Subscriber<S>>> entry : subscribersMap.entrySet()) {
             addSubscribers(id, new ArrayList<>(entry.getValue()));
         }

@@ -43,7 +43,7 @@ public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService
     @Override
     public <S> void callListRepositories(@NonNull GetRepositoriesRequest<S> request) {
         Observable<BitBucketRepositories> repositoriesOb = getService().listRepositories(request.getUser());
-
+        addSubscribers(request.getHash(), request.getServiceResponseList().getSubscribersList());
         new RxJavaController<BitBucketRepositories>().scheduleAndObserve(repositoriesOb, (ServiceResponseMapAdapter<BitBucketRepositories>)request.getServiceResponseList());
     }
 
@@ -51,7 +51,7 @@ public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService
     public <S> void callListRepositories(@NonNull GetOwnRepositoriesRequest<S> request) {
         if(owner != null) {
             Observable<BitBucketRepositories> repositoriesOb = getService().listRepositories(owner.getLogin());
-
+            addSubscribers(request.getHash(), request.getServiceResponseList().getSubscribersList());
             new RxJavaController<BitBucketRepositories>().scheduleAndObserve(repositoriesOb, (ServiceResponseMapAdapter<BitBucketRepositories>) request.getServiceResponseList());
         }
     }
@@ -65,7 +65,7 @@ public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService
                     castedRequest.getBasicAuthorization(),
                     castedRequest.getAuthorizationGrant(),
                     castedRequest.getCode());
-
+            addSubscribers(request.getHash(), request.getServiceResponseList().getSubscribersList());
             new RxJavaController<BitBucketAccessToken>().scheduleAndObserve(accessTokenObservable, castedRequest.getServiceResponseList());
         }
     }
@@ -73,7 +73,7 @@ public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService
     @Override
     public <S extends Owner> void callGetOwner(@NonNull GetOwnerRequest<S> request) {
         Observable<BitBucketOwner> repositoriesOb = getService().getOwner();
-
+        addSubscribers(request.getHash(), request.getServiceResponseList().getSubscribersList());
         new RxJavaController<BitBucketOwner>().scheduleAndObserve(repositoriesOb, (ServiceResponseMapAdapter<BitBucketOwner>)request.getServiceResponseList());
     }
 
