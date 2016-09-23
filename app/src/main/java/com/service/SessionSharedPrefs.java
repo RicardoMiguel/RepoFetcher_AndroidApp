@@ -36,7 +36,7 @@ public class SessionSharedPrefs {
         this.context = context;
     }
 
-    void saveToken(String file, String token){
+    void saveToken(@NonNull String file, @Nullable String token){
         SharedPreferences sharedPref = context.getSharedPreferences(file, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(Constants.TOKEN, token);

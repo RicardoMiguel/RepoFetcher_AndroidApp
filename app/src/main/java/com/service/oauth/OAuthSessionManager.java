@@ -26,10 +26,9 @@ public class OAuthSessionManager implements OAuthClientManager{
         runnable = this::refreshToken;
     }
 
-    public OAuthSessionManager(@NonNull OAuthClientService oAuthClientService, @Nullable AccessToken accessToken, @Nullable OAuthClientRequester oAuthClientRequester) {
+    public OAuthSessionManager(@NonNull OAuthClientService oAuthClientService, @Nullable OAuthClientRequester oAuthClientRequester) {
         this();
         this.oAuthClientService = oAuthClientService;
-        setAccessToken(accessToken);
         this.oAuthClientRequester = oAuthClientRequester;
     }
 
@@ -39,6 +38,7 @@ public class OAuthSessionManager implements OAuthClientManager{
             ExpirableAccessToken expirableAccessToken = (ExpirableAccessToken) token;
             if(expirableAccessToken.getExpiresIn() != null && expirableAccessToken.getExpiresIn() > 0) {
                 int delay = (expirableAccessToken.getExpiresIn() * 1000) - 120000; // Milisconds - 2 minutes in milliseconds
+//                int delay = 10000;
                 if(handler != null){
                     handler.removeCallbacks(runnable);
                 }

@@ -46,7 +46,7 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberS
 
     protected RepoServiceHandler(@NonNull Context context, @Nullable OAuthClientRequester oAuthClientRequester){
         this.context = context;
-        this.sessionManager = new OAuthSessionManager(this, null, oAuthClientRequester);
+        this.sessionManager = new OAuthSessionManager(this, oAuthClientRequester);
     }
 
     protected T getService(){
