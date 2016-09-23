@@ -3,8 +3,9 @@ package com.service.interceptor;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.model.AccessToken;
 import com.service.Constants;
-import com.service.OAuthClientService;
+import com.service.oauth.OAuthSessionManager;
 
 import java.io.IOException;
 
@@ -16,9 +17,9 @@ import okhttp3.Response;
  * Created by ricar on 14/09/2016.
  */
 public class OAuthInterceptor implements Interceptor {
-    private OAuthClientService oAuthClientService;
+    private OAuthSessionManager oAuthClientService;
 
-    public OAuthInterceptor(@NonNull OAuthClientService oAuthClientService) {
+    public OAuthInterceptor(@NonNull OAuthSessionManager oAuthClientService) {
         this.oAuthClientService = oAuthClientService;
     }
 
@@ -27,14 +28,14 @@ public class OAuthInterceptor implements Interceptor {
         Request.Builder request = chain
                 .request()
                 .newBuilder();
-
-        if(!TextUtils.isEmpty(oAuthClientService.getOAuthToken())){
-                    request.addHeader(Constants.AUTHORIZATION, Constants.BEARER + " " + oAuthClientService.getOAuthToken());
+        AccessToken token = oAuthClientService.getToken();
+        if(token != null && !TextUtils.isEmpty(token.getAccessToken())) {
+            request.addHeader(Constants.AUTHORIZATION, Constants.BEARER + " " + token.getAccessToken());
         }
         Response response = chain.proceed(request.build());
 
         if(response.code() == 401){
-            oAuthClientService.setOAuthToken(null);
+            oAuthClientService.setAccessToken(null);
         }
 
         return response;

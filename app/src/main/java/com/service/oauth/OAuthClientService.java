@@ -1,4 +1,4 @@
-package com.service;
+package com.service.oauth;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,9 +13,4 @@ public interface OAuthClientService {
     @NonNull String getClientSecret();
     @NonNull String getAuthorizationUrl();
     @NonNull String getExchangeTokenUrl();
-
-    @Nullable String getOAuthToken();
-    void setOAuthToken(@Nullable String token);
-    void setOwner(@Nullable Owner owner);
-    @Nullable Owner getOwner();
 }

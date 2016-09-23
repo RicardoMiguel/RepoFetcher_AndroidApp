@@ -10,6 +10,7 @@ import com.model.bitbucket.BitBucketAccessToken;
 import com.model.bitbucket.BitBucketOwner;
 import com.model.bitbucket.BitBucketRepositories;
 import com.repofetcher.R;
+import com.service.oauth.OAuthClientRequester;
 import com.service.request.BitbucketExchangeTokenRequest;
 import com.service.request.BitbucketRefreshTokenRequest;
 import com.service.request.ExchangeTokenRequest;
@@ -50,8 +51,8 @@ public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService
 
     @Override
     public <S> void callListRepositories(@NonNull GetOwnRepositoriesRequest<S> request) {
-        if(owner != null) {
-            Observable<BitBucketRepositories> repositoriesOb = getService().listRepositories(owner.getLogin());
+        if(sessionManager.getOwner() != null) {
+            Observable<BitBucketRepositories> repositoriesOb = getService().listRepositories(sessionManager.getOwner().getLogin());
             addSubscribers(request.getHash(), request.getServiceResponseList().getSubscribersList());
             new RxJavaController<BitBucketRepositories>().scheduleAndObserve(repositoriesOb, (ServiceResponseMapAdapter<BitBucketRepositories>) request.getServiceResponseList());
         }

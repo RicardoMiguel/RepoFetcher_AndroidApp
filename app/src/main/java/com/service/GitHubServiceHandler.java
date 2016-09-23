@@ -10,6 +10,7 @@ import com.model.github.GitHubAccessToken;
 import com.model.github.GitHubOwner;
 import com.model.github.GitHubRepo;
 import com.repofetcher.R;
+import com.service.oauth.OAuthClientRequester;
 import com.service.request.ExchangeTokenRequest;
 import com.service.request.GetOwnRepositoriesRequest;
 import com.service.request.GetOwnerRequest;
@@ -18,10 +19,8 @@ import com.service.request.ServiceResponseMapAdapter;
 import com.service.rx.RxJavaController;
 
 import java.util.List;
-import java.util.Map;
 
 import rx.Observable;
-import rx.Subscriber;
 
 /**
  * Created by ricar on 02/09/2016.

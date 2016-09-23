@@ -28,6 +28,11 @@ public class GitHubAccessToken implements AccessToken{
         return accessToken;
     }
 
+    @Override
+    public void setAccessToken(String token) {
+        this.accessToken = token;
+    }
+
     /**
      *
      * @return

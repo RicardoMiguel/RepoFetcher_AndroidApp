@@ -5,4 +5,5 @@ package com.model;
  */
 public interface AccessToken {
     String getAccessToken();
+    void setAccessToken(String token);
 }

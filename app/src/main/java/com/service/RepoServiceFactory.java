@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.service.oauth.OAuthClientRequester;
+
 /**
  * Created by ricar on 05/09/2016.
  */

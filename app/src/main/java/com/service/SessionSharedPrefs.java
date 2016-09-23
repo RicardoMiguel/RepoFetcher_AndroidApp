@@ -6,8 +6,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import com.model.AccessToken;
 import com.model.Owner;
+import com.model.bitbucket.BitBucketAccessToken;
 import com.model.bitbucket.BitBucketOwner;
+import com.model.github.GitHubAccessToken;
 import com.model.github.GitHubOwner;
 
 import java.util.HashMap;
@@ -41,13 +44,13 @@ public class SessionSharedPrefs {
     }
 
     @Nullable
-    Map<Class, String> getTokens(){
-        Map<Class, String> map = null;
+    Map<Class, AccessToken> getTokens(){
+        Map<Class, AccessToken> map = null;
         Class[] classes = getClasses();
 
         for(Class c : classes){
-            String token = getToken(c.getName());
-            if(!TextUtils.isEmpty(token)){
+            AccessToken token = getToken(c.getName());
+            if(token != null){
                 if(map == null){
                     map = new HashMap<>();
                 }
@@ -58,19 +61,18 @@ public class SessionSharedPrefs {
     }
 
     @Nullable
-    String getToken(String file){
-        return context.getSharedPreferences(file, Context.MODE_PRIVATE).getString(Constants.TOKEN, null);
-    }
-
-    boolean hasTokens(){
-        boolean tokenFound = false;
-        Class[] classes = getClasses();
-        for(Class c : classes){
-            if(!TextUtils.isEmpty(getToken(c.getName()))){
-                tokenFound = true;
+    AccessToken getToken(@NonNull String file){
+        String token = context.getSharedPreferences(file, Context.MODE_PRIVATE).getString(Constants.TOKEN, null);
+        AccessToken accessToken = null;
+        if(token != null) {
+            if (file.equals(GITHUB.getName())) {
+                accessToken = new GitHubAccessToken();
+            } else if (file.equals(BITBUCKET.getName())) {
+                accessToken = new BitBucketAccessToken();
             }
+            accessToken.setAccessToken(token);
         }
-        return tokenFound;
+        return accessToken;
     }
 
     void saveOwner(String file, @NonNull Owner owner){
