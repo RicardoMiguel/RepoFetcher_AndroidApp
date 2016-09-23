@@ -11,6 +11,7 @@ import com.model.bitbucket.BitBucketOwner;
 import com.model.bitbucket.BitBucketRepositories;
 import com.repofetcher.R;
 import com.service.request.BitbucketExchangeTokenRequest;
+import com.service.request.BitbucketRefreshTokenRequest;
 import com.service.request.ExchangeTokenRequest;
 import com.service.request.GetOwnRepositoriesRequest;
 import com.service.request.GetOwnerRequest;
@@ -71,8 +72,8 @@ public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService
     }
 
     public <S extends AccessToken> void refreshToken(@NonNull ExchangeTokenRequest<S> request){
-        if(request instanceof BitbucketExchangeTokenRequest) {
-            BitbucketExchangeTokenRequest castedRequest = (BitbucketExchangeTokenRequest) request;
+        if(request instanceof BitbucketRefreshTokenRequest) {
+            BitbucketRefreshTokenRequest castedRequest = (BitbucketRefreshTokenRequest) request;
 
             Observable<BitBucketAccessToken> accessTokenObservable = getService().refreshToken(getExchangeTokenUrl(),
                     castedRequest.getBasicAuthorization(),
