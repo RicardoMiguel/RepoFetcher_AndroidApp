@@ -70,6 +70,19 @@ public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService
         }
     }
 
+    public <S extends AccessToken> void refreshToken(@NonNull ExchangeTokenRequest<S> request){
+        if(request instanceof BitbucketExchangeTokenRequest) {
+            BitbucketExchangeTokenRequest castedRequest = (BitbucketExchangeTokenRequest) request;
+
+            Observable<BitBucketAccessToken> accessTokenObservable = getService().refreshToken(getExchangeTokenUrl(),
+                    castedRequest.getBasicAuthorization(),
+                    castedRequest.getAuthorizationGrant(),
+                    castedRequest.getCode());
+            addSubscribers(request.getHash(), request.getServiceResponseList().getSubscribersList());
+            new RxJavaController<BitBucketAccessToken>().scheduleAndObserve(accessTokenObservable, castedRequest.getServiceResponseList());
+        }
+    }
+
     @Override
     public <S extends Owner> void callGetOwner(@NonNull GetOwnerRequest<S> request) {
         Observable<BitBucketOwner> repositoriesOb = getService().getOwner();

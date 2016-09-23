@@ -64,6 +64,11 @@ class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
     }
 
     @Override
+    public <S extends AccessToken> void refreshToken(@NonNull ExchangeTokenRequest<S> request) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public <S extends Owner> void callGetOwner(@NonNull GetOwnerRequest<S> request) {
         Observable<GitHubOwner> accessTokenObservable = getService().getOwner();
         addSubscribers(request.getHash(), request.getServiceResponseList().getSubscribersList());

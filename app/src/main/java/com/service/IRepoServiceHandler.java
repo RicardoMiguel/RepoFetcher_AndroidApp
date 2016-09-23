@@ -16,5 +16,6 @@ public interface IRepoServiceHandler {
     <S> void callListRepositories(@NonNull GetRepositoriesRequest<S> request);
     <S> void callListRepositories(@NonNull GetOwnRepositoriesRequest<S> request);
     <S extends AccessToken> void exchangeToken(@NonNull ExchangeTokenRequest<S> request);
+    <S extends AccessToken> void refreshToken(@NonNull ExchangeTokenRequest<S> request);
     <S extends Owner> void callGetOwner(@NonNull GetOwnerRequest<S> request);
 }
