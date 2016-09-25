@@ -4,7 +4,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.model.AccessToken;
 import com.model.ExpirableAccessToken;
@@ -26,6 +25,7 @@ public class OAuthSessionManager implements OAuthClientManager{
     private OAuthClientService oAuthClientService;
 
     public OAuthSessionManager() {
+        handler = new Handler(Looper.getMainLooper());
         runnable = this::refreshToken;
     }
 
@@ -40,13 +40,14 @@ public class OAuthSessionManager implements OAuthClientManager{
         if(accessToken instanceof ExpirableAccessToken){
             ExpirableAccessToken expirableAccessToken = (ExpirableAccessToken) accessToken;
             if(expirableAccessToken.getExpiresIn() != null && expirableAccessToken.getExpiresIn() > 0) {
-//                int delay = (expirableAccessToken.getExpiresIn() * 1000) - 120000; // Milisconds - 2 minutes in milliseconds
-                int delay = 10000;
-                if(handler != null){
-                    handler.removeCallbacks(runnable);
-                }
-                handler = new Handler(Looper.getMainLooper());
+                int delay = (OAuthUtils.secondsToMilliseconds(expirableAccessToken.getExpiresIn())) - OAuthUtils.secondsToMilliseconds(120); // time - 2 minutes
+//                int delay = 10000;
+
+                handler.removeCallbacks(runnable);
                 handler.postDelayed(runnable, delay);
+            } else {
+                handler.removeCallbacks(runnable);
+                handler.post(runnable);
             }
         }
 
@@ -68,7 +69,6 @@ public class OAuthSessionManager implements OAuthClientManager{
     }
 
     private void refreshToken(){
-        Log.d("olaolaolaola", "onRefreshToken");
         if(oAuthClientRequester != null) {
             oAuthClientRequester.onRefreshToken(oAuthClientService, this);
         }

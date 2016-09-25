@@ -6,11 +6,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.model.AccessToken;
+import com.model.ExpirableAccessToken;
 import com.model.Owner;
 import com.model.bitbucket.BitBucketAccessToken;
 import com.model.bitbucket.BitBucketOwner;
 import com.model.github.GitHubAccessToken;
 import com.model.github.GitHubOwner;
+import com.service.oauth.OAuthUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +26,16 @@ public class SessionSharedPrefs {
 
     public static final Class BITBUCKET = BitBucketServiceHandler.class;
 
+    private static final String TOKEN = Constants.TOKEN;
+
+    private static final String EXPIRATION = "expiration";
+
+    private static final String REFRESH_TOKEN = Constants.REFRESH_TOKEN;
+
+    private static final String DATE_ACQUIRED = "date_acquired";
+
+    private static final String USERNAME = Constants.USERNAME;
+
     private static Class[] getClasses(){
         Class[] classes = {GITHUB, BITBUCKET};
         return classes;
@@ -35,10 +47,25 @@ public class SessionSharedPrefs {
         this.context = context;
     }
 
-    void saveToken(@NonNull String file, @Nullable String token){
+    void saveToken(@NonNull String file, @Nullable AccessToken token){
         SharedPreferences sharedPref = context.getSharedPreferences(file, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(Constants.TOKEN, token);
+
+        if(token != null){
+            if(token instanceof ExpirableAccessToken){
+                ExpirableAccessToken expirableAccessToken = (ExpirableAccessToken) token;
+                editor.putInt(EXPIRATION, expirableAccessToken.getExpiresIn());
+                editor.putString(REFRESH_TOKEN, expirableAccessToken.getRefreshCode());
+                editor.putLong(DATE_ACQUIRED, System.currentTimeMillis());
+            }
+            editor.putString(TOKEN, token.getToken());
+        } else {
+            editor.putString(TOKEN, null);
+            editor.putInt(EXPIRATION, -1);
+            editor.putString(REFRESH_TOKEN, null);
+            editor.putLong(DATE_ACQUIRED, -1);
+        }
+
         editor.commit();
     }
 
@@ -61,13 +88,25 @@ public class SessionSharedPrefs {
 
     @Nullable
     AccessToken getToken(@NonNull String file){
-        String token = context.getSharedPreferences(file, Context.MODE_PRIVATE).getString(Constants.TOKEN, null);
+        SharedPreferences sharedPref = context.getSharedPreferences(file, Context.MODE_PRIVATE);
+        String token = sharedPref.getString(TOKEN, null);
         AccessToken accessToken = null;
         if(token != null) {
             if (file.equals(GITHUB.getName())) {
                 accessToken = new GitHubAccessToken();
             } else if (file.equals(BITBUCKET.getName())) {
                 accessToken = new BitBucketAccessToken();
+            }
+
+            if(accessToken instanceof ExpirableAccessToken){
+                ExpirableAccessToken expirableAccessToken = (ExpirableAccessToken) accessToken;
+                expirableAccessToken.setRefreshToken(sharedPref.getString(REFRESH_TOKEN,null));
+
+                int expiration = sharedPref.getInt(EXPIRATION, -1);
+                long dateAcquired = sharedPref.getLong(DATE_ACQUIRED, -1);
+                if(expiration != -1 && dateAcquired != -1){
+                    expirableAccessToken.setExpiresIn(OAuthUtils.calcTimeToRefreshToken(dateAcquired, expiration));
+                }
             }
             accessToken.setToken(token);
         }
@@ -77,7 +116,7 @@ public class SessionSharedPrefs {
     void saveOwner(String file, @NonNull Owner owner){
         SharedPreferences sharedPref = context.getSharedPreferences(file, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(Constants.USERNAME, owner.getLogin());
+        editor.putString(USERNAME, owner.getLogin());
         editor.commit();
     }
 
@@ -85,7 +124,7 @@ public class SessionSharedPrefs {
     Owner getOwner(@NonNull String file){
         Owner owner = null;
         SharedPreferences sharedPref = context.getSharedPreferences(file, Context.MODE_PRIVATE);
-        String username = sharedPref.getString(Constants.USERNAME,null);
+        String username = sharedPref.getString(USERNAME,null);
         if(username != null){
             if(file.equals(GITHUB.getName())){
                 owner = new GitHubOwner();

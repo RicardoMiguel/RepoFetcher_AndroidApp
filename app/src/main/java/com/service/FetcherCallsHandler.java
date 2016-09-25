@@ -212,11 +212,10 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
     @Override
     public void onTokenChanged(OAuthClientService oAuthClientService, OAuthClientManager oAuthClientManager) {
         AccessToken token = oAuthClientManager.getAccessToken();
-        String tokenString = token != null ? token.getToken() : null;
         if (oAuthClientService instanceof GitHubServiceHandler) {
-            new SessionSharedPrefs(context).saveToken(SessionSharedPrefs.GITHUB.getName(), tokenString);
+            new SessionSharedPrefs(context).saveToken(SessionSharedPrefs.GITHUB.getName(), token);
         } else if (oAuthClientService instanceof BitBucketServiceHandler) {
-            new SessionSharedPrefs(context).saveToken(SessionSharedPrefs.BITBUCKET.getName(), tokenString);
+            new SessionSharedPrefs(context).saveToken(SessionSharedPrefs.BITBUCKET.getName(), token);
         }
     }
 

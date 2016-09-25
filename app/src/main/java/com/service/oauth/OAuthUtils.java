@@ -13,4 +13,17 @@ public class OAuthUtils {
     public static boolean isTokenValid(@Nullable AccessToken accessToken){
         return accessToken != null && !TextUtils.isEmpty(accessToken.getToken());
     }
+
+    public static int calcTimeToRefreshToken(long dateAcquired, int expiration){
+        Long expiresIn = -(System.currentTimeMillis() - (dateAcquired + secondsToMilliseconds(expiration)));
+        return millisecondsToSeconds(expiresIn.intValue());
+    }
+
+    public static int secondsToMilliseconds(int seconds){
+        return seconds * 1000;
+    }
+
+    public static int millisecondsToSeconds(int milliseconds){
+        return milliseconds / 1000;
+    }
 }
