@@ -24,12 +24,12 @@ public class GitHubAccessToken implements AccessToken{
      * @return
      * The accessToken
      */
-    public String getAccessToken() {
+    public String getToken() {
         return accessToken;
     }
 
     @Override
-    public void setAccessToken(String token) {
+    public void setToken(String token) {
         this.accessToken = token;
     }
 

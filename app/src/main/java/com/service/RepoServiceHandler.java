@@ -29,7 +29,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by ricar on 04/09/2016.
  */
-abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberService, OAuthClientService, OAuthClientManager {
+abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberService, OAuthClientService {
 
     private T service;
 
@@ -40,7 +40,6 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberS
     @Nullable protected String authorizationUrl;
     @Nullable protected String exchangeTokenUrl;
     protected OAuthSessionManager sessionManager;
-
 
     @Nullable private Map<Integer, List<Subscriber>> listToUnsubscribe;
 
@@ -107,19 +106,7 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberS
         return listToUnsubscribe;
     }
 
-    public void setOwner(@Nullable Owner owner){
-        sessionManager.setOwner(owner);
-    }
-
-    @Nullable public Owner getOwner(){
-        return sessionManager.getOwner();
-    }
-
-    public void setAccessToken(@Nullable AccessToken token){
-        sessionManager.setAccessToken(token);
-    }
-
-    @Nullable public AccessToken getToken(){
-        return sessionManager.getToken();
+    OAuthClientManager getOAuthClientManager(){
+        return sessionManager;
     }
 }

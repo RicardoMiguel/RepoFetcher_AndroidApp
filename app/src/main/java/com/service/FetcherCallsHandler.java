@@ -5,8 +5,6 @@ import android.content.Context;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 
 import com.model.AccessToken;
 import com.model.ExpirableAccessToken;
@@ -15,6 +13,7 @@ import com.model.bitbucket.BitBucketOwner;
 import com.service.oauth.OAuthClientManager;
 import com.service.oauth.OAuthClientRequester;
 import com.service.oauth.OAuthClientService;
+import com.service.oauth.OAuthUtils;
 import com.service.request.BitbucketRefreshTokenRequest;
 import com.service.request.ExchangeTokenRequest;
 import com.service.request.GetOwnRepositoriesRequest;
@@ -95,7 +94,7 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
         request.addServiceResponse(RxJavaController.IO, new RepoServiceResponse<S>() {
             @Override
             public void onSuccess(S object) {
-                handler.setAccessToken(object);
+                handler.getOAuthClientManager().setAccessToken(object);
             }
 
             @Override
@@ -150,7 +149,7 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
         request.addServiceResponse(RxJavaController.IO, new RepoServiceResponse<S>() {
             @Override
             public void onSuccess(S object) {
-                handler.setOwner(object);
+                handler.getOAuthClientManager().setOwner(object);
             }
 
             @Override
@@ -166,7 +165,7 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
         request.addServiceResponse(RxJavaController.IO, new RepoServiceResponse<S>() {
             @Override
             public void onSuccess(S object) {
-                handler.setAccessToken(object);
+                handler.getOAuthClientManager().setAccessToken(object);
             }
 
             @Override
@@ -212,8 +211,8 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
 
     @Override
     public void onTokenChanged(OAuthClientService oAuthClientService, OAuthClientManager oAuthClientManager) {
-        AccessToken token = oAuthClientManager.getToken();
-        String tokenString = token != null ? token.getAccessToken() : null;
+        AccessToken token = oAuthClientManager.getAccessToken();
+        String tokenString = token != null ? token.getToken() : null;
         if (oAuthClientService instanceof GitHubServiceHandler) {
             new SessionSharedPrefs(context).saveToken(SessionSharedPrefs.GITHUB.getName(), tokenString);
         } else if (oAuthClientService instanceof BitBucketServiceHandler) {
@@ -234,7 +233,7 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
 
     @Override
     public void onRefreshToken(OAuthClientService oAuthClientService, OAuthClientManager oAuthClientManager) {
-        AccessToken token = oAuthClientManager.getToken();
+        AccessToken token = oAuthClientManager.getAccessToken();
         if(token instanceof ExpirableAccessToken){
             String refreshCode = ((ExpirableAccessToken) token).getRefreshCode();
             oAuthClientManager.setAccessToken(null);
@@ -255,9 +254,9 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
         if(map != null){
             for(Map.Entry<Class, AccessToken> entry : map.entrySet()){
                 if(entry.getKey() == SessionSharedPrefs.GITHUB){
-                    getInstance().get(GITHUB).setAccessToken(entry.getValue());
+                    getInstance().get(GITHUB).getOAuthClientManager().setAccessToken(entry.getValue());
                 } else if(entry.getKey() == SessionSharedPrefs.BITBUCKET){
-                    getInstance().get(BITBUCKET).setAccessToken(entry.getValue());
+                    getInstance().get(BITBUCKET).getOAuthClientManager().setAccessToken(entry.getValue());
                 }
             }
         }
@@ -266,9 +265,9 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
         if(ownerMap != null){
             for(Map.Entry<Class, Owner> entry : ownerMap.entrySet()){
                 if(entry.getKey() == SessionSharedPrefs.GITHUB){
-                    getInstance().get(GITHUB).setOwner(entry.getValue());
+                    getInstance().get(GITHUB).getOAuthClientManager().setOwner(entry.getValue());
                 } else if(entry.getKey() == SessionSharedPrefs.BITBUCKET){
-                    getInstance().get(BITBUCKET).setOwner(entry.getValue());
+                    getInstance().get(BITBUCKET).getOAuthClientManager().setOwner(entry.getValue());
                 }
             }
         }
@@ -277,13 +276,13 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
     public static boolean hasSessions(){
         boolean tokenFound = false;
         for(RepoServiceHandler repoServiceHandler : getInstance().values()){
-            tokenFound |= repoServiceHandler.getToken() != null;
+            tokenFound |= OAuthUtils.isTokenValid(repoServiceHandler.getOAuthClientManager().getAccessToken());
         }
         return tokenFound;
     }
 
     public static boolean hasSession(@RepoServiceType int service){
-        return getInstance().get(service).getToken() != null;
+        return OAuthUtils.isTokenValid(getInstance().get(service).getOAuthClientManager().getAccessToken());
     }
 
     private static int[] getServicesAlias(){

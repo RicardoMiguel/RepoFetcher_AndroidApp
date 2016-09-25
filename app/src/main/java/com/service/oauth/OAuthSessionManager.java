@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.model.AccessToken;
 import com.model.ExpirableAccessToken;
@@ -14,7 +15,9 @@ import com.model.Owner;
  */
 
 public class OAuthSessionManager implements OAuthClientManager{
+
     @Nullable private AccessToken accessToken;
+
     @Nullable protected Owner owner;
     private Handler handler;
     private Runnable runnable;
@@ -32,13 +35,13 @@ public class OAuthSessionManager implements OAuthClientManager{
         this.oAuthClientRequester = oAuthClientRequester;
     }
 
-    public void setAccessToken(@Nullable AccessToken token){
+    public void setAccessToken(@Nullable AccessToken accessToken){
 
-        if(token instanceof ExpirableAccessToken){
-            ExpirableAccessToken expirableAccessToken = (ExpirableAccessToken) token;
+        if(accessToken instanceof ExpirableAccessToken){
+            ExpirableAccessToken expirableAccessToken = (ExpirableAccessToken) accessToken;
             if(expirableAccessToken.getExpiresIn() != null && expirableAccessToken.getExpiresIn() > 0) {
-                int delay = (expirableAccessToken.getExpiresIn() * 1000) - 120000; // Milisconds - 2 minutes in milliseconds
-//                int delay = 10000;
+//                int delay = (expirableAccessToken.getExpiresIn() * 1000) - 120000; // Milisconds - 2 minutes in milliseconds
+                int delay = 10000;
                 if(handler != null){
                     handler.removeCallbacks(runnable);
                 }
@@ -47,7 +50,12 @@ public class OAuthSessionManager implements OAuthClientManager{
             }
         }
 
-        this.accessToken = token;
+        if(OAuthUtils.isTokenValid(accessToken)){
+            this.accessToken = accessToken;
+        } else if(this.accessToken != null){
+            this.accessToken.setToken(null);
+        }
+
         if(oAuthClientRequester != null){
             oAuthClientRequester.onTokenChanged(oAuthClientService, this);
         }
@@ -55,11 +63,12 @@ public class OAuthSessionManager implements OAuthClientManager{
 
     @Nullable
     @Override
-    public AccessToken getToken() {
+    public AccessToken getAccessToken() {
         return accessToken;
     }
 
     private void refreshToken(){
+        Log.d("olaolaolaola", "onRefreshToken");
         if(oAuthClientRequester != null) {
             oAuthClientRequester.onRefreshToken(oAuthClientService, this);
         }

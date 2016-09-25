@@ -15,5 +15,5 @@ public interface OAuthClientManager {
     @Nullable Owner getOwner();
 
     void setAccessToken(@Nullable AccessToken token);
-    @Nullable AccessToken getToken();
+    @Nullable AccessToken getAccessToken();
 }

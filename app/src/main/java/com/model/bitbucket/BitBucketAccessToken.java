@@ -31,7 +31,7 @@ public class BitBucketAccessToken implements ExpirableAccessToken{
      * @return
      * The accessToken
      */
-    public String getAccessToken() {
+    public String getToken() {
         return accessToken;
     }
 
@@ -40,7 +40,7 @@ public class BitBucketAccessToken implements ExpirableAccessToken{
      * @param accessToken
      * The access_token
      */
-    public void setAccessToken(String accessToken) {
+    public void setToken(String accessToken) {
         this.accessToken = accessToken;
     }
 

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 
 import com.model.AccessToken;
 import com.model.Owner;
@@ -70,7 +69,7 @@ public class SessionSharedPrefs {
             } else if (file.equals(BITBUCKET.getName())) {
                 accessToken = new BitBucketAccessToken();
             }
-            accessToken.setAccessToken(token);
+            accessToken.setToken(token);
         }
         return accessToken;
     }

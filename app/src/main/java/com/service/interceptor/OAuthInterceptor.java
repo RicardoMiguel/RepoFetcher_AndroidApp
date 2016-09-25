@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.model.AccessToken;
 import com.service.Constants;
 import com.service.oauth.OAuthSessionManager;
+import com.service.oauth.OAuthUtils;
 
 import java.io.IOException;
 
@@ -28,9 +29,9 @@ public class OAuthInterceptor implements Interceptor {
         Request.Builder request = chain
                 .request()
                 .newBuilder();
-        AccessToken token = oAuthClientService.getToken();
-        if(token != null && !TextUtils.isEmpty(token.getAccessToken())) {
-            request.addHeader(Constants.AUTHORIZATION, Constants.BEARER + " " + token.getAccessToken());
+        AccessToken token = oAuthClientService.getAccessToken();
+        if(OAuthUtils.isTokenValid(token)) {
+            request.addHeader(Constants.AUTHORIZATION, Constants.BEARER + " " + token.getToken());
         }
         Response response = chain.proceed(request.build());
 
