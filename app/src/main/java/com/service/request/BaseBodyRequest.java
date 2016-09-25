@@ -12,7 +12,7 @@ import com.service.RepoServiceResponse;
 public class BaseBodyRequest<V, T> extends BaseRequest<T>{
     private V body;
 
-    public BaseBodyRequest(@NonNull Fragment context, @NonNull V body, @Nullable RepoServiceResponse<T> response) {
+    public BaseBodyRequest(@NonNull Object context, @NonNull V body, @Nullable RepoServiceResponse<T> response) {
         setHash(context);
         this.body = body;
 

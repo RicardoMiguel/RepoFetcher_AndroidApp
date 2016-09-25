@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.model.AccessToken;
+import com.model.ExpirableAccessToken;
 import com.model.Owner;
 import com.model.bitbucket.BitBucketAccessToken;
 import com.model.bitbucket.BitBucketOwner;
@@ -72,7 +73,7 @@ public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService
         }
     }
 
-    public <S extends AccessToken> void refreshToken(@NonNull ExchangeTokenRequest<S> request){
+    public <S extends ExpirableAccessToken> void refreshToken(@NonNull ExchangeTokenRequest<S> request){
         if(request instanceof BitbucketRefreshTokenRequest) {
             BitbucketRefreshTokenRequest castedRequest = (BitbucketRefreshTokenRequest) request;
 

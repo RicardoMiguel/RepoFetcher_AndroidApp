@@ -13,7 +13,7 @@ import com.service.RepoServiceResponse;
  */
 
 public class BitbucketRefreshTokenRequest extends BitbucketExchangeTokenRequest{
-    public BitbucketRefreshTokenRequest(@NonNull Fragment context,
+    public BitbucketRefreshTokenRequest(@NonNull Object context,
                                         @NonNull String refreshCode,
                                         @NonNull String clientId,
                                         @NonNull String clientSecret,

@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public class GetOwnRepositoriesRequest<T> extends BaseRequest<T> {
 
-    public GetOwnRepositoriesRequest(@NonNull Fragment context, @Nullable RepoServiceResponse<T> response) {
+    public GetOwnRepositoriesRequest(@NonNull Object context, @Nullable RepoServiceResponse<T> response) {
         setHash(context);
         setUiServiceResponse(response);
     }

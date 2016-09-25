@@ -22,4 +22,8 @@ public class ServiceUtils {
         String credentials = firstParameter + ":" + secondParameter;
         return Constants.BASIC + " " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
     }
+
+    public static int getHashCode(@NonNull Object object){
+        return System.identityHashCode(object);
+    }
 }

@@ -9,11 +9,13 @@ import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 
 import com.model.AccessToken;
+import com.model.ExpirableAccessToken;
 import com.model.Owner;
 import com.model.bitbucket.BitBucketOwner;
 import com.service.oauth.OAuthClientManager;
 import com.service.oauth.OAuthClientRequester;
 import com.service.oauth.OAuthClientService;
+import com.service.request.BitbucketRefreshTokenRequest;
 import com.service.request.ExchangeTokenRequest;
 import com.service.request.GetOwnRepositoriesRequest;
 import com.service.request.GetOwnerRequest;
@@ -159,6 +161,23 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
         makeCallIfThereIsNetwork(() -> handler.callGetOwner(request), request.getUiServiceResponse());
     }
 
+    public static <S extends ExpirableAccessToken> void callRefreshToken(@RepoServiceType int type, ExchangeTokenRequest<S> request){
+        RepoServiceHandler handler = getInstance().get(type);
+        request.addServiceResponse(RxJavaController.IO, new RepoServiceResponse<S>() {
+            @Override
+            public void onSuccess(S object) {
+                handler.setAccessToken(object);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+
+            }
+        });
+
+        makeCallIfThereIsNetwork(() -> handler.refreshToken(request), request.getUiServiceResponse());
+    }
+
     @NonNull
     public static String getClientId(@RepoServiceType int service){
         return getInstance().get(service).getClientId();
@@ -183,8 +202,8 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
         }
     }
 
-    public static void unSubscribe(Fragment fragment){
-        int id = System.identityHashCode(fragment);
+    public static void unSubscribe(Object fragment){
+        int id = ServiceUtils.getHashCode(fragment);
         for (RepoServiceHandler serviceHandler: getInstance().values())
         {
             serviceHandler.removeSubscribers(id);
@@ -215,6 +234,19 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
 
     @Override
     public void onRefreshToken(OAuthClientService oAuthClientService, OAuthClientManager oAuthClientManager) {
+        AccessToken token = oAuthClientManager.getToken();
+        if(token instanceof ExpirableAccessToken){
+            String refreshCode = ((ExpirableAccessToken) token).getRefreshCode();
+            oAuthClientManager.setAccessToken(null);
+
+            if(oAuthClientService instanceof BitBucketServiceHandler){
+                callRefreshToken(BITBUCKET, new BitbucketRefreshTokenRequest(this,
+                        refreshCode,
+                        oAuthClientService.getClientId(),
+                        oAuthClientService.getClientSecret(),
+                        null));
+            }
+        }
     }
 
     private static void loadSessions(){

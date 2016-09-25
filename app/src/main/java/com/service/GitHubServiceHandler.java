@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.model.AccessToken;
+import com.model.ExpirableAccessToken;
 import com.model.Owner;
 import com.model.github.GitHubAccessToken;
 import com.model.github.GitHubOwner;
@@ -63,7 +64,7 @@ class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
     }
 
     @Override
-    public <S extends AccessToken> void refreshToken(@NonNull ExchangeTokenRequest<S> request) {
+    public <S extends ExpirableAccessToken> void refreshToken(@NonNull ExchangeTokenRequest<S> request) {
         throw new UnsupportedOperationException();
     }
 

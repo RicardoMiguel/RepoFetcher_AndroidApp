@@ -20,7 +20,7 @@ public class ExchangeTokenRequest<T extends AccessToken> extends BaseRequest<T>{
     protected String clientId;
     protected String clientSecret;
 
-    public ExchangeTokenRequest(@NonNull Fragment context,
+    public ExchangeTokenRequest(@NonNull Object context,
                                 @NonNull String code,
                                 @NonNull String clientId,
                                 @NonNull String clientSecret,
