@@ -89,9 +89,11 @@ public class SessionSharedPrefs {
     @Nullable
     AccessToken getToken(@NonNull String file){
         SharedPreferences sharedPref = context.getSharedPreferences(file, Context.MODE_PRIVATE);
-        String token = sharedPref.getString(TOKEN, null);
         AccessToken accessToken = null;
-        if(token != null) {
+        String token = sharedPref.getString(TOKEN, null);
+        int expiration = sharedPref.getInt(EXPIRATION, -1);
+        if(token != null || expiration != -1) {
+
             if (file.equals(GITHUB.getName())) {
                 accessToken = new GitHubAccessToken();
             } else if (file.equals(BITBUCKET.getName())) {
@@ -102,7 +104,6 @@ public class SessionSharedPrefs {
                 ExpirableAccessToken expirableAccessToken = (ExpirableAccessToken) accessToken;
                 expirableAccessToken.setRefreshToken(sharedPref.getString(REFRESH_TOKEN,null));
 
-                int expiration = sharedPref.getInt(EXPIRATION, -1);
                 long dateAcquired = sharedPref.getLong(DATE_ACQUIRED, -1);
                 if(expiration != -1 && dateAcquired != -1){
                     expirableAccessToken.setExpiresIn(OAuthUtils.calcTimeToRefreshToken(dateAcquired, expiration));
