@@ -5,12 +5,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.model.AccessToken;
+import com.model.ExpirableAccessToken;
 import com.model.Owner;
 import com.model.bitbucket.BitBucketAccessToken;
 import com.model.bitbucket.BitBucketOwner;
 import com.model.bitbucket.BitBucketRepositories;
 import com.repofetcher.R;
+import com.service.oauth.OAuthClientRequester;
 import com.service.request.BitbucketExchangeTokenRequest;
+import com.service.request.BitbucketRefreshTokenRequest;
 import com.service.request.ExchangeTokenRequest;
 import com.service.request.GetOwnRepositoriesRequest;
 import com.service.request.GetOwnerRequest;
@@ -49,8 +52,8 @@ public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService
 
     @Override
     public <S> void callListRepositories(@NonNull GetOwnRepositoriesRequest<S> request) {
-        if(owner != null) {
-            Observable<BitBucketRepositories> repositoriesOb = getService().listRepositories(owner.getLogin());
+        if(sessionManager.getOwner() != null) {
+            Observable<BitBucketRepositories> repositoriesOb = getService().listRepositories(sessionManager.getOwner().getLogin());
             addSubscribers(request.getHash(), request.getServiceResponseList().getSubscribersList());
             new RxJavaController<BitBucketRepositories>().scheduleAndObserve(repositoriesOb, (ServiceResponseMapAdapter<BitBucketRepositories>) request.getServiceResponseList());
         }
@@ -62,6 +65,19 @@ public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService
             BitbucketExchangeTokenRequest castedRequest = (BitbucketExchangeTokenRequest) request;
 
             Observable<BitBucketAccessToken> accessTokenObservable = getService().exchangeToken(getExchangeTokenUrl(),
+                    castedRequest.getBasicAuthorization(),
+                    castedRequest.getAuthorizationGrant(),
+                    castedRequest.getCode());
+            addSubscribers(request.getHash(), request.getServiceResponseList().getSubscribersList());
+            new RxJavaController<BitBucketAccessToken>().scheduleAndObserve(accessTokenObservable, castedRequest.getServiceResponseList());
+        }
+    }
+
+    public <S extends ExpirableAccessToken> void refreshToken(@NonNull ExchangeTokenRequest<S> request){
+        if(request instanceof BitbucketRefreshTokenRequest) {
+            BitbucketRefreshTokenRequest castedRequest = (BitbucketRefreshTokenRequest) request;
+
+            Observable<BitBucketAccessToken> accessTokenObservable = getService().refreshToken(getExchangeTokenUrl(),
                     castedRequest.getBasicAuthorization(),
                     castedRequest.getAuthorizationGrant(),
                     castedRequest.getCode());

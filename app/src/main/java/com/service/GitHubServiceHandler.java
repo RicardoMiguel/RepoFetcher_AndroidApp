@@ -5,11 +5,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.model.AccessToken;
+import com.model.ExpirableAccessToken;
 import com.model.Owner;
 import com.model.github.GitHubAccessToken;
 import com.model.github.GitHubOwner;
 import com.model.github.GitHubRepo;
 import com.repofetcher.R;
+import com.service.oauth.OAuthClientRequester;
 import com.service.request.ExchangeTokenRequest;
 import com.service.request.GetOwnRepositoriesRequest;
 import com.service.request.GetOwnerRequest;
@@ -18,10 +20,8 @@ import com.service.request.ServiceResponseMapAdapter;
 import com.service.rx.RxJavaController;
 
 import java.util.List;
-import java.util.Map;
 
 import rx.Observable;
-import rx.Subscriber;
 
 /**
  * Created by ricar on 02/09/2016.
@@ -61,6 +61,11 @@ class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
         Observable<GitHubAccessToken> accessTokenObservable = getService().exchangeToken(getExchangeTokenUrl(), request.getParams());
         addSubscribers(request.getHash(), request.getServiceResponseList().getSubscribersList());
         new RxJavaController<GitHubAccessToken>().scheduleAndObserve(accessTokenObservable, (ServiceResponseMapAdapter<GitHubAccessToken>)request.getServiceResponseList());
+    }
+
+    @Override
+    public <S extends ExpirableAccessToken> void refreshToken(@NonNull ExchangeTokenRequest<S> request) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public class BitbucketExchangeTokenRequest extends ExchangeTokenRequest<BitBucketAccessToken>{
 
-    public BitbucketExchangeTokenRequest(@NonNull Fragment context,
+    public BitbucketExchangeTokenRequest(@NonNull Object context,
                                          @NonNull String code,
                                          @NonNull String clientId,
                                          @NonNull String clientSecret,

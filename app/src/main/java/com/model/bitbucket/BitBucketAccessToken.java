@@ -3,11 +3,12 @@ package com.model.bitbucket;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.model.AccessToken;
+import com.model.ExpirableAccessToken;
 
 /**
  * Created by ricar on 16/09/2016.
  */
-public class BitBucketAccessToken implements AccessToken{
+public class BitBucketAccessToken implements ExpirableAccessToken{
 
     @SerializedName("access_token")
     @Expose
@@ -30,7 +31,7 @@ public class BitBucketAccessToken implements AccessToken{
      * @return
      * The accessToken
      */
-    public String getAccessToken() {
+    public String getToken() {
         return accessToken;
     }
 
@@ -39,7 +40,7 @@ public class BitBucketAccessToken implements AccessToken{
      * @param accessToken
      * The access_token
      */
-    public void setAccessToken(String accessToken) {
+    public void setToken(String accessToken) {
         this.accessToken = accessToken;
     }
 
@@ -70,6 +71,11 @@ public class BitBucketAccessToken implements AccessToken{
         return expiresIn;
     }
 
+    @Override
+    public String getRefreshCode() {
+        return refreshToken;
+    }
+
     /**
      *
      * @param expiresIn
@@ -77,15 +83,6 @@ public class BitBucketAccessToken implements AccessToken{
      */
     public void setExpiresIn(Integer expiresIn) {
         this.expiresIn = expiresIn;
-    }
-
-    /**
-     *
-     * @return
-     * The refreshToken
-     */
-    public String getRefreshToken() {
-        return refreshToken;
     }
 
     /**

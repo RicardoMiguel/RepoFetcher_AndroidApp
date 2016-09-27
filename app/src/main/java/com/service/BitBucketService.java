@@ -24,6 +24,10 @@ public interface BitBucketService {
     @POST
     Observable<BitBucketAccessToken> exchangeToken(@Url String url, @Header(Constants.AUTHORIZATION) String basic, @Field("grant_type") String grant, @Field(Constants.CODE)String code);
 
+    @FormUrlEncoded
+    @POST
+    Observable<BitBucketAccessToken> refreshToken(@Url String url, @Header(Constants.AUTHORIZATION) String basic, @Field("grant_type") String grant, @Field("refresh_token")String code_refresh);
+
     @GET("user")
     Observable<BitBucketOwner> getOwner();
 }

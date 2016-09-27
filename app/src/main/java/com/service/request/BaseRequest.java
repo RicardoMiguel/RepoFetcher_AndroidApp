@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 import com.service.RepoServiceResponse;
+import com.service.ServiceUtils;
 import com.service.rx.RxJavaController;
 
 import java.util.HashMap;
@@ -60,8 +61,8 @@ public abstract class BaseRequest<T> {
         return hash;
     }
 
-    void setHash(@NonNull Fragment fragment) {
-        this.hash = System.identityHashCode(fragment);
+    void setHash(@NonNull Object fragment) {
+        this.hash = ServiceUtils.getHashCode(fragment);
     }
 
     void setHash(int hash){

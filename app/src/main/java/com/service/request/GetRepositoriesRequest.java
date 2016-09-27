@@ -14,7 +14,7 @@ public class GetRepositoriesRequest<T> extends GetOwnRepositoriesRequest<T> {
 
     private String user;
 
-    public GetRepositoriesRequest(@NonNull Fragment context, @NonNull String user, @Nullable RepoServiceResponse<T> response) {
+    public GetRepositoriesRequest(@NonNull Object context, @NonNull String user, @Nullable RepoServiceResponse<T> response) {
         super(context,response);
         this.user = user;
     }

@@ -4,9 +4,14 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.model.AccessToken;
 import com.model.Owner;
 import com.service.interceptor.JsonInterceptor;
 import com.service.interceptor.OAuthInterceptor;
+import com.service.oauth.OAuthClientManager;
+import com.service.oauth.OAuthClientRequester;
+import com.service.oauth.OAuthClientService;
+import com.service.oauth.OAuthSessionManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,16 +39,13 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberS
     @Nullable protected String clientSecret;
     @Nullable protected String authorizationUrl;
     @Nullable protected String exchangeTokenUrl;
-    @Nullable private String token;
-    @Nullable protected Owner owner;
+    protected OAuthSessionManager sessionManager;
 
     @Nullable private Map<Integer, List<Subscriber>> listToUnsubscribe;
 
-    @Nullable private OAuthClientRequester oAuthClientRequester;
-
     protected RepoServiceHandler(@NonNull Context context, @Nullable OAuthClientRequester oAuthClientRequester){
         this.context = context;
-        this.oAuthClientRequester = oAuthClientRequester;
+        this.sessionManager = new OAuthSessionManager(this, oAuthClientRequester);
     }
 
     protected T getService(){
@@ -51,7 +53,7 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberS
             OkHttpClient client = new OkHttpClient.Builder()
                     .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
                     .addInterceptor(new JsonInterceptor())
-                    .addInterceptor(new OAuthInterceptor(this))
+                    .addInterceptor(new OAuthInterceptor(sessionManager))
                     .build();
 
             Retrofit retrofit = new Retrofit.Builder()
@@ -104,29 +106,7 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberS
         return listToUnsubscribe;
     }
 
-    @Nullable
-    public String getOAuthToken(){
-        return token;
-    }
-
-    public void setOAuthToken(@Nullable String token){
-        this.token = token;
-        if(oAuthClientRequester != null){
-            oAuthClientRequester.onTokenChanged(this);
-        }
-    }
-
-    @Override
-    public void setOwner(@Nullable Owner owner) {
-        this.owner = owner;
-        if(oAuthClientRequester != null){
-            oAuthClientRequester.onOwnerChanged(this);
-        }
-    }
-
-    @Override
-    @Nullable
-    public Owner getOwner() {
-        return owner;
+    OAuthClientManager getOAuthClientManager(){
+        return sessionManager;
     }
 }
