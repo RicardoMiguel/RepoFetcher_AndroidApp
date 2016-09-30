@@ -1,4 +1,4 @@
-package com.service;
+package com.service.handler;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -12,7 +12,6 @@ import com.model.bitbucket.BitBucketOwner;
 import com.model.bitbucket.BitBucketRepositories;
 import com.repofetcher.R;
 import com.service.oauth.OAuthClientManager;
-import com.service.oauth.OAuthClientRequester;
 import com.service.request.BitbucketExchangeTokenRequest;
 import com.service.request.BitbucketRefreshTokenRequest;
 import com.service.request.ExchangeTokenRequest;
@@ -29,7 +28,7 @@ import rx.Observable;
  */
 public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService>{
 
-    public BitBucketServiceHandler(@NonNull Context context, @Nullable OAuthClientManager clientManager) {
+    BitBucketServiceHandler(@NonNull Context context, @Nullable OAuthClientManager clientManager) {
         super(context, clientManager);
     }
 

@@ -1,4 +1,4 @@
-package com.service;
+package com.service.handler;
 
 import com.model.github.GitHubAccessToken;
 import com.model.github.GitHubOwner;

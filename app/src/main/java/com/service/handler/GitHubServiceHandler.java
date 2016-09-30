@@ -1,4 +1,4 @@
-package com.service;
+package com.service.handler;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -26,9 +26,9 @@ import rx.Observable;
 /**
  * Created by ricar on 02/09/2016.
  */
-class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
+public class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
 
-    public GitHubServiceHandler(@NonNull Context context, @Nullable OAuthClientManager clientManager) {
+    GitHubServiceHandler(@NonNull Context context, @Nullable OAuthClientManager clientManager) {
         super(context, clientManager);
     }
 

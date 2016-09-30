@@ -1,4 +1,4 @@
-package com.service;
+package com.service.handler;
 
 import android.support.annotation.NonNull;
 
@@ -13,7 +13,7 @@ import com.service.request.GetRepositoriesRequest;
 /**
  * Created by ricar on 04/09/2016.
  */
-public interface IRepoServiceHandler {
+interface IRepoServiceHandler {
     <S> void callListRepositories(@NonNull GetRepositoriesRequest<S> request);
     <S> void callListRepositories(@NonNull GetOwnRepositoriesRequest<S> request);
     <S extends AccessToken> void exchangeToken(@NonNull ExchangeTokenRequest<S> request);

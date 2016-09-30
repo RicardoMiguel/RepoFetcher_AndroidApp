@@ -1,17 +1,14 @@
-package com.service;
+package com.service.handler;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.model.AccessToken;
-import com.model.Owner;
+import com.service.SubscriberService;
 import com.service.interceptor.JsonInterceptor;
 import com.service.interceptor.OAuthInterceptor;
 import com.service.oauth.OAuthClientManager;
-import com.service.oauth.OAuthClientRequester;
 import com.service.oauth.OAuthClientService;
-import com.service.oauth.OAuthSessionManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,7 +26,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by ricar on 04/09/2016.
  */
-abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberService, OAuthClientService {
+public abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberService, OAuthClientService {
 
     private T service;
 
@@ -107,7 +104,7 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberS
         return listToUnsubscribe;
     }
 
-    OAuthClientManager getOAuthClientManager(){
+    public OAuthClientManager getOAuthClientManager(){
         return sessionManager;
     }
 }

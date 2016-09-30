@@ -10,11 +10,12 @@ import com.model.AccessToken;
 import com.model.ExpirableAccessToken;
 import com.model.Owner;
 import com.model.bitbucket.BitBucketOwner;
-import com.service.oauth.OAuthClientManager;
+import com.service.handler.RepoServiceFactory;
+import com.service.handler.RepoServiceHandler;
 import com.service.oauth.OAuthClientRequester;
-import com.service.oauth.OAuthClientService;
 import com.service.oauth.OAuthSessionManager;
 import com.service.oauth.OAuthUtils;
+import com.service.oauth.SessionSharedPrefs;
 import com.service.request.BitbucketRefreshTokenRequest;
 import com.service.request.ExchangeTokenRequest;
 import com.service.request.GetOwnRepositoriesRequest;
@@ -81,12 +82,12 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
     }
 
     public static void callListRepositories(@RepoServiceType int service, @NonNull GetRepositoriesRequest<?> request){
-        IRepoServiceHandler handler = getInstance().get(service);
+        RepoServiceHandler handler = getInstance().get(service);
         makeCallIfThereIsNetwork(() -> handler.callListRepositories(request), request.getUiServiceResponse());
     }
 
     public static void callListRepositories(@RepoServiceType int service, @NonNull GetOwnRepositoriesRequest<?> request){
-        IRepoServiceHandler handler = getInstance().get(service);
+        RepoServiceHandler handler = getInstance().get(service);
         makeCallIfThereIsNetwork(() -> handler.callListRepositories(request), request.getUiServiceResponse());
     }
 

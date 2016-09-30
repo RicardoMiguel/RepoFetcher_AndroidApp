@@ -1,4 +1,4 @@
-package com.service;
+package com.service.oauth;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,7 +12,9 @@ import com.model.bitbucket.BitBucketAccessToken;
 import com.model.bitbucket.BitBucketOwner;
 import com.model.github.GitHubAccessToken;
 import com.model.github.GitHubOwner;
-import com.service.oauth.OAuthUtils;
+import com.service.handler.BitBucketServiceHandler;
+import com.service.Constants;
+import com.service.handler.GitHubServiceHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,11 +45,11 @@ public class SessionSharedPrefs {
 
     private Context context;
 
-    SessionSharedPrefs(@NonNull Context context){
+    public SessionSharedPrefs(@NonNull Context context){
         this.context = context;
     }
 
-    void saveToken(@NonNull String file, @Nullable AccessToken token){
+    public void saveToken(@NonNull String file, @Nullable AccessToken token){
         SharedPreferences sharedPref = context.getSharedPreferences(file, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
 
@@ -70,7 +72,7 @@ public class SessionSharedPrefs {
     }
 
     @Nullable
-    Map<Class, AccessToken> getTokens(){
+    public Map<Class, AccessToken> getTokens(){
         Map<Class, AccessToken> map = null;
         Class[] classes = getClasses();
 
@@ -114,7 +116,7 @@ public class SessionSharedPrefs {
         return accessToken;
     }
 
-    void saveOwner(String file, @NonNull Owner owner){
+   public void saveOwner(String file, @NonNull Owner owner){
         SharedPreferences sharedPref = context.getSharedPreferences(file, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(USERNAME, owner.getLogin());
@@ -138,7 +140,7 @@ public class SessionSharedPrefs {
     }
 
     @Nullable
-    Map<Class, Owner> getOwners(){
+    public Map<Class, Owner> getOwners(){
         Map<Class, Owner> owners = null;
         Class[] classes = getClasses();
         for(Class c : classes){
