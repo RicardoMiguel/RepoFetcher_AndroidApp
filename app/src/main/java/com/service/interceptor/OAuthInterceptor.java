@@ -1,11 +1,10 @@
 package com.service.interceptor;
 
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 
 import com.model.AccessToken;
 import com.service.Constants;
-import com.service.oauth.OAuthSessionManager;
+import com.service.oauth.OAuthClientManager;
 import com.service.oauth.OAuthUtils;
 
 import java.io.IOException;
@@ -18,9 +17,9 @@ import okhttp3.Response;
  * Created by ricar on 14/09/2016.
  */
 public class OAuthInterceptor implements Interceptor {
-    private OAuthSessionManager oAuthClientService;
+    private OAuthClientManager oAuthClientService;
 
-    public OAuthInterceptor(@NonNull OAuthSessionManager oAuthClientService) {
+    public OAuthInterceptor(@NonNull OAuthClientManager oAuthClientService) {
         this.oAuthClientService = oAuthClientService;
     }
 

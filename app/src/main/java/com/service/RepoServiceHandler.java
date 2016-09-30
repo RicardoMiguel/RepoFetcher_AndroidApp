@@ -39,28 +39,29 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberS
     @Nullable protected String clientSecret;
     @Nullable protected String authorizationUrl;
     @Nullable protected String exchangeTokenUrl;
-    protected OAuthSessionManager sessionManager;
+    @Nullable protected OAuthClientManager sessionManager;
 
     @Nullable private Map<Integer, List<Subscriber>> listToUnsubscribe;
 
-    protected RepoServiceHandler(@NonNull Context context, @Nullable OAuthClientRequester oAuthClientRequester){
+    protected RepoServiceHandler(@NonNull Context context, @Nullable OAuthClientManager clientManager){
         this.context = context;
-        this.sessionManager = new OAuthSessionManager(this, oAuthClientRequester);
+        this.sessionManager = clientManager;
     }
 
     protected T getService(){
         if(service == null){
-            OkHttpClient client = new OkHttpClient.Builder()
+            OkHttpClient.Builder httpBuilder = new OkHttpClient.Builder()
                     .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-                    .addInterceptor(new JsonInterceptor())
-                    .addInterceptor(new OAuthInterceptor(sessionManager))
-                    .build();
+                    .addInterceptor(new JsonInterceptor());
+                    if(sessionManager != null) {
+                        httpBuilder.addInterceptor(new OAuthInterceptor(sessionManager));
+                    }
 
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(getServiceBaseUrl())
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))
-                    .client(client)
+                    .client(httpBuilder.build())
                     .build();
             service = retrofit.create(getServiceClassSpecification());
         }
