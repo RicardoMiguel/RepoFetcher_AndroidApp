@@ -26,6 +26,11 @@ public abstract class BaseRequest<T> {
 
     }
 
+    public BaseRequest(@NonNull Object context, @Nullable RepoServiceResponse<T> uiServiceResponse) {
+        setUiServiceResponse(uiServiceResponse);
+        setHash(context);
+    }
+
     BaseRequest(@NonNull BaseRequest<T> baseRequest){
         this.uiServiceResponse = baseRequest.uiServiceResponse;
         this.responseMap = baseRequest.responseMap;

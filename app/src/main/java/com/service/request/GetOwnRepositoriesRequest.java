@@ -15,8 +15,7 @@ import java.util.Map;
 public class GetOwnRepositoriesRequest<T> extends BaseRequest<T> {
 
     public GetOwnRepositoriesRequest(@NonNull Object context, @Nullable RepoServiceResponse<T> response) {
-        setHash(context);
-        setUiServiceResponse(response);
+        super(context, response);
     }
 
     @Override

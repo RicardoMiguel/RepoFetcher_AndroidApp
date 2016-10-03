@@ -13,10 +13,8 @@ public class BaseBodyRequest<V, T> extends BaseRequest<T>{
     private V body;
 
     public BaseBodyRequest(@NonNull Object context, @NonNull V body, @Nullable RepoServiceResponse<T> response) {
-        setHash(context);
+        super(context, response);
         this.body = body;
-
-        setUiServiceResponse(response);
     }
 
     public V getBody() {
