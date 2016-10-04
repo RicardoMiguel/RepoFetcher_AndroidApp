@@ -3,10 +3,6 @@ package com.service.rx;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 
-import com.service.RepoServiceResponse;
-import com.service.SubscriberAdapter;
-import com.service.request.BaseRequest;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.List;
@@ -69,4 +65,20 @@ public class RxJavaController<T> {
 
         connectableObservable.connect();
     }
+
+//    public void scheduleAndMerge(List<Observable<T>> list, RepoServiceResponse repoServiceResponse, Action1 onSuccess) {
+//        List<Observable<T>> newList = new ArrayList<>();
+//        for(Observable<T> observable: list){
+//            newList.add(observable.observeOn(AndroidSchedulers.mainThread())
+//                    .subscribeOn(Schedulers.io()));
+//        }
+//        Observable.mergeDelayError(newList)
+//                .doAfterTerminate(() -> repoServiceResponse.onSuccess(null))
+//                .subscribe(onSuccess, new Action1<Throwable>() {
+//                    @Override
+//                    public void call(Throwable throwable) {
+//                        Log.d("lol","lol_error");
+//                    }
+//                });
+//    }
 }

@@ -21,6 +21,7 @@ import com.service.request.ExchangeTokenRequest;
 import com.service.request.GetOwnRepositoriesRequest;
 import com.service.request.GetOwnerRequest;
 import com.service.request.GetRepositoriesRequest;
+import com.service.request.InitRequest;
 import com.service.request.RedefineUiCallbackVisitor;
 import com.service.rx.RxJavaController;
 
@@ -28,7 +29,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by ricar on 04/09/2016.
@@ -60,7 +60,10 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
 
     public static void init(@NonNull Context context){
         FetcherCallsHandler.context = context;
-        loadSessions();
+    }
+
+    public static void load(@NonNull InitRequest request){
+        new InitController(context, getInstance()).loadSessions(request);
     }
 
     private FetcherCallsHandler(){
@@ -242,31 +245,6 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
                     null));
         }
 
-    }
-
-    private static void loadSessions(){
-        SessionSharedPrefs prefs = new SessionSharedPrefs(context);
-        Map<Class, AccessToken> map = prefs.getTokens();
-        if(map != null){
-            for(Map.Entry<Class, AccessToken> entry : map.entrySet()){
-                if(entry.getKey() == SessionSharedPrefs.GITHUB){
-                    getInstance().get(GITHUB).getOAuthClientManager().setAccessToken(entry.getValue());
-                } else if(entry.getKey() == SessionSharedPrefs.BITBUCKET){
-                    getInstance().get(BITBUCKET).getOAuthClientManager().setAccessToken(entry.getValue());
-                }
-            }
-        }
-
-        Map<Class, Owner> ownerMap = prefs.getOwners();
-        if(ownerMap != null){
-            for(Map.Entry<Class, Owner> entry : ownerMap.entrySet()){
-                if(entry.getKey() == SessionSharedPrefs.GITHUB){
-                    getInstance().get(GITHUB).getOAuthClientManager().setOwner(entry.getValue());
-                } else if(entry.getKey() == SessionSharedPrefs.BITBUCKET){
-                    getInstance().get(BITBUCKET).getOAuthClientManager().setOwner(entry.getValue());
-                }
-            }
-        }
     }
 
     public static boolean hasSessions(){
