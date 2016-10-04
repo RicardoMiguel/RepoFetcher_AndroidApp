@@ -2,7 +2,6 @@ package com.service.oauth;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.model.AccessToken;
@@ -22,16 +21,16 @@ public class OAuthSessionManager implements OAuthClientManager{
     private Runnable runnable;
 
     private OAuthClientRequester oAuthClientRequester;
-    private OAuthClientService oAuthClientService;
+    private int service;
 
-    public OAuthSessionManager() {
+    private OAuthSessionManager() {
         handler = new Handler(Looper.getMainLooper());
         runnable = this::refreshToken;
     }
 
-    public OAuthSessionManager(@NonNull OAuthClientService oAuthClientService, @Nullable OAuthClientRequester oAuthClientRequester) {
+    public OAuthSessionManager(int service, @Nullable OAuthClientRequester oAuthClientRequester) {
         this();
-        this.oAuthClientService = oAuthClientService;
+        this.service = service;
         this.oAuthClientRequester = oAuthClientRequester;
     }
 
@@ -58,7 +57,7 @@ public class OAuthSessionManager implements OAuthClientManager{
         }
 
         if(oAuthClientRequester != null){
-            oAuthClientRequester.onTokenChanged(oAuthClientService, this);
+            oAuthClientRequester.onTokenChanged(service, accessToken);
         }
     }
 
@@ -69,8 +68,9 @@ public class OAuthSessionManager implements OAuthClientManager{
     }
 
     private void refreshToken(){
-        if(oAuthClientRequester != null) {
-            oAuthClientRequester.onRefreshToken(oAuthClientService, this);
+        if(oAuthClientRequester != null && accessToken instanceof ExpirableAccessToken) {
+            setAccessToken(null);
+            oAuthClientRequester.onRefreshToken(service, ((ExpirableAccessToken) accessToken).getRefreshCode());
         }
     }
 
@@ -78,7 +78,7 @@ public class OAuthSessionManager implements OAuthClientManager{
     public void setOwner(@Nullable Owner owner) {
         this.owner = owner;
         if(oAuthClientRequester != null){
-            oAuthClientRequester.onOwnerChanged(oAuthClientService, this);
+            oAuthClientRequester.onOwnerChanged(service, owner);
         }
     }
 

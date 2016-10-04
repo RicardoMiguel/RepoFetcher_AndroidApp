@@ -1,27 +1,28 @@
-package com.service;
+package com.service.handler;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.service.oauth.OAuthClientRequester;
+import com.service.FetcherCallsHandler;
+import com.service.oauth.OAuthClientManager;
 
 /**
  * Created by ricar on 05/09/2016.
  */
-class RepoServiceFactory {
+public class RepoServiceFactory {
 
     private Context context;
-    private OAuthClientRequester requester;
+    private OAuthClientManager requester;
 
 
-    public RepoServiceFactory(@NonNull Context context, @Nullable OAuthClientRequester requester) {
+    public RepoServiceFactory(@NonNull Context context, @Nullable OAuthClientManager clientManager) {
         this.context = context;
-        this.requester = requester;
+        this.requester = clientManager;
     }
 
     @Nullable
-    RepoServiceHandler create(@FetcherCallsHandler.RepoServiceType int service){
+    public RepoServiceHandler create(@FetcherCallsHandler.RepoServiceType int service){
         switch (service){
             case FetcherCallsHandler.GITHUB:
                 return new GitHubServiceHandler(context, requester);

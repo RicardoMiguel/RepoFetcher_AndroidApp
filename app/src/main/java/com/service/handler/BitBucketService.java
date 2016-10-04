@@ -1,8 +1,9 @@
-package com.service;
+package com.service.handler;
 
 import com.model.bitbucket.BitBucketAccessToken;
 import com.model.bitbucket.BitBucketOwner;
 import com.model.bitbucket.BitBucketRepositories;
+import com.service.Constants;
 
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -16,7 +17,7 @@ import rx.Observable;
 /**
  * Created by ricar on 06/09/2016.
  */
-public interface BitBucketService {
+interface BitBucketService {
     @GET("repositories/{user}/")
     Observable<BitBucketRepositories> listRepositories(@Path("user") String user);
 

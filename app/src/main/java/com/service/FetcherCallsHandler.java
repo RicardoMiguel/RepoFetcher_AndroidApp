@@ -10,10 +10,12 @@ import com.model.AccessToken;
 import com.model.ExpirableAccessToken;
 import com.model.Owner;
 import com.model.bitbucket.BitBucketOwner;
-import com.service.oauth.OAuthClientManager;
+import com.service.handler.RepoServiceFactory;
+import com.service.handler.RepoServiceHandler;
 import com.service.oauth.OAuthClientRequester;
-import com.service.oauth.OAuthClientService;
+import com.service.oauth.OAuthSessionManager;
 import com.service.oauth.OAuthUtils;
+import com.service.oauth.SessionSharedPrefs;
 import com.service.request.BitbucketRefreshTokenRequest;
 import com.service.request.ExchangeTokenRequest;
 import com.service.request.GetOwnRepositoriesRequest;
@@ -70,7 +72,7 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
         RepoServiceHandler handler = super.get(key);
 
         if(handler == null){
-            handler = new RepoServiceFactory(context, this).create((int)key);
+            handler = new RepoServiceFactory(context, new OAuthSessionManager((int)key, this)).create((int)key);
             if(handler != null) {
                 put((int) key, handler);
             }
@@ -80,12 +82,12 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
     }
 
     public static void callListRepositories(@RepoServiceType int service, @NonNull GetRepositoriesRequest<?> request){
-        IRepoServiceHandler handler = getInstance().get(service);
+        RepoServiceHandler handler = getInstance().get(service);
         makeCallIfThereIsNetwork(() -> handler.callListRepositories(request), request.getUiServiceResponse());
     }
 
     public static void callListRepositories(@RepoServiceType int service, @NonNull GetOwnRepositoriesRequest<?> request){
-        IRepoServiceHandler handler = getInstance().get(service);
+        RepoServiceHandler handler = getInstance().get(service);
         makeCallIfThereIsNetwork(() -> handler.callListRepositories(request), request.getUiServiceResponse());
     }
 
@@ -210,41 +212,36 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
     }
 
     @Override
-    public void onTokenChanged(OAuthClientService oAuthClientService, OAuthClientManager oAuthClientManager) {
-        AccessToken token = oAuthClientManager.getAccessToken();
-        if (oAuthClientService instanceof GitHubServiceHandler) {
-            new SessionSharedPrefs(context).saveToken(SessionSharedPrefs.GITHUB.getName(), token);
-        } else if (oAuthClientService instanceof BitBucketServiceHandler) {
-            new SessionSharedPrefs(context).saveToken(SessionSharedPrefs.BITBUCKET.getName(), token);
+    public void onTokenChanged(int service, @Nullable AccessToken accessToken) {
+        if (service == GITHUB) {
+            new SessionSharedPrefs(context).saveToken(SessionSharedPrefs.GITHUB.getName(), accessToken);
+        } else if (service == BITBUCKET) {
+            new SessionSharedPrefs(context).saveToken(SessionSharedPrefs.BITBUCKET.getName(), accessToken);
         }
     }
 
     @Override
-    public void onOwnerChanged(OAuthClientService oAuthClientService, OAuthClientManager oAuthClientManager) {
-        if(oAuthClientManager.getOwner() != null) {
-            if (oAuthClientService instanceof GitHubServiceHandler) {
-                new SessionSharedPrefs(context).saveOwner(SessionSharedPrefs.GITHUB.getName(), oAuthClientManager.getOwner());
-            } else if (oAuthClientService instanceof BitBucketServiceHandler) {
-                new SessionSharedPrefs(context).saveOwner(SessionSharedPrefs.BITBUCKET.getName(), oAuthClientManager.getOwner());
+    public void onOwnerChanged(int service, @Nullable Owner owner) {
+        if(owner != null) {
+            if (service == GITHUB) {
+                new SessionSharedPrefs(context).saveOwner(SessionSharedPrefs.GITHUB.getName(), owner);
+            } else if (service == BITBUCKET) {
+                new SessionSharedPrefs(context).saveOwner(SessionSharedPrefs.BITBUCKET.getName(), owner);
             }
         }
     }
 
     @Override
-    public void onRefreshToken(OAuthClientService oAuthClientService, OAuthClientManager oAuthClientManager) {
-        AccessToken token = oAuthClientManager.getAccessToken();
-        if(token instanceof ExpirableAccessToken){
-            String refreshCode = ((ExpirableAccessToken) token).getRefreshCode();
-            oAuthClientManager.setAccessToken(null);
-
-            if(oAuthClientService instanceof BitBucketServiceHandler){
-                callRefreshToken(BITBUCKET, new BitbucketRefreshTokenRequest(this,
-                        refreshCode,
-                        oAuthClientService.getClientId(),
-                        oAuthClientService.getClientSecret(),
-                        null));
-            }
+    public void onRefreshToken(int service, @NonNull String refreshCode) {
+        RepoServiceHandler oAuthClientService = get(service);
+        if(service == BITBUCKET){
+            callRefreshToken(BITBUCKET, new BitbucketRefreshTokenRequest(this,
+                    refreshCode,
+                    oAuthClientService.getClientId(),
+                    oAuthClientService.getClientSecret(),
+                    null));
         }
+
     }
 
     private static void loadSessions(){

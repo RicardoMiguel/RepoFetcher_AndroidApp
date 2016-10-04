@@ -1,17 +1,14 @@
-package com.service;
+package com.service.handler;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.model.AccessToken;
-import com.model.Owner;
+import com.service.SubscriberService;
 import com.service.interceptor.JsonInterceptor;
 import com.service.interceptor.OAuthInterceptor;
 import com.service.oauth.OAuthClientManager;
-import com.service.oauth.OAuthClientRequester;
 import com.service.oauth.OAuthClientService;
-import com.service.oauth.OAuthSessionManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,7 +26,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by ricar on 04/09/2016.
  */
-abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberService, OAuthClientService {
+public abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberService, OAuthClientService {
 
     private T service;
 
@@ -39,28 +36,29 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberS
     @Nullable protected String clientSecret;
     @Nullable protected String authorizationUrl;
     @Nullable protected String exchangeTokenUrl;
-    protected OAuthSessionManager sessionManager;
+    @Nullable protected OAuthClientManager sessionManager;
 
     @Nullable private Map<Integer, List<Subscriber>> listToUnsubscribe;
 
-    protected RepoServiceHandler(@NonNull Context context, @Nullable OAuthClientRequester oAuthClientRequester){
+    protected RepoServiceHandler(@NonNull Context context, @Nullable OAuthClientManager clientManager){
         this.context = context;
-        this.sessionManager = new OAuthSessionManager(this, oAuthClientRequester);
+        this.sessionManager = clientManager;
     }
 
     protected T getService(){
         if(service == null){
-            OkHttpClient client = new OkHttpClient.Builder()
+            OkHttpClient.Builder httpBuilder = new OkHttpClient.Builder()
                     .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-                    .addInterceptor(new JsonInterceptor())
-                    .addInterceptor(new OAuthInterceptor(sessionManager))
-                    .build();
+                    .addInterceptor(new JsonInterceptor());
+                    if(sessionManager != null) {
+                        httpBuilder.addInterceptor(new OAuthInterceptor(sessionManager));
+                    }
 
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(getServiceBaseUrl())
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))
-                    .client(client)
+                    .client(httpBuilder.build())
                     .build();
             service = retrofit.create(getServiceClassSpecification());
         }
@@ -106,7 +104,7 @@ abstract class RepoServiceHandler<T> implements IRepoServiceHandler, SubscriberS
         return listToUnsubscribe;
     }
 
-    OAuthClientManager getOAuthClientManager(){
+    public OAuthClientManager getOAuthClientManager(){
         return sessionManager;
     }
 }

@@ -1,4 +1,4 @@
-package com.service;
+package com.service.handler;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -11,7 +11,7 @@ import com.model.github.GitHubAccessToken;
 import com.model.github.GitHubOwner;
 import com.model.github.GitHubRepo;
 import com.repofetcher.R;
-import com.service.oauth.OAuthClientRequester;
+import com.service.oauth.OAuthClientManager;
 import com.service.request.ExchangeTokenRequest;
 import com.service.request.GetOwnRepositoriesRequest;
 import com.service.request.GetOwnerRequest;
@@ -26,10 +26,10 @@ import rx.Observable;
 /**
  * Created by ricar on 02/09/2016.
  */
-class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
+public class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
 
-    public GitHubServiceHandler(@NonNull Context context, @Nullable OAuthClientRequester oAuthClientRequester) {
-        super(context, oAuthClientRequester);
+    GitHubServiceHandler(@NonNull Context context, @Nullable OAuthClientManager clientManager) {
+        super(context, clientManager);
     }
 
     @Override
@@ -115,4 +115,6 @@ class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
 
         return exchangeTokenUrl;
     }
+
+
 }
