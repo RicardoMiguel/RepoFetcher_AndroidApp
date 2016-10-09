@@ -2,6 +2,7 @@ package com.service;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.model.AccessToken;
 import com.model.ExpirableAccessToken;
@@ -28,14 +29,15 @@ public class InitController {
 
     private Context context;
     private Map<Integer, RepoServiceHandler> handlers;
-    private int counter = -1;
+    private int counter;
 
     public InitController(@NonNull Context context, @NonNull Map<Integer, RepoServiceHandler> handlers) {
         this.context = context;
         this.handlers = handlers;
+        this.counter = -1;
     }
 
-    public void loadSessions(@NonNull InitRequest request) {
+    public void loadSessions(@Nullable InitRequest request) {
         SessionSharedPrefs prefs = new SessionSharedPrefs(context);
         Map<Class, AccessToken> map = prefs.getTokens();
         if (map != null) {
@@ -45,7 +47,7 @@ public class InitController {
             for (Map.Entry<Class, AccessToken> entry : map.entrySet()) {
                 if(entry.getValue() instanceof ExpirableAccessToken){
                     ExpirableAccessToken expirableAccessToken = (ExpirableAccessToken) entry.getValue();
-//                    expirableAccessToken.setExpiresIn(0);
+                    expirableAccessToken.setExpiresIn(0);
                     //TODO check time minus 2 minutes
                     if(expirableAccessToken.getExpiresIn() != null && expirableAccessToken.getExpiresIn() <= 0){
                         expirablesMap.put(entry.getKey(), expirableAccessToken);
@@ -64,11 +66,11 @@ public class InitController {
             if(!expirablesMap.isEmpty()) {
                 loadExpirableTokens(expirablesMap, request);
             } else {
-                request.getUiServiceResponse().onSuccess(null);
+                proceedCallback(request);
             }
 
         } else {
-            request.getUiServiceResponse().onSuccess(null);
+            proceedCallback(request);
         }
 
     }
@@ -94,7 +96,7 @@ public class InitController {
         }
     }
 
-    private <S extends ExpirableAccessToken> void loadExpirableTokens(@NonNull Map<Class, S> map, InitRequest initRequest) {
+    private <S extends ExpirableAccessToken> void loadExpirableTokens(@NonNull Map<Class, S> map, @Nullable InitRequest initRequest) {
         counter = map.size();
         for (Map.Entry<Class,S> entry : map.entrySet()) {
 
@@ -111,12 +113,12 @@ public class InitController {
                         repoServiceHandler.getClientSecret(), new RepoServiceResponse<BitBucketAccessToken>() {
                     @Override
                     public void onSuccess(BitBucketAccessToken object) {
-                        checkIfInitRequestsDone(--counter, initRequest);
+                        onRequestComplete(initRequest);
                     }
 
                     @Override
                     public void onError(Throwable t) {
-                        checkIfInitRequestsDone(--counter, initRequest);
+                        onRequestComplete(initRequest);
                     }
                 });
 
@@ -130,8 +132,14 @@ public class InitController {
 
     }
 
-    private void checkIfInitRequestsDone(int counter, InitRequest initRequest){
-        if(counter == 0){
+    private void onRequestComplete(@Nullable InitRequest initRequest){
+        if(--counter == 0){
+            proceedCallback(initRequest);
+        }
+    }
+
+    private void proceedCallback(@Nullable InitRequest initRequest){
+        if(initRequest != null && initRequest.getUiServiceResponse() != null) {
             initRequest.getUiServiceResponse().onSuccess(null);
         }
     }
