@@ -5,8 +5,8 @@ package com.model;
  */
 
 public interface ExpirableAccessToken extends AccessToken {
-    Integer getExpiresIn();
-    void setExpiresIn(Integer expiresIn);
+    int getExpiresIn();
+    void setExpiresIn(int expiresIn);
     String getRefreshCode();
     void setRefreshToken(String refreshToken);
 }

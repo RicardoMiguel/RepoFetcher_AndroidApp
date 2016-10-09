@@ -63,7 +63,7 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
     }
 
     public static void load(@Nullable InitRequest request){
-        new InitController(context, getInstance()).loadSessions(request);
+        new Initializer(context, getInstance()).loadSessions(request);
     }
 
     private FetcherCallsHandler(){

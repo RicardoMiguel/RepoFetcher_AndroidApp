@@ -2,6 +2,7 @@ package com.service.oauth;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.model.AccessToken;
@@ -38,10 +39,9 @@ public class OAuthSessionManager implements OAuthClientManager{
 
         if(accessToken instanceof ExpirableAccessToken){
             ExpirableAccessToken expirableAccessToken = (ExpirableAccessToken) accessToken;
-            if(expirableAccessToken.getExpiresIn() != null && expirableAccessToken.getExpiresIn() > 0) {
-                int delay = (OAuthUtils.secondsToMilliseconds(expirableAccessToken.getExpiresIn())) - OAuthUtils.secondsToMilliseconds(120); // time - 2 minutes
+            int delay = OAuthUtils.calcDelay(expirableAccessToken);
 //                int delay = 10000;
-
+            if(delay > 0) {
                 handler.removeCallbacks(runnable);
                 handler.postDelayed(runnable, delay);
             } else {

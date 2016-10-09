@@ -9,6 +9,7 @@ import com.model.ExpirableAccessToken;
 import com.model.Owner;
 import com.model.bitbucket.BitBucketAccessToken;
 import com.service.handler.RepoServiceHandler;
+import com.service.oauth.OAuthUtils;
 import com.service.oauth.SessionSharedPrefs;
 import com.service.request.BitbucketRefreshTokenRequest;
 import com.service.request.ExchangeTokenRequest;
@@ -25,13 +26,13 @@ import static com.service.FetcherCallsHandler.GITHUB;
  * Created by ricar on 03/10/2016.
  */
 
-public class InitController {
+public class Initializer {
 
     private Context context;
     private Map<Integer, RepoServiceHandler> handlers;
     private int counter;
 
-    public InitController(@NonNull Context context, @NonNull Map<Integer, RepoServiceHandler> handlers) {
+    public Initializer(@NonNull Context context, @NonNull Map<Integer, RepoServiceHandler> handlers) {
         this.context = context;
         this.handlers = handlers;
         this.counter = -1;
@@ -47,9 +48,9 @@ public class InitController {
             for (Map.Entry<Class, AccessToken> entry : map.entrySet()) {
                 if(entry.getValue() instanceof ExpirableAccessToken){
                     ExpirableAccessToken expirableAccessToken = (ExpirableAccessToken) entry.getValue();
-                    expirableAccessToken.setExpiresIn(0);
-                    //TODO check time minus 2 minutes
-                    if(expirableAccessToken.getExpiresIn() != null && expirableAccessToken.getExpiresIn() <= 0){
+//                    expirableAccessToken.setExpiresIn(120);
+
+                    if(OAuthUtils.calcDelay(expirableAccessToken) <= 0){
                         expirablesMap.put(entry.getKey(), expirableAccessToken);
                         map.remove(entry.getKey());
                     }
