@@ -62,8 +62,8 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
         FetcherCallsHandler.context = context;
     }
 
-    public static void load(@NonNull InitRequest request){
-        new InitController(context, getInstance()).loadSessions(request);
+    public static void load(@Nullable InitRequest request){
+        new Initializer(context, getInstance()).loadSessions(request);
     }
 
     private FetcherCallsHandler(){
@@ -201,16 +201,17 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
         if(ServiceUtils.isNetworkAvailable(context)){
             runnable.run();
         } else if(callback != null){
-            SubscriberAdapter<?> subscriberAdapter = new SubscriberAdapter<>(callback);
-            subscriberAdapter.onError(new NetworkErrorException());
+            callback.onError(new NetworkErrorException());
         }
     }
 
     public static void unSubscribe(Object fragment){
         int id = ServiceUtils.getHashCode(fragment);
-        for (RepoServiceHandler serviceHandler: getInstance().values())
-        {
+        //TODO re-do to unsubscribe only when it's necessary
+        int ownId = ServiceUtils.getHashCode(getInstance());
+        for (RepoServiceHandler serviceHandler: getInstance().values()) {
             serviceHandler.removeSubscribers(id);
+            serviceHandler.removeSubscribers(ownId);
         }
     }
 

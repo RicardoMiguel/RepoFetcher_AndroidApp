@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements FragmentTransitio
     }
 
     @Override
-    public void setActionBar(BaseFragment baseFragment, Menu menu) {
+    public void setActionBar(@NonNull BaseFragment baseFragment, @NonNull Menu menu) {
         actionBarController.onFragmentCreateOptionsMenu(baseFragment, menu);
     }
 

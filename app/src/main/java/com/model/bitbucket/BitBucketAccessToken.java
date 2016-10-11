@@ -67,8 +67,8 @@ public class BitBucketAccessToken implements ExpirableAccessToken{
      * @return
      * The expiresIn
      */
-    public Integer getExpiresIn() {
-        return expiresIn;
+    public int getExpiresIn() {
+        return expiresIn != null ? expiresIn : 0;
     }
 
     @Override
@@ -81,7 +81,7 @@ public class BitBucketAccessToken implements ExpirableAccessToken{
      * @param expiresIn
      * The expires_in
      */
-    public void setExpiresIn(Integer expiresIn) {
+    public void setExpiresIn(int expiresIn) {
         this.expiresIn = expiresIn;
     }
 

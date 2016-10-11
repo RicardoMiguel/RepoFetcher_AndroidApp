@@ -2,10 +2,8 @@ package com.service.request;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 
 import com.model.AccessToken;
-import com.model.github.GitHubAccessToken;
 import com.service.Constants;
 import com.service.RepoServiceResponse;
 
@@ -34,6 +32,7 @@ public class ExchangeTokenRequest<T extends AccessToken> extends BaseRequest<T>{
     @Override
     public Map<String, String> getParams() {
         Map<String, String> map = super.getParams();
+        //TODO create Github class for this
         map.put(Constants.CLIENT_ID, clientId);
         map.put(Constants.CLIENT_SECRET, clientSecret);
         map.put(Constants.CODE, code);
