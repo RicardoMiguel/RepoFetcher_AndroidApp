@@ -16,6 +16,7 @@ import com.service.request.ExchangeTokenRequest;
 import com.service.request.GetOwnRepositoriesRequest;
 import com.service.request.GetOwnerRequest;
 import com.service.request.GetRepositoriesRequest;
+import com.service.request.GitHubExchangeTokenRequest;
 import com.service.request.ServiceResponseMapAdapter;
 import com.service.rx.RxJavaController;
 
@@ -58,9 +59,13 @@ public class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
 
     @Override
     public <S extends AccessToken> void exchangeToken(@NonNull ExchangeTokenRequest<S> request) {
-        Observable<GitHubAccessToken> accessTokenObservable = getService().exchangeToken(getExchangeTokenUrl(), request.getParams());
-        addSubscribers(request.getHash(), request.getServiceResponseList().getSubscribersList());
-        new RxJavaController<GitHubAccessToken>().scheduleAndObserve(accessTokenObservable, (ServiceResponseMapAdapter<GitHubAccessToken>)request.getServiceResponseList());
+        if(request instanceof GitHubExchangeTokenRequest) {
+            GitHubExchangeTokenRequest gitHubExchangeTokenRequest = (GitHubExchangeTokenRequest)request;
+
+            Observable<GitHubAccessToken> accessTokenObservable = getService().exchangeToken(getExchangeTokenUrl(), request.getParams());
+            addSubscribers(request.getHash(), request.getServiceResponseList().getSubscribersList());
+            new RxJavaController<GitHubAccessToken>().scheduleAndObserve(accessTokenObservable, gitHubExchangeTokenRequest.getServiceResponseList());
+        }
     }
 
     @Override

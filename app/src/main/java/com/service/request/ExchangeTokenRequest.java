@@ -28,14 +28,4 @@ public class ExchangeTokenRequest<T extends AccessToken> extends BaseRequest<T>{
         this.clientId = clientId;
         this.clientSecret = clientSecret;
     }
-
-    @Override
-    public Map<String, String> getParams() {
-        Map<String, String> map = super.getParams();
-        //TODO create Github class for this
-        map.put(Constants.CLIENT_ID, clientId);
-        map.put(Constants.CLIENT_SECRET, clientSecret);
-        map.put(Constants.CODE, code);
-        return map;
-    }
 }
