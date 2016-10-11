@@ -25,8 +25,7 @@ public class ExchangeTokenRequest<T extends AccessToken> extends BaseRequest<T>{
                                 @NonNull String clientId,
                                 @NonNull String clientSecret,
                                 @Nullable RepoServiceResponse<T> response) {
-        setHash(context);
-        setUiServiceResponse(response);
+        super(context, response);
         this.code = code;
         this.clientId = clientId;
         this.clientSecret = clientSecret;

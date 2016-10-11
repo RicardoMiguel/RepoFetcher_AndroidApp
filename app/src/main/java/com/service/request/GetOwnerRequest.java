@@ -13,8 +13,7 @@ import com.service.RepoServiceResponse;
 public class GetOwnerRequest<T extends Owner> extends BaseRequest<T> {
 
     public GetOwnerRequest(@NonNull Object context, @Nullable RepoServiceResponse<T> response) {
-        setHash(context);
-        setUiServiceResponse(response);
+        super(context, response);
     }
 
     public GetOwnerRequest(int hash, @Nullable RepoServiceResponse<T> response) {
