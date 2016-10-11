@@ -201,16 +201,17 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
         if(ServiceUtils.isNetworkAvailable(context)){
             runnable.run();
         } else if(callback != null){
-            SubscriberAdapter<?> subscriberAdapter = new SubscriberAdapter<>(callback);
-            subscriberAdapter.onError(new NetworkErrorException());
+            callback.onError(new NetworkErrorException());
         }
     }
 
     public static void unSubscribe(Object fragment){
         int id = ServiceUtils.getHashCode(fragment);
-        for (RepoServiceHandler serviceHandler: getInstance().values())
-        {
+        //TODO re-do to unsubscribe only when it's necessary
+        int ownId = ServiceUtils.getHashCode(getInstance());
+        for (RepoServiceHandler serviceHandler: getInstance().values()) {
             serviceHandler.removeSubscribers(id);
+            serviceHandler.removeSubscribers(ownId);
         }
     }
 

@@ -108,7 +108,7 @@ public class Initializer {
 
                 type = BITBUCKET;
                 repoServiceHandler = handlers.get(BITBUCKET);
-                exchangeTokenRequest = new BitbucketRefreshTokenRequest(this,
+                exchangeTokenRequest = new BitbucketRefreshTokenRequest(handlers,
                         entry.getValue().getRefreshCode(),
                         repoServiceHandler.getClientId(),
                         repoServiceHandler.getClientSecret(), new RepoServiceResponse<BitBucketAccessToken>() {

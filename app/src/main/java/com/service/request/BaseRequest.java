@@ -26,7 +26,7 @@ public abstract class BaseRequest<T> {
 
     }
 
-    public BaseRequest(@NonNull Object context, @Nullable RepoServiceResponse<T> uiServiceResponse) {
+    BaseRequest(@NonNull Object context, @Nullable RepoServiceResponse<T> uiServiceResponse) {
         setUiServiceResponse(uiServiceResponse);
         setHash(context);
     }
