@@ -5,3 +5,5 @@
 * Implement Team Foundation Server - https://www.visualstudio.com/en-us/docs/integrate/get-started/auth/oauth#get-an-access-token .
 * Implement main repository file listing.
 * Implement readme.
+* Try to use reactive to make refreshTokens requests (for example MergeDelayError - http://reactivex.io/documentation/operators/merge.html)
+* Try to use reactive to chain the two requests ExchangeToken -> GetOwner.
