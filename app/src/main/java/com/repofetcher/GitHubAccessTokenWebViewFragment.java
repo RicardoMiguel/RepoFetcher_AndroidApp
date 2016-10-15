@@ -7,7 +7,6 @@ import com.model.github.GitHubAccessToken;
 import com.service.Constants;
 import com.service.FetcherCallsHandler;
 import com.service.RepoServiceResponse;
-import com.service.request.ExchangeTokenRequest;
 import com.service.request.GitHubExchangeTokenRequest;
 
 /**

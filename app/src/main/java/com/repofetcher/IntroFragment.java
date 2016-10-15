@@ -7,11 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import com.service.FetcherCallsHandler;
-
-import java.util.ArrayList;
 
 /**
  * Created by ricar on 07/09/2016.

@@ -1,6 +1,7 @@
 package com.service;
 
 import android.accounts.NetworkErrorException;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
@@ -42,8 +43,8 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
     @Retention(RetentionPolicy.SOURCE)
     public @interface RepoServiceType {}
 
-    @Nullable //The instance might be null. Use getInstance instead.
-    private static FetcherCallsHandler instance;
+    //The instance might be null. Use getInstance instead.
+    @Nullable private static FetcherCallsHandler instance;
     private static Context context;
 
     @NonNull
@@ -261,8 +262,7 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
     }
 
     private static int[] getServicesAlias(){
-        int[] classes = {GITHUB, BITBUCKET};
-        return classes;
+        return new int[]{GITHUB, BITBUCKET};
     }
 
     @NonNull

@@ -8,33 +8,22 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:layout_gravity="center">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/search_hint_text_view"
+        android:drawableStart="@drawable/ic_search_black_24dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/ask_username_linear_layout"
-        android:orientation="horizontal"
-        android:gravity="center_horizontal">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_search_black_24dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/to_search_label"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_marginBottom="20dp"/>
-
-    </LinearLayout>
+        android:text="@string/to_search_label"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_marginBottom="20dp"
+        android:layout_centerHorizontal="true"/>
 
     <Button
         android:id="@+id/login_center_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/login_center_label"
-        android:layout_below="@id/ask_username_linear_layout"
+        android:layout_below="@id/search_hint_text_view"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
     />

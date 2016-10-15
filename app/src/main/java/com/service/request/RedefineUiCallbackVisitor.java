@@ -1,7 +1,6 @@
 package com.service.request;
 
 import com.model.AccessToken;
-import com.model.bitbucket.BitBucketAccessToken;
 import com.service.RepoServiceResponse;
 import com.service.SubscriberAdapter;
 

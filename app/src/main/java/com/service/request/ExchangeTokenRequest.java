@@ -4,10 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.model.AccessToken;
-import com.service.Constants;
 import com.service.RepoServiceResponse;
-
-import java.util.Map;
 
 /**
  * Created by ricar on 13/09/2016.

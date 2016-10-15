@@ -1,5 +1,6 @@
 package com.service.oauth;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
@@ -20,6 +21,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * This class writes uses currentThread to write into SharedPrefs.
+ *
  * Created by ricar on 15/09/2016.
  */
 public class SessionSharedPrefs {
@@ -39,8 +42,7 @@ public class SessionSharedPrefs {
     private static final String USERNAME = Constants.USERNAME;
 
     private static Class[] getClasses(){
-        Class[] classes = {GITHUB, BITBUCKET};
-        return classes;
+        return new Class[]{GITHUB, BITBUCKET};
     }
 
     private Context context;
@@ -49,6 +51,7 @@ public class SessionSharedPrefs {
         this.context = context;
     }
 
+    @SuppressLint("CommitPrefEdits")
     public void saveToken(@NonNull String file, @Nullable AccessToken token){
         SharedPreferences sharedPref = context.getSharedPreferences(file, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -116,6 +119,7 @@ public class SessionSharedPrefs {
         return accessToken;
     }
 
+   @SuppressLint("CommitPrefEdits")
    public void saveOwner(String file, @NonNull Owner owner){
         SharedPreferences sharedPref = context.getSharedPreferences(file, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();

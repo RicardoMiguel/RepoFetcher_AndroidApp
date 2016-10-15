@@ -47,6 +47,7 @@ public class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
     public <S> void callListRepositories(@NonNull GetRepositoriesRequest<S> request){
         Observable<List<GitHubRepo>> repositoriesOb = getService().listRepositories(request.getUser(), request.getParams());
         addSubscribers(request.getHash(), request.getServiceResponseList().getSubscribersList());
+        //noinspection unchecked
         new RxJavaController<List<GitHubRepo>>().scheduleAndObserve(repositoriesOb, (ServiceResponseMapAdapter<List<GitHubRepo>>)request.getServiceResponseList());
     }
 
@@ -54,6 +55,7 @@ public class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
     public <S> void callListRepositories(@NonNull GetOwnRepositoriesRequest<S> request) {
         Observable<List<GitHubRepo>> repositoriesOb = getService().listRepositories(request.getParams());
         addSubscribers(request.getHash(), request.getServiceResponseList().getSubscribersList());
+        //noinspection unchecked
         new RxJavaController<List<GitHubRepo>>().scheduleAndObserve(repositoriesOb, (ServiceResponseMapAdapter<List<GitHubRepo>>)request.getServiceResponseList());
     }
 
@@ -77,6 +79,7 @@ public class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
     public <S extends Owner> void callGetOwner(@NonNull GetOwnerRequest<S> request) {
         Observable<GitHubOwner> accessTokenObservable = getService().getOwner();
         addSubscribers(request.getHash(), request.getServiceResponseList().getSubscribersList());
+        //noinspection unchecked
         new RxJavaController<GitHubOwner>().scheduleAndObserve(accessTokenObservable, (ServiceResponseMapAdapter<GitHubOwner>)request.getServiceResponseList());
     }
 

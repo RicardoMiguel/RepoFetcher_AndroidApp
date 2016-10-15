@@ -1,5 +1,6 @@
 package com.repofetcher;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -27,6 +28,7 @@ public class BitbucketAccessTokenWebViewFragment extends AccessTokenWebViewFragm
                 .build().toString();
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     protected void configWebView(){
         webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl(getQuery());

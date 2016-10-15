@@ -2,7 +2,6 @@ package com.model.bitbucket;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.model.AccessToken;
 import com.model.ExpirableAccessToken;
 
 /**

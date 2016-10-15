@@ -26,21 +26,6 @@ public class RxJavaController<T> {
     public static final int MAIN_THREAD = 1;
     public static final int IO = 2;
 
-    @Deprecated
-    void scheduleOnIO_ObserveOnMainThread(@NonNull Observable<?> observable, @NonNull List<Subscriber> subscribers){
-        ConnectableObservable<?> connectableObservable = observable.publish();
-
-        for(Subscriber subscriber: subscribers){
-            connectableObservable
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(subscriber);
-        }
-
-        connectableObservable.connect();
-
-    }
-
     public void scheduleAndObserve(@NonNull Observable<T> observable, @NonNull SubscribersMap<T> subscribersMap){
         ConnectableObservable<T> connectableObservable = observable.publish();
 

@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.repofetcher.R;
 
@@ -21,14 +20,11 @@ import java.util.ArrayList;
 
 public class FragmentController {
 
-    private AppCompatActivity activity;
-
     private FragmentManager fragmentManager;
 
     private ArrayList<String> backStack;
 
     public FragmentController(@NonNull AppCompatActivity activity) {
-        this.activity = activity;
         fragmentManager = activity.getSupportFragmentManager();
         backStack = new ArrayList<>();
     }
@@ -51,7 +47,7 @@ public class FragmentController {
         return !backStack.isEmpty();
     }
 
-    public void pushToStack(@NonNull Fragment fragment){
+    private void pushToStack(@NonNull Fragment fragment){
         backStack.add(fragment.getClass().getName());
     }
 

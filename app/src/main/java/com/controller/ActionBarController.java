@@ -20,8 +20,8 @@ import com.repofetcher.RepoListFragment;
  * Created by ricar on 19/09/2016.
  */
 public class ActionBarController {
-    private ActionBar actionBar;
-    private FragmentTransitionService fragmentTransitionService;
+    private final ActionBar actionBar;
+    private final FragmentTransitionService fragmentTransitionService;
 
     public ActionBarController(@NonNull ActionBar actionBar, @NonNull FragmentTransitionService fragmentTransitionService) {
         this.actionBar = actionBar;
