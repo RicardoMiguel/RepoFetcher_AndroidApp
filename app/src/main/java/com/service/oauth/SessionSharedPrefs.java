@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This class writes uses currentThread to write into SharedPrefs.
+ * This class uses currentThread to write into SharedPreferences.
  *
  * Created by ricar on 15/09/2016.
  */
@@ -51,6 +51,12 @@ public class SessionSharedPrefs {
         this.context = context;
     }
 
+    /**
+     * This method uses currentThread to write into SharedPreferences.
+     *
+     * @param file The shared prefs to write into.
+     * @param token The AccessToken to write into.
+     */
     @SuppressLint("CommitPrefEdits")
     public void saveToken(@NonNull String file, @Nullable AccessToken token){
         SharedPreferences sharedPref = context.getSharedPreferences(file, Context.MODE_PRIVATE);
@@ -119,6 +125,12 @@ public class SessionSharedPrefs {
         return accessToken;
     }
 
+    /**
+     * This method uses currentThread to write into SharedPreferences.
+     *
+     * @param file The shared prefs to write into.
+     * @param owner The Owner to write into.
+     */
    @SuppressLint("CommitPrefEdits")
    public void saveOwner(String file, @NonNull Owner owner){
         SharedPreferences sharedPref = context.getSharedPreferences(file, Context.MODE_PRIVATE);
