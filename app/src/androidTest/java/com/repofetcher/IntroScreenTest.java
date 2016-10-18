@@ -15,7 +15,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.core.AllOf.allOf;
-import static org.hamcrest.Matchers.not;
 
 /**
  * Created by ricar on 18/10/2016.
@@ -35,6 +34,5 @@ public class IntroScreenTest {
 
         onView(withId(R.id.login_github_button)).check(matches(allOf(isDisplayed(), isEnabled())));
     }
-
 
 }
