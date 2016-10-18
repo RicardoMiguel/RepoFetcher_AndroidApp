@@ -2,7 +2,8 @@
 * Loading View.
 * Error views: Unexpected/Network/User not found.
 * Add floating button to Login center.
-* Handle repositories pagination (Bitbucket) - https://developer.atlassian.com/bitbucket/api/2/reference/resource/repositories/%7Busername%7D .
+* Handle repositories pagination. (Bitbucket - https://developer.atlassian.com/bitbucket/api/2/reference/resource/repositories/%7Busername%7D ).
+* Handle OAuth 2 Implicit grant on Bitbucket.
 * Implement Team Foundation Server - https://www.visualstudio.com/en-us/docs/integrate/get-started/auth/oauth#get-an-access-token .
 * Implement main repository file listing.
 * Implement readme.
