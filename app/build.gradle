@@ -10,6 +10,8 @@ android {
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -31,10 +33,10 @@ dependencies {
     testCompile 'junit:junit:4.12'
 
     //Android Support
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.android.support:recyclerview-v7:24.2.1'
-    compile 'com.android.support:cardview-v7:24.2.1'
-    compile 'com.android.support:design:24.2.1'
+    compile "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
+    compile "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
+    compile "com.android.support:cardview-v7:$rootProject.supportLibraryVersion"
+    compile "com.android.support:design:$rootProject.supportLibraryVersion"
 
     //Retrofit
     compile 'com.google.code.gson:gson:2.7'
@@ -50,12 +52,15 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
 
     //Leak Canary
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+    debugCompile "com.squareup.leakcanary:leakcanary-android:$rootProject.leakCanaryVersion"
+    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakCanaryVersion"
+    testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakCanaryVersion"
 
     //RecyclerView Animators
     compile 'jp.wasabeef:recyclerview-animators:2.2.3'
+
+    // Espresso UI Testing dependencies.
+    androidTestCompile "com.android.support.test.espresso:espresso-core:$rootProject.ext.espressoVersion"
 
     //RetroLambda - Has to be the last one. Source: https://medium.com/android-news/retrolambda-on-android-191cc8151f85#.plukggfya
     apply plugin: 'com.android.application'

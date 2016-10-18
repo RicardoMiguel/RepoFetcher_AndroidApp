@@ -25,6 +25,7 @@ public class MultipleAccountRepositoriesFragment extends BaseFragment{
     public static final String TEXT = "TEXT";
 
     private static final String TAG = MultipleAccountRepositoriesFragment.class.getName();
+
     @Nullable
     private String text;
     private ArrayList<Integer> servicesAlias;
