@@ -23,3 +23,14 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+ext {
+
+    // App dependencies
+    supportLibraryVersion = '24.2.1'
+    leakCanaryVersion = '1.4-beta2'
+    runnerVersion = '0.5'
+    rulesVersion = '0.5'
+    espressoVersion = '2.2.2'
+
+}
