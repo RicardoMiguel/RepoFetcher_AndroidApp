@@ -1,0 +1,33 @@
+package com.service.holder;
+
+import android.support.annotation.StringRes;
+
+import com.service.FetcherCallsHandler;
+
+/**
+ * Created by ricar on 24/10/2016.
+ */
+
+public abstract class ServiceHolder {
+    private @FetcherCallsHandler.RepoServiceType int serviceType;
+    private Class classType;
+    private @StringRes int serviceName;
+
+    public ServiceHolder(@FetcherCallsHandler.RepoServiceType int serviceType, Class classType, @StringRes int serviceName) {
+        this.serviceType = serviceType;
+        this.classType = classType;
+        this.serviceName = serviceName;
+    }
+
+    public int getServiceType() {
+        return serviceType;
+    }
+
+    public Class getClassType() {
+        return classType;
+    }
+
+    public int getServiceName() {
+        return serviceName;
+    }
+}
