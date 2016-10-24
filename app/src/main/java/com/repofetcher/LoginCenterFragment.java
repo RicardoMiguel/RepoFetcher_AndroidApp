@@ -1,7 +1,6 @@
 package com.repofetcher;
 
 import android.content.DialogInterface;
-import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -9,11 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialog;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ListAdapter;
 
 import com.service.FetcherCallsHandler;
 import com.service.holder.RepoServiceType;
@@ -41,7 +36,7 @@ public class LoginCenterFragment extends BaseFragment implements DialogInterface
         gitHubButton.setOnClickListener( v -> goToWebViewFragment(RepoServiceType.GITHUB));
 
         bitbucketButton = (Button)view.findViewById(R.id.login_bitbucket_button);
-        bitbucketButton.setOnClickListener(v -> goToWebViewFragment(FetcherCallsHandler.BITBUCKET));
+        bitbucketButton.setOnClickListener(v -> goToWebViewFragment(RepoServiceType.BITBUCKET));
 
         FloatingActionButton fab = (FloatingActionButton)view.findViewById(R.id.floating_button);
         fab.setOnClickListener(v -> createDialog());
@@ -50,7 +45,7 @@ public class LoginCenterFragment extends BaseFragment implements DialogInterface
     private void createDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.chose_account_label).setMultiChoiceItems(R.array.repositories_names,
-                new boolean[]{FetcherCallsHandler.hasSession(FetcherCallsHandler.GITHUB), FetcherCallsHandler.hasSession(FetcherCallsHandler.BITBUCKET)},
+                new boolean[]{FetcherCallsHandler.hasSession(RepoServiceType.GITHUB), FetcherCallsHandler.hasSession(RepoServiceType.BITBUCKET)},
                 this);
         AppCompatDialog alert = builder.create();
         alert.show();
@@ -108,9 +103,9 @@ public class LoginCenterFragment extends BaseFragment implements DialogInterface
         final String bitbucket = getString(R.string.bitbucket);
         if(b) {
             if (repoServices[i].equals(github)) {
-                goToWebViewFragment(FetcherCallsHandler.GITHUB);
+                goToWebViewFragment(RepoServiceType.GITHUB);
             } else if (repoServices[i].equals(bitbucket)) {
-                goToWebViewFragment(FetcherCallsHandler.BITBUCKET);
+                goToWebViewFragment(RepoServiceType.BITBUCKET);
             }
         } else {
 

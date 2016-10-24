@@ -2,7 +2,7 @@ package com.controller;
 
 import android.support.annotation.NonNull;
 
-import com.service.FetcherCallsHandler;
+import com.service.holder.RepoServiceType;
 
 /**
  * Created by ricar on 20/10/2016.
@@ -17,7 +17,7 @@ public interface LoginCenterContract {
 
         void dismissSessionsDialog();
 
-        void goToWebViewFragment(@FetcherCallsHandler.RepoServiceType int serviceType);
+        void goToWebViewFragment(@RepoServiceType int serviceType);
     }
 
     interface Controller {
