@@ -14,6 +14,7 @@ import android.webkit.WebViewClient;
 
 import com.service.Constants;
 import com.service.FetcherCallsHandler;
+import com.service.holder.RepoServiceType;
 
 /**
  * Created by ricar on 12/09/2016.
@@ -76,5 +77,5 @@ public abstract class AccessTokenWebViewFragment extends BaseFragment{
 
     protected abstract void exchangeCodeForToken(@NonNull String code);
 
-    protected abstract @FetcherCallsHandler.RepoServiceType int getType();
+    protected abstract @RepoServiceType int getType();
 }

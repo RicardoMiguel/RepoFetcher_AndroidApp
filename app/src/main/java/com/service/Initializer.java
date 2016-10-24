@@ -18,9 +18,8 @@ import com.service.request.InitRequest;
 import java.util.HashMap;
 import java.util.Map;
 
-
-import static com.service.FetcherCallsHandler.BITBUCKET;
-import static com.service.FetcherCallsHandler.GITHUB;
+import static com.service.holder.RepoServiceType.BITBUCKET;
+import static com.service.holder.RepoServiceType.GITHUB;
 
 /**
  * Created by ricar on 03/10/2016.
@@ -40,12 +39,12 @@ public class Initializer {
 
     public void loadSessions(@Nullable InitRequest request) {
         SessionSharedPrefs prefs = new SessionSharedPrefs(context);
-        Map<Class, AccessToken> map = prefs.getTokens();
+        Map<Integer, AccessToken> map = prefs.getTokens(FetcherCallsHandler.getServicesAlias());
         if (map != null) {
 
-            Map<Class, ExpirableAccessToken> expirablesMap = new HashMap<>();
+            Map<Integer, ExpirableAccessToken> expirablesMap = new HashMap<>();
 
-            for (Map.Entry<Class, AccessToken> entry : map.entrySet()) {
+            for (Map.Entry<Integer, AccessToken> entry : map.entrySet()) {
                 if(entry.getValue() instanceof ExpirableAccessToken){
                     ExpirableAccessToken expirableAccessToken = (ExpirableAccessToken) entry.getValue();
 //                    expirableAccessToken.setExpiresIn(120);
@@ -59,7 +58,7 @@ public class Initializer {
 
             loadTokens(map);
 
-            Map<Class, Owner> ownerMap = prefs.getOwners();
+            Map<Integer, Owner> ownerMap = prefs.getOwners(FetcherCallsHandler.getServicesAlias());
             if (ownerMap != null) {
                 loadOwners(ownerMap);
             }
@@ -76,35 +75,31 @@ public class Initializer {
 
     }
 
-    private void loadTokens(@NonNull Map<Class, AccessToken> map){
-        for (Map.Entry<Class, AccessToken> entry : map.entrySet()) {
+    private void loadTokens(@NonNull Map<Integer, AccessToken> map){
+        for (Map.Entry<Integer, AccessToken> entry : map.entrySet()) {
             AccessToken accessToken = entry.getValue();
-            if (entry.getKey() == SessionSharedPrefs.GITHUB) {
-                handlers.get(GITHUB).getOAuthClientManager().setAccessToken(accessToken);
-            } else if (entry.getKey() == SessionSharedPrefs.BITBUCKET) {
-                handlers.get(BITBUCKET).getOAuthClientManager().setAccessToken(accessToken);
-            }
+            handlers.get(entry.getKey()).getOAuthClientManager().setAccessToken(accessToken);
         }
     }
 
-    private void loadOwners(@NonNull Map<Class, Owner> map){
-        for (Map.Entry<Class, Owner> entry : map.entrySet()) {
-            if (entry.getKey() == SessionSharedPrefs.GITHUB) {
+    private void loadOwners(@NonNull Map<Integer, Owner> map){
+        for (Map.Entry<Integer, Owner> entry : map.entrySet()) {
+            if (entry.getKey() == GITHUB) {
                 handlers.get(GITHUB).getOAuthClientManager().setOwner(entry.getValue());
-            } else if (entry.getKey() == SessionSharedPrefs.BITBUCKET) {
+            } else if (entry.getKey() == BITBUCKET) {
                 handlers.get(BITBUCKET).getOAuthClientManager().setOwner(entry.getValue());
             }
         }
     }
 
-    private <S extends ExpirableAccessToken> void loadExpirableTokens(@NonNull Map<Class, S> map, @Nullable InitRequest initRequest) {
+    private <S extends ExpirableAccessToken> void loadExpirableTokens(@NonNull Map<Integer, S> map, @Nullable InitRequest initRequest) {
         counter = map.size();
-        for (Map.Entry<Class,S> entry : map.entrySet()) {
+        for (Map.Entry<Integer,S> entry : map.entrySet()) {
 
             RepoServiceHandler repoServiceHandler = null;
             ExchangeTokenRequest<? extends ExpirableAccessToken> exchangeTokenRequest = null;
             int type = -1;
-            if (entry.getKey() == SessionSharedPrefs.BITBUCKET) {
+            if (entry.getKey() == BITBUCKET) {
 
                 type = BITBUCKET;
                 repoServiceHandler = handlers.get(BITBUCKET);

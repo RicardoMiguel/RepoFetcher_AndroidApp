@@ -1,9 +1,7 @@
 package com.service;
 
 import android.accounts.NetworkErrorException;
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -13,6 +11,7 @@ import com.model.Owner;
 import com.model.bitbucket.BitBucketOwner;
 import com.service.handler.RepoServiceFactory;
 import com.service.handler.RepoServiceHandler;
+import com.service.holder.RepoServiceType;
 import com.service.oauth.OAuthClientRequester;
 import com.service.oauth.OAuthSessionManager;
 import com.service.oauth.OAuthUtils;
@@ -26,22 +25,16 @@ import com.service.request.InitRequest;
 import com.service.request.RedefineUiCallbackVisitor;
 import com.service.rx.RxJavaController;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import static com.service.holder.RepoServiceType.BITBUCKET;
+import static com.service.holder.RepoServiceType.GITHUB;
 
 /**
  * Created by ricar on 04/09/2016.
  */
 public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> implements OAuthClientRequester {
-
-    public static final int GITHUB = 0;
-    public static final int BITBUCKET = 1;
-
-    @IntDef({GITHUB, BITBUCKET})
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface RepoServiceType {}
 
     //The instance might be null. Use getInstance instead.
     @Nullable private static FetcherCallsHandler instance;
@@ -218,21 +211,13 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
 
     @Override
     public void onTokenChanged(int service, @Nullable AccessToken accessToken) {
-        if (service == GITHUB) {
-            new SessionSharedPrefs(context).saveToken(SessionSharedPrefs.GITHUB.getName(), accessToken);
-        } else if (service == BITBUCKET) {
-            new SessionSharedPrefs(context).saveToken(SessionSharedPrefs.BITBUCKET.getName(), accessToken);
-        }
+        new SessionSharedPrefs(context).saveToken(service, accessToken);
     }
 
     @Override
     public void onOwnerChanged(int service, @Nullable Owner owner) {
         if(owner != null) {
-            if (service == GITHUB) {
-                new SessionSharedPrefs(context).saveOwner(SessionSharedPrefs.GITHUB.getName(), owner);
-            } else if (service == BITBUCKET) {
-                new SessionSharedPrefs(context).saveOwner(SessionSharedPrefs.BITBUCKET.getName(), owner);
-            }
+            new SessionSharedPrefs(context).saveOwner(service, owner);
         }
     }
 
@@ -261,7 +246,7 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
         return OAuthUtils.isTokenValid(getInstance().get(service).getOAuthClientManager().getAccessToken());
     }
 
-    private static int[] getServicesAlias(){
+    public static @RepoServiceType int[] getServicesAlias(){
         return new int[]{GITHUB, BITBUCKET};
     }
 

@@ -1,11 +1,11 @@
 package com.repofetcher;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -14,7 +14,7 @@ import android.view.MenuItem;
 
 import com.controller.ActionBarController;
 import com.controller.FragmentController;
-import com.service.FetcherCallsHandler;
+import com.service.holder.RepoServiceType;
 
 import java.util.ArrayList;
 
@@ -132,8 +132,8 @@ public class MainActivity extends AppCompatActivity implements FragmentTransitio
             bundle.putString( MultipleAccountRepositoriesFragment.TEXT, username);
 
             ArrayList<Integer> list = new ArrayList<>();
-            list.add(FetcherCallsHandler.GITHUB);
-            list.add(FetcherCallsHandler.BITBUCKET);
+            list.add(RepoServiceType.GITHUB);
+            list.add(RepoServiceType.BITBUCKET);
             bundle.putIntegerArrayList(MultipleAccountRepositoriesFragment.SERVICE_ALIAS, list);
             switchFragment(MultipleAccountRepositoriesFragment.class, bundle);
         }
