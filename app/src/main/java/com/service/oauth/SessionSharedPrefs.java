@@ -100,10 +100,13 @@ public class SessionSharedPrefs {
         int expiration = sharedPref.getInt(EXPIRATION, -1);
         if(token != null || expiration != -1) {
 
-            if (serviceType == RepoServiceType.GITHUB) {
-                accessToken = new GitHubAccessToken();
-            } else if (serviceType == RepoServiceType.BITBUCKET) {
-                accessToken = new BitBucketAccessToken();
+            switch (serviceType){
+                case RepoServiceType.GITHUB:
+                    accessToken = new GitHubAccessToken();
+                    break;
+                case RepoServiceType.BITBUCKET:
+                    accessToken = new BitBucketAccessToken();
+                    break;
             }
 
             if(accessToken instanceof ExpirableAccessToken){
@@ -142,12 +145,15 @@ public class SessionSharedPrefs {
 
         Owner owner = null;
         SharedPreferences sharedPref = context.getSharedPreferences(file, Context.MODE_PRIVATE);
-        String username = sharedPref.getString(USERNAME,null);
+        String username = sharedPref.getString(USERNAME, null);
         if(username != null){
-            if(serviceType == RepoServiceType.GITHUB){
-                owner = new GitHubOwner();
-            } else if(serviceType == RepoServiceType.BITBUCKET){
-                owner = new BitBucketOwner();
+            switch (serviceType){
+                case RepoServiceType.GITHUB:
+                    owner = new GitHubOwner();
+                    break;
+                case RepoServiceType.BITBUCKET:
+                    owner = new BitBucketOwner();
+                    break;
             }
             owner.setLogin(username);
         }
