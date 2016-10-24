@@ -27,10 +27,6 @@ import java.util.Map;
  */
 public class SessionSharedPrefs {
 
-    public static final Class GITHUB = ServiceUtils.getServiceClass(RepoServiceType.GITHUB);
-
-    public static final Class BITBUCKET = ServiceUtils.getServiceClass(RepoServiceType.BITBUCKET);
-
     private static final String TOKEN = Constants.TOKEN;
 
     private static final String EXPIRATION = "expiration";
@@ -41,10 +37,6 @@ public class SessionSharedPrefs {
 
     private static final String USERNAME = Constants.USERNAME;
 
-    private static Class[] getClasses(){
-        return new Class[]{GITHUB, BITBUCKET};
-    }
-
     private Context context;
 
     public SessionSharedPrefs(@NonNull Context context){
@@ -54,11 +46,13 @@ public class SessionSharedPrefs {
     /**
      * This method uses currentThread to write into SharedPreferences.
      *
-     * @param file The shared prefs to write into.
+     * @param serviceType The service tye to write into.
      * @param token The AccessToken to write into.
      */
     @SuppressLint("CommitPrefEdits")
-    public void saveToken(@NonNull String file, @Nullable AccessToken token){
+    public void saveToken(@RepoServiceType int serviceType, @Nullable AccessToken token){
+        final String file = ServiceUtils.getServiceClass(serviceType).getName();
+
         SharedPreferences sharedPref = context.getSharedPreferences(file, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
 
@@ -81,12 +75,11 @@ public class SessionSharedPrefs {
     }
 
     @Nullable
-    public Map<Class, AccessToken> getTokens(){
-        Map<Class, AccessToken> map = null;
-        Class[] classes = getClasses();
+    public Map<Integer, AccessToken> getTokens(@RepoServiceType int[] services){
+        Map<Integer, AccessToken> map = null;
 
-        for(Class c : classes){
-            AccessToken token = getToken(c.getName());
+        for(Integer c : services){
+            AccessToken token = getToken(c);
             if(token != null){
                 if(map == null){
                     map = new HashMap<>();
@@ -98,16 +91,18 @@ public class SessionSharedPrefs {
     }
 
     @Nullable
-    AccessToken getToken(@NonNull String file){
+    AccessToken getToken(@RepoServiceType int serviceType){
+        final String file = ServiceUtils.getServiceClass(serviceType).getName();
+
         SharedPreferences sharedPref = context.getSharedPreferences(file, Context.MODE_PRIVATE);
         AccessToken accessToken = null;
         String token = sharedPref.getString(TOKEN, null);
         int expiration = sharedPref.getInt(EXPIRATION, -1);
         if(token != null || expiration != -1) {
 
-            if (file.equals(GITHUB.getName())) {
+            if (serviceType == RepoServiceType.GITHUB) {
                 accessToken = new GitHubAccessToken();
-            } else if (file.equals(BITBUCKET.getName())) {
+            } else if (serviceType == RepoServiceType.BITBUCKET) {
                 accessToken = new BitBucketAccessToken();
             }
 
@@ -128,11 +123,13 @@ public class SessionSharedPrefs {
     /**
      * This method uses currentThread to write into SharedPreferences.
      *
-     * @param file The shared prefs to write into.
+     * @param serviceType The service tye to write into.
      * @param owner The Owner to write into.
      */
    @SuppressLint("CommitPrefEdits")
-   public void saveOwner(String file, @NonNull Owner owner){
+   public void saveOwner(@RepoServiceType int serviceType, @NonNull Owner owner){
+        final String file = ServiceUtils.getServiceClass(serviceType).getName();
+
         SharedPreferences sharedPref = context.getSharedPreferences(file, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(USERNAME, owner.getLogin());
@@ -140,14 +137,16 @@ public class SessionSharedPrefs {
     }
 
     @Nullable
-    Owner getOwner(@NonNull String file){
+    Owner getOwner(@RepoServiceType int serviceType){
+        final String file = ServiceUtils.getServiceClass(serviceType).getName();
+
         Owner owner = null;
         SharedPreferences sharedPref = context.getSharedPreferences(file, Context.MODE_PRIVATE);
         String username = sharedPref.getString(USERNAME,null);
         if(username != null){
-            if(file.equals(GITHUB.getName())){
+            if(serviceType == RepoServiceType.GITHUB){
                 owner = new GitHubOwner();
-            } else if(file.equals(BITBUCKET.getName())){
+            } else if(serviceType == RepoServiceType.BITBUCKET){
                 owner = new BitBucketOwner();
             }
             owner.setLogin(username);
@@ -156,11 +155,11 @@ public class SessionSharedPrefs {
     }
 
     @Nullable
-    public Map<Class, Owner> getOwners(){
-        Map<Class, Owner> owners = null;
-        Class[] classes = getClasses();
-        for(Class c : classes){
-            Owner owner = getOwner(c.getName());
+    public Map<Integer, Owner> getOwners(@RepoServiceType int[] services){
+        Map<Integer, Owner> owners = null;
+
+        for(Integer c : services){
+            Owner owner = getOwner(c);
             if(owner != null){
                 if(owners == null){
                     owners = new HashMap<>();
