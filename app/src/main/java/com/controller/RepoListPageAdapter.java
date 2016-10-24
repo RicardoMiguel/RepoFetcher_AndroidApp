@@ -10,7 +10,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.repofetcher.MultipleAccountRepositoriesFragment;
 import com.repofetcher.R;
 import com.repofetcher.RepoListFragment;
-import com.service.FetcherCallsHandler;
+import com.service.holder.RepoServiceType;
 
 import java.util.List;
 
@@ -34,9 +34,9 @@ public class RepoListPageAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         int repo = repos[position].getInt(MultipleAccountRepositoriesFragment.SERVICE_ALIAS);
         switch (repo){
-            case FetcherCallsHandler.GITHUB:
+            case RepoServiceType.GITHUB:
                 return context.getResources().getString(R.string.github);
-            case FetcherCallsHandler.BITBUCKET:
+            case RepoServiceType.BITBUCKET:
                 return context.getResources().getString(R.string.bitbucket);
         }
         return super.getPageTitle(position);

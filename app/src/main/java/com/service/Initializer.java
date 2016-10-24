@@ -18,9 +18,8 @@ import com.service.request.InitRequest;
 import java.util.HashMap;
 import java.util.Map;
 
-
-import static com.service.FetcherCallsHandler.BITBUCKET;
-import static com.service.FetcherCallsHandler.GITHUB;
+import static com.service.holder.RepoServiceType.BITBUCKET;
+import static com.service.holder.RepoServiceType.GITHUB;
 
 /**
  * Created by ricar on 03/10/2016.

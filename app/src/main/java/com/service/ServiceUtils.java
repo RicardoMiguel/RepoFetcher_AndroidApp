@@ -6,6 +6,9 @@ import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.util.Base64;
 
+import com.service.holder.RepoServiceType;
+import com.service.holder.ServiceHolderFactory;
+
 /**
  * Created by ricar on 04/09/2016.
  */
@@ -25,5 +28,9 @@ public class ServiceUtils {
 
     public static int getHashCode(@NonNull Object object){
         return System.identityHashCode(object);
+    }
+
+    public static Class getServiceClass(@RepoServiceType int service){
+        return new ServiceHolderFactory().create(service).getClass();
     }
 }

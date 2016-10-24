@@ -7,6 +7,7 @@ import com.model.github.GitHubAccessToken;
 import com.service.Constants;
 import com.service.FetcherCallsHandler;
 import com.service.RepoServiceResponse;
+import com.service.holder.RepoServiceType;
 import com.service.request.GitHubExchangeTokenRequest;
 
 /**
@@ -38,6 +39,6 @@ public class GitHubAccessTokenWebViewFragment extends AccessTokenWebViewFragment
 
     @Override
     protected int getType() {
-        return FetcherCallsHandler.GITHUB;
+        return RepoServiceType.GITHUB;
     }
 }

@@ -13,9 +13,9 @@ import com.model.bitbucket.BitBucketAccessToken;
 import com.model.bitbucket.BitBucketOwner;
 import com.model.github.GitHubAccessToken;
 import com.model.github.GitHubOwner;
-import com.service.handler.BitBucketServiceHandler;
 import com.service.Constants;
-import com.service.handler.GitHubServiceHandler;
+import com.service.ServiceUtils;
+import com.service.holder.RepoServiceType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,9 +27,9 @@ import java.util.Map;
  */
 public class SessionSharedPrefs {
 
-    public static final Class GITHUB = GitHubServiceHandler.class;
+    public static final Class GITHUB = ServiceUtils.getServiceClass(RepoServiceType.GITHUB);
 
-    public static final Class BITBUCKET = BitBucketServiceHandler.class;
+    public static final Class BITBUCKET = ServiceUtils.getServiceClass(RepoServiceType.BITBUCKET);
 
     private static final String TOKEN = Constants.TOKEN;
 
