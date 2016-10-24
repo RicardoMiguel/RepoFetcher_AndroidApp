@@ -13,7 +13,7 @@ public interface LoginCenterContract {
     interface View {
         void inject(@NonNull String v);
 
-        void showSessionsDialog();
+        void showSessionsDialog(@NonNull String[] names, @NonNull boolean[] serviceHasSession);
 
         void dismissSessionsDialog();
 
