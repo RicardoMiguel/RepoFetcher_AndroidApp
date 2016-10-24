@@ -12,6 +12,7 @@ import com.model.bitbucket.BitBucketAccessToken;
 import com.service.Constants;
 import com.service.FetcherCallsHandler;
 import com.service.RepoServiceResponse;
+import com.service.holder.RepoServiceType;
 import com.service.request.BitbucketExchangeTokenRequest;
 
 /**
@@ -67,6 +68,6 @@ public class BitbucketAccessTokenWebViewFragment extends AccessTokenWebViewFragm
 
     @Override
     protected int getType() {
-        return FetcherCallsHandler.BITBUCKET;
+        return RepoServiceType.BITBUCKET;
     }
 }

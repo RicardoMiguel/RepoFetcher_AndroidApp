@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ListAdapter;
 
 import com.service.FetcherCallsHandler;
+import com.service.holder.RepoServiceType;
 
 /**
  * Created by ricar on 13/09/2016.
@@ -37,7 +38,7 @@ public class LoginCenterFragment extends BaseFragment implements DialogInterface
         Log.d(TAG, "onViewCreated");
         super.onViewCreated(view, savedInstanceState);
         gitHubButton = (Button)view.findViewById(R.id.login_github_button);
-        gitHubButton.setOnClickListener( v -> goToWebViewFragment(FetcherCallsHandler.GITHUB));
+        gitHubButton.setOnClickListener( v -> goToWebViewFragment(RepoServiceType.GITHUB));
 
         bitbucketButton = (Button)view.findViewById(R.id.login_bitbucket_button);
         bitbucketButton.setOnClickListener(v -> goToWebViewFragment(FetcherCallsHandler.BITBUCKET));
@@ -61,12 +62,12 @@ public class LoginCenterFragment extends BaseFragment implements DialogInterface
         super.onDestroyView();
     }
 
-    private void goToWebViewFragment(@FetcherCallsHandler.RepoServiceType int serviceType) {
+    private void goToWebViewFragment(@RepoServiceType int serviceType) {
         switch (serviceType){
-            case FetcherCallsHandler.GITHUB:
+            case RepoServiceType.GITHUB:
                 switchFragment(GitHubAccessTokenWebViewFragment.class,null);
                 break;
-            case FetcherCallsHandler.BITBUCKET:
+            case RepoServiceType.BITBUCKET:
                 switchFragment(BitbucketAccessTokenWebViewFragment.class,null);
                 break;
         }
@@ -81,17 +82,17 @@ public class LoginCenterFragment extends BaseFragment implements DialogInterface
     }
 
     private void setBitBucketButton() {
-        if(FetcherCallsHandler.hasSession(FetcherCallsHandler.BITBUCKET)){
+        if(FetcherCallsHandler.hasSession(RepoServiceType.BITBUCKET)){
             bitbucketButton.setEnabled(false);
             bitbucketButton.setText(R.string.logged_in_bitbucket_label);
         } else {
-            bitbucketButton.setEnabled(false);
-            bitbucketButton.setText(R.string.bitbucket);
+            bitbucketButton.setEnabled(true);
+            bitbucketButton.setText(R.string.login_to_bitbucket_label);
         }
     }
 
     private void setGitHubButton() {
-        if(FetcherCallsHandler.hasSession(FetcherCallsHandler.GITHUB)){
+        if(FetcherCallsHandler.hasSession(RepoServiceType.GITHUB)){
             gitHubButton.setEnabled(false);
             gitHubButton.setText(R.string.logged_in_github_label);
         } else {

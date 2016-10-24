@@ -1,6 +1,6 @@
 package com.repofetcher;
 
-import com.service.FetcherCallsHandler;
+import com.service.holder.RepoServiceType;
 
 import java.io.Serializable;
 
@@ -8,9 +8,10 @@ import java.io.Serializable;
  * Created by ricar on 15/09/2016.
  */
 public class SerializableInteger implements Serializable {
-    @FetcherCallsHandler.RepoServiceType int service;
+    @RepoServiceType
+    int service;
 
-    public SerializableInteger(@FetcherCallsHandler.RepoServiceType int service) {
+    public SerializableInteger(@RepoServiceType int service) {
         this.service = service;
     }
 }

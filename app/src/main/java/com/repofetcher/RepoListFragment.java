@@ -19,6 +19,7 @@ import com.model.bitbucket.BitBucketRepositories;
 import com.model.github.GitHubRepo;
 import com.service.FetcherCallsHandler;
 import com.service.RepoServiceResponse;
+import com.service.holder.RepoServiceType;
 import com.service.request.GetOwnRepositoriesRequest;
 import com.service.request.GetRepositoriesRequest;
 
@@ -128,10 +129,10 @@ public class RepoListFragment extends BaseFragment{
 
     private void getRepoList(@NonNull String user, int repo){
         switch (repo){
-            case FetcherCallsHandler.GITHUB:
+            case RepoServiceType.GITHUB:
                 getGitHubRepoList(user);
                 break;
-            case FetcherCallsHandler.BITBUCKET:
+            case RepoServiceType.BITBUCKET:
                 getBitBucketRepoList(user);
                 break;
         }
@@ -139,7 +140,7 @@ public class RepoListFragment extends BaseFragment{
 
     private void getBitBucketRepoList(@Nullable String user){
         if(user != null) {
-            FetcherCallsHandler.callListRepositories(FetcherCallsHandler.BITBUCKET, new GetRepositoriesRequest<>(this, user, new RepoServiceResponse<BitBucketRepositories>() {
+            FetcherCallsHandler.callListRepositories(RepoServiceType.BITBUCKET, new GetRepositoriesRequest<>(this, user, new RepoServiceResponse<BitBucketRepositories>() {
 
                 @Override
                 public void onSuccess(BitBucketRepositories object) {
@@ -152,7 +153,7 @@ public class RepoListFragment extends BaseFragment{
                 }
             }));
         } else {
-            FetcherCallsHandler.callListRepositories(FetcherCallsHandler.BITBUCKET, new GetOwnRepositoriesRequest<>(this, new RepoServiceResponse<BitBucketRepositories>() {
+            FetcherCallsHandler.callListRepositories(RepoServiceType.BITBUCKET, new GetOwnRepositoriesRequest<>(this, new RepoServiceResponse<BitBucketRepositories>() {
 
                 @Override
                 public void onSuccess(BitBucketRepositories object) {
@@ -169,7 +170,7 @@ public class RepoListFragment extends BaseFragment{
 
     private void getGitHubRepoList(@Nullable String user){
         if(user != null) {
-            FetcherCallsHandler.callListRepositories(FetcherCallsHandler.GITHUB, new GetRepositoriesRequest<>(this, user, new RepoServiceResponse<ArrayList<GitHubRepo>>() {
+            FetcherCallsHandler.callListRepositories(RepoServiceType.GITHUB, new GetRepositoriesRequest<>(this, user, new RepoServiceResponse<ArrayList<GitHubRepo>>() {
                 @Override
                 public void onSuccess(ArrayList<GitHubRepo> object) {
                     buildRepositoriesRecyclerView(object);
@@ -181,7 +182,7 @@ public class RepoListFragment extends BaseFragment{
                 }
             }));
         } else {
-            FetcherCallsHandler.callListRepositories(FetcherCallsHandler.GITHUB, new GetOwnRepositoriesRequest<>(this, new RepoServiceResponse<ArrayList<GitHubRepo>>() {
+            FetcherCallsHandler.callListRepositories(RepoServiceType.GITHUB, new GetOwnRepositoriesRequest<>(this, new RepoServiceResponse<ArrayList<GitHubRepo>>() {
                 @Override
                 public void onSuccess(ArrayList<GitHubRepo> object) {
                     buildRepositoriesRecyclerView(object);
