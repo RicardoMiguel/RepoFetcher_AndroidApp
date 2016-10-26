@@ -15,7 +15,6 @@ import android.widget.Button;
 
 import com.controller.LoginCenterContract;
 import com.controller.LoginCenterController;
-import com.service.FetcherCallsHandler;
 import com.service.holder.RepoServiceType;
 
 /**
@@ -25,8 +24,7 @@ public class LoginCenterFragment extends BaseFragment implements DialogInterface
 
     private static final String TAG = LoginCenterFragment.class.getName();
 
-    private Button gitHubButton;
-    private Button bitbucketButton;
+    private ViewGroup viewGroup;
 
     @Nullable
     private AppCompatDialog alert;
@@ -48,12 +46,11 @@ public class LoginCenterFragment extends BaseFragment implements DialogInterface
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onViewCreated");
         super.onViewCreated(view, savedInstanceState);
-        gitHubButton = (Button)view.findViewById(R.id.login_github_button);
-
-        bitbucketButton = (Button)view.findViewById(R.id.login_bitbucket_button);
 
         FloatingActionButton fab = (FloatingActionButton)view.findViewById(R.id.floating_button);
         fab.setOnClickListener(v -> controller.createSessionsDialog());
+
+        viewGroup = (ViewGroup)view.findViewById(R.id.sessions_layout);
     }
 
     @Override
@@ -63,8 +60,10 @@ public class LoginCenterFragment extends BaseFragment implements DialogInterface
     }
 
     @Override
-    public void inject(@NonNull String v) {
-
+    public void inflateSessionView(@NonNull String v) {
+        Button button = (Button)LayoutInflater.from(this.getContext()).inflate(R.layout.repository_button, viewGroup, false);
+        button.setText(v);
+        viewGroup.addView(button);
     }
 
     @Override
@@ -97,30 +96,14 @@ public class LoginCenterFragment extends BaseFragment implements DialogInterface
     }
 
     @Override
+    public void showNoSessionsView() {
+        //TODO Implement Errors view
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        setGitHubButton();
-        setBitBucketButton();
-    }
-
-    private void setBitBucketButton() {
-        if(FetcherCallsHandler.hasSession(RepoServiceType.BITBUCKET)){
-            bitbucketButton.setEnabled(false);
-            bitbucketButton.setText(R.string.logged_in_bitbucket_label);
-        } else {
-            bitbucketButton.setEnabled(true);
-            bitbucketButton.setText(R.string.login_to_bitbucket_label);
-        }
-    }
-
-    private void setGitHubButton() {
-        if(FetcherCallsHandler.hasSession(RepoServiceType.GITHUB)){
-            gitHubButton.setEnabled(false);
-            gitHubButton.setText(R.string.logged_in_github_label);
-        } else {
-            gitHubButton.setEnabled(false);
-            gitHubButton.setText(R.string.github);
-        }
+        controller.activeSessions();
     }
 
     @Override

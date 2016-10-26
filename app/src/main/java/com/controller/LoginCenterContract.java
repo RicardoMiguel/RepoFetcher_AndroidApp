@@ -11,13 +11,15 @@ import com.service.holder.RepoServiceType;
 public interface LoginCenterContract {
 
     interface View {
-        void inject(@NonNull String v);
+        void inflateSessionView(@NonNull String v);
 
         void showSessionsDialog(@NonNull String[] names, @NonNull boolean[] serviceHasSession);
 
         void dismissSessionsDialog();
 
         void goToWebViewFragment(@RepoServiceType int serviceType);
+
+        void showNoSessionsView();
     }
 
     interface Controller {

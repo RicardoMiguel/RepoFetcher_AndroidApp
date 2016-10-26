@@ -8,23 +8,12 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin">
 
-    <Button
-        android:id="@+id/login_github_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text="@string/login_to_github_label"
-        android:layout_marginBottom="20dp"
-        />
-
-    <Button
-        android:id="@+id/login_bitbucket_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text="@string/login_to_github_label"
-        android:layout_below="@id/login_github_button"
-        />
+    <LinearLayout
+        android:id="@+id/sessions_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/floating_button"

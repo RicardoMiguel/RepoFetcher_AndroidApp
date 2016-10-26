@@ -26,9 +26,13 @@ public class LoginCenterController implements LoginCenterContract.Controller{
     @Override
     public void activeSessions() {
 
-        for(int i = 0; i<services.length; i++){
-            if(FetcherCallsHandler.hasSession(services[i])){
-                view.inject(resources.getString(new ServiceHolderFactory().create(services[i]).getServiceName()));
+        if(services.length == 0){
+            view.showNoSessionsView();
+        } else {
+            for (int i = 0; i < services.length; i++) {
+                if (FetcherCallsHandler.hasSession(services[i])) {
+                    view.inflateSessionView(resources.getString(new ServiceHolderFactory().create(services[i]).getServiceName()));
+                }
             }
         }
 
