@@ -52,7 +52,10 @@ public class LoginCenterController implements LoginCenterContract.Controller{
 
     @Override
     public void removeSession(int i) {
-
+        FetcherCallsHandler.removeToken(services[i]);
+        view.wipeSessionsView();
+        activeSessions();
+        view.dismissSessionsDialog();
     }
 
     @Override

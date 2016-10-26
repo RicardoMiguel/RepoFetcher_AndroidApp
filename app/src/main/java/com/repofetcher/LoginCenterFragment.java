@@ -67,6 +67,11 @@ public class LoginCenterFragment extends BaseFragment implements DialogInterface
     }
 
     @Override
+    public void wipeSessionsView() {
+        viewGroup.removeAllViews();
+    }
+
+    @Override
     public void showSessionsDialog(@NonNull String[] names, @NonNull boolean[] serviceHasSession) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.chose_account_label).setMultiChoiceItems(names,

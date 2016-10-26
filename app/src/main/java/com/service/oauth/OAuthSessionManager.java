@@ -69,6 +69,7 @@ public class OAuthSessionManager implements OAuthClientManager{
     private void refreshToken(){
         if(oAuthClientRequester != null && accessToken instanceof ExpirableAccessToken) {
             setAccessToken(null);
+            handler.removeCallbacks(runnable);
             oAuthClientRequester.onRefreshToken(service, ((ExpirableAccessToken) accessToken).getRefreshCode());
         }
     }

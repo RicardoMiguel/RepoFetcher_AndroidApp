@@ -13,6 +13,8 @@ public interface LoginCenterContract {
     interface View {
         void inflateSessionView(@NonNull String v);
 
+        void wipeSessionsView();
+
         void showSessionsDialog(@NonNull String[] names, @NonNull boolean[] serviceHasSession);
 
         void dismissSessionsDialog();
