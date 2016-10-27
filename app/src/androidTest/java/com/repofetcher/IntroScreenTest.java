@@ -32,7 +32,7 @@ public class IntroScreenTest {
     public void clickLoginScreen_OpensLoginScreenUi(){
         onView(withId(R.id.login_center_button)).perform(click());
 
-        onView(withId(R.id.login_github_button)).check(matches(allOf(isDisplayed(), isEnabled())));
+        onView(withId(R.id.floating_button)).check(matches(allOf(isDisplayed(), isEnabled())));
     }
 
 }
