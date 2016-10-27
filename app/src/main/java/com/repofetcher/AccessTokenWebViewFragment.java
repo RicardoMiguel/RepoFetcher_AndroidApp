@@ -57,7 +57,7 @@ public abstract class AccessTokenWebViewFragment extends BaseFragment{
     }
 
     protected void configWebView(){
-
+        webView.getSettings().setJavaScriptEnabled(javaScriptEnable());
         webView.loadUrl(getQuery());
 
         webView.setWebViewClient(new WebViewClient() {
@@ -78,4 +78,6 @@ public abstract class AccessTokenWebViewFragment extends BaseFragment{
     protected abstract void exchangeCodeForToken(@NonNull String code);
 
     protected abstract @RepoServiceType int getType();
+
+    protected abstract boolean javaScriptEnable();
 }

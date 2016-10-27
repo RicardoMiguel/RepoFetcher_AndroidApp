@@ -41,4 +41,9 @@ public class GitHubAccessTokenWebViewFragment extends AccessTokenWebViewFragment
     protected int getType() {
         return RepoServiceType.GITHUB;
     }
+
+    @Override
+    protected boolean javaScriptEnable() {
+        return false;
+    }
 }

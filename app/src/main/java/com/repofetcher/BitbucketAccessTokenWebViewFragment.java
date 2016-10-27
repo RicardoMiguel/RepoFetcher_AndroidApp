@@ -1,12 +1,7 @@
 package com.repofetcher;
 
-import android.annotation.SuppressLint;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 import com.model.bitbucket.BitBucketAccessToken;
 import com.service.Constants;
@@ -27,24 +22,6 @@ public class BitbucketAccessTokenWebViewFragment extends AccessTokenWebViewFragm
                 .appendQueryParameter(Constants.CLIENT_ID, clientId)
                 .appendQueryParameter(Constants.RESPONSE_TYPE, Constants.CODE)
                 .build().toString();
-    }
-
-    @SuppressLint("SetJavaScriptEnabled")
-    protected void configWebView(){
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl(getQuery());
-
-        webView.setWebViewClient(new WebViewClient() {
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-
-                Uri uri = Uri.parse(url);
-                String code = uri.getQueryParameter(Constants.CODE);
-                if (!TextUtils.isEmpty(code)) {
-                    webView.stopLoading();
-                    exchangeCodeForToken(code);
-                }
-            }
-        });
     }
 
     @Override
@@ -69,5 +46,10 @@ public class BitbucketAccessTokenWebViewFragment extends AccessTokenWebViewFragm
     @Override
     protected int getType() {
         return RepoServiceType.BITBUCKET;
+    }
+
+    @Override
+    protected boolean javaScriptEnable() {
+        return true;
     }
 }
