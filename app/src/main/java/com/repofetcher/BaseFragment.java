@@ -12,13 +12,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 
+import com.controller.ErrorUIController;
 import com.service.FetcherCallsHandler;
 
 /**
  * Created by ricar on 07/09/2016.
  */
-public abstract class BaseFragment extends Fragment{
+public abstract class BaseFragment extends Fragment implements ErrorsContract.View {
 
     private static final String TAG = BaseFragment.class.getName();
 
@@ -26,6 +28,13 @@ public abstract class BaseFragment extends Fragment{
     private FragmentTransitionService fragmentTransitionService;
 
     @LayoutRes protected int layoutRes;
+
+    private View mainContent;
+
+    private View errorContent;
+
+    @Nullable
+    private ErrorsContract.controller errorController;
 
     public BaseFragment(@LayoutRes int layoutRes){
         this.layoutRes = layoutRes;
@@ -43,7 +52,25 @@ public abstract class BaseFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(fragmentTransitionService != null && fragmentTransitionService.hasToBuildActionBar(this));
-        return inflater.inflate(layoutRes, container, false);
+        return inflater.inflate(R.layout.base_fragment_layout, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ViewStub mainContentStub = (ViewStub)view.findViewById(R.id.main_content);
+        mainContentStub.setLayoutResource(layoutRes);
+        mainContentStub.setOnInflateListener((viewStub, view1) -> mainContent = view1);
+        mainContentStub.inflate();
+
+        errorContent = view.findViewById(R.id.error_content);
+        ViewStub errorContentStub = (ViewStub)errorContent;
+        errorContentStub.setLayoutResource(R.layout.error_view);
+        errorContentStub.setOnInflateListener((viewStub, view1) -> {
+            errorContent = view1;
+            errorController = new ErrorUIController(errorContent);
+        });
+
     }
 
     @Override
@@ -84,4 +111,26 @@ public abstract class BaseFragment extends Fragment{
             fragmentTransitionService.goToLoginCenter();
         }
     }
+
+    public void showUnexpectedError(){
+        showView(errorContent, mainContent);
+        if(errorController != null){
+            errorController.createUnexpectedError();
+        }
+    }
+
+    public void showNetworkError(){
+        showView(errorContent, mainContent);
+        if(errorController != null){
+            errorController.createNetworkError();
+        }
+    }
+
+    protected final void showView(View viewToShow, View... viewsToHide){
+        for(View view : viewsToHide){
+            view.setVisibility(View.GONE);
+        }
+        viewToShow.setVisibility(View.VISIBLE);
+    }
+
 }
