@@ -69,6 +69,7 @@ public class ErrorUIController implements ErrorsContract.Controller {
     private void inflateIfNotInflatedYet(){
         if(errorView instanceof ViewStub){
             errorView = ((ViewStub) errorView).inflate();
+            errorView.setVisibility(View.GONE);
         }
 
         if(errorText == null){

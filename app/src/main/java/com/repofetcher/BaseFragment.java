@@ -112,8 +112,16 @@ public abstract class BaseFragment extends Fragment implements ErrorsContract.Vi
         }
     }
 
+    public void showContentView(){
+        if(mainContent.getVisibility() != View.VISIBLE) {
+            showView(mainContent, errorContent);
+        }
+    }
+
     public void showErrorView(){
-        showView(errorContent, mainContent);
+        if(errorContent.getVisibility() != View.VISIBLE) {
+            showView(errorContent, mainContent);
+        }
     }
 
     public void retry(){}
