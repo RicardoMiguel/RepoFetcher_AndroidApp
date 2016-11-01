@@ -17,6 +17,8 @@ import android.view.ViewStub;
 import com.controller.ErrorUIController;
 import com.service.FetcherCallsHandler;
 
+import static com.repofetcher.UIUtils.showView;
+
 /**
  * Created by ricar on 07/09/2016.
  */
@@ -33,8 +35,7 @@ public abstract class BaseFragment extends Fragment implements ErrorsContract.Vi
 
     private View errorContent;
 
-    @Nullable
-    private ErrorsContract.controller errorController;
+    protected ErrorsContract.Controller errorController;
 
     public BaseFragment(@LayoutRes int layoutRes){
         this.layoutRes = layoutRes;
@@ -64,12 +65,11 @@ public abstract class BaseFragment extends Fragment implements ErrorsContract.Vi
         mainContentStub.inflate();
 
         errorContent = view.findViewById(R.id.error_content);
+        errorController = new ErrorUIController(this, errorContent);
+
         ViewStub errorContentStub = (ViewStub)errorContent;
         errorContentStub.setLayoutResource(R.layout.error_view);
-        errorContentStub.setOnInflateListener((viewStub, view1) -> {
-            errorContent = view1;
-            errorController = new ErrorUIController(errorContent);
-        });
+        errorContentStub.setOnInflateListener((viewStub, view1) -> errorContent = view1);
 
     }
 
@@ -112,25 +112,9 @@ public abstract class BaseFragment extends Fragment implements ErrorsContract.Vi
         }
     }
 
-    public void showUnexpectedError(){
+    public void showErrorView(){
         showView(errorContent, mainContent);
-        if(errorController != null){
-            errorController.createUnexpectedError();
-        }
     }
 
-    public void showNetworkError(){
-        showView(errorContent, mainContent);
-        if(errorController != null){
-            errorController.createNetworkError();
-        }
-    }
-
-    protected final void showView(View viewToShow, View... viewsToHide){
-        for(View view : viewsToHide){
-            view.setVisibility(View.GONE);
-        }
-        viewToShow.setVisibility(View.VISIBLE);
-    }
-
+    public void retry(){}
 }

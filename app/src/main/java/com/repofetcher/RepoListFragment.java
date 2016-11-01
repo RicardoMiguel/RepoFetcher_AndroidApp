@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.controller.RepoListAdapter;
 import com.controller.VerticalSpaceItemDecoration;
@@ -149,7 +148,7 @@ public class RepoListFragment extends BaseFragment{
 
                 @Override
                 public void onError(Throwable t) {
-                    Toast.makeText(RepoListFragment.this.getContext(), t.toString(), Toast.LENGTH_LONG).show();
+                    errorController.handleError(t);
                 }
             }));
         } else {
@@ -162,7 +161,7 @@ public class RepoListFragment extends BaseFragment{
 
                 @Override
                 public void onError(Throwable t) {
-                    Toast.makeText(RepoListFragment.this.getContext(), t.toString(), Toast.LENGTH_LONG).show();
+                    errorController.handleError(t);
                 }
             }));
         }
@@ -178,7 +177,7 @@ public class RepoListFragment extends BaseFragment{
 
                 @Override
                 public void onError(Throwable t) {
-                    Toast.makeText(RepoListFragment.this.getContext(), t.toString(), Toast.LENGTH_LONG).show();
+                    errorController.handleError(t);
                 }
             }));
         } else {
@@ -190,7 +189,7 @@ public class RepoListFragment extends BaseFragment{
 
                 @Override
                 public void onError(Throwable t) {
-                    Toast.makeText(RepoListFragment.this.getContext(), t.toString(), Toast.LENGTH_LONG).show();
+                    errorController.handleError(t);
                 }
             }));
         }

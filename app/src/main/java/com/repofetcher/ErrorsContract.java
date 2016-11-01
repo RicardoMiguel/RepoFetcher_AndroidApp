@@ -6,12 +6,13 @@ package com.repofetcher;
 
 public interface ErrorsContract {
     interface View{
-        void showUnexpectedError();
-        void showNetworkError();
+        void showErrorView();
+        void retry();
     }
 
-    interface controller{
+    interface Controller {
         void createUnexpectedError();
         void createNetworkError();
+        void handleError(Throwable t);
     }
 }
