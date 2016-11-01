@@ -29,6 +29,8 @@ public abstract class AccessTokenWebViewFragment extends BaseFragment{
     protected String clientId;
     protected String clientSecret;
 
+    @Nullable String accessCode;
+
     public AccessTokenWebViewFragment() {
         super(R.layout.web_view);
     }
@@ -67,6 +69,7 @@ public abstract class AccessTokenWebViewFragment extends BaseFragment{
                 String code = uri.getQueryParameter(Constants.CODE);
                 if (!TextUtils.isEmpty(code)) {
                     webView.stopLoading();
+                    accessCode = code;
                     exchangeCodeForToken(code);
                 }
             }
@@ -78,4 +81,11 @@ public abstract class AccessTokenWebViewFragment extends BaseFragment{
     protected abstract void exchangeCodeForToken(@NonNull String code);
 
     protected abstract @RepoServiceType int getType();
+
+    @Override
+    public void retry() {
+        if(!TextUtils.isEmpty(accessCode)){
+            exchangeCodeForToken(accessCode);
+        }
+    }
 }
