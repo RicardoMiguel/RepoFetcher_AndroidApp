@@ -2,7 +2,8 @@
     <string name="app_name">RepoFetcher</string>
     <string name="search">Search</string>
     <string name="go_my_repositories_label">Go to my repositories</string>
-    <string name="to_search_label">to search</string>
+    <string name="to_search_label">to search for an account</string>
+    <string name="to_add_label">to add an account</string>
     <string name="login_center">Login Center</string>
     <string name="login_center_label">Go to Login Center</string>
     <string name="login_to_github_label">Login to GitHub</string>

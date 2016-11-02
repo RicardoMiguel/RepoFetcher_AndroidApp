@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.widget.Button;
 
 import com.controller.LoginCenterContract;
@@ -24,7 +25,9 @@ public class LoginCenterFragment extends BaseFragment implements DialogInterface
 
     private static final String TAG = LoginCenterFragment.class.getName();
 
-    private ViewGroup viewGroup;
+    private ViewGroup sessionsView;
+
+    private View noSessionsView;
 
     @Nullable
     private AppCompatDialog alert;
@@ -50,7 +53,10 @@ public class LoginCenterFragment extends BaseFragment implements DialogInterface
         FloatingActionButton fab = (FloatingActionButton)view.findViewById(R.id.floating_button);
         fab.setOnClickListener(v -> controller.createSessionsDialog());
 
-        viewGroup = (ViewGroup)view.findViewById(R.id.sessions_layout);
+        sessionsView = (ViewGroup)view.findViewById(R.id.sessions_layout);
+
+        noSessionsView = view.findViewById(R.id.no_sessions_view);
+        ((ViewStub)noSessionsView).setOnInflateListener((viewStub,view1)-> noSessionsView = view1);
     }
 
     @Override
@@ -61,14 +67,14 @@ public class LoginCenterFragment extends BaseFragment implements DialogInterface
 
     @Override
     public void inflateSessionView(@NonNull String v) {
-        Button button = (Button)LayoutInflater.from(this.getContext()).inflate(R.layout.repository_button, viewGroup, false);
+        Button button = (Button)LayoutInflater.from(this.getContext()).inflate(R.layout.repository_button, sessionsView, false);
         button.setText(v);
-        viewGroup.addView(button);
+        sessionsView.addView(button);
     }
 
     @Override
     public void wipeSessionsView() {
-        viewGroup.removeAllViews();
+        sessionsView.removeAllViews();
     }
 
     @Override
@@ -102,7 +108,7 @@ public class LoginCenterFragment extends BaseFragment implements DialogInterface
 
     @Override
     public void showNoSessionsView() {
-        //TODO Implement Errors view
+        UIUtils.showView(noSessionsView, sessionsView);
     }
 
     @Override
