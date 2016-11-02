@@ -6,7 +6,6 @@
     android:gravity="center">
 
     <TextView
-        android:id="@+id/search_hint_text_view"
         android:drawableStart="@android:drawable/ic_input_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
