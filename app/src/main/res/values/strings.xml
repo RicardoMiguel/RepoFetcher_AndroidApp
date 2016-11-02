@@ -10,6 +10,9 @@
     <string name="login_to_bitbucket_label">Login to BitBucket</string>
     <string name="logged_in_bitbucket_label">Already logged into BitBucket</string>
     <string name="chose_account_label">Choose account</string>
+    <string name="network_error_label">Please, make sure you have internet connection and try again.</string>
+    <string name="unexpected_error_label">Something wrong occurred, please try again.</string>
+    <string name="retry_label">Retry</string>
 
     <string name="github">GitHub</string>
     <string name="bitbucket">Bitbucket</string>

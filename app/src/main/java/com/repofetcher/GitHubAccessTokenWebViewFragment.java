@@ -33,6 +33,7 @@ public class GitHubAccessTokenWebViewFragment extends AccessTokenWebViewFragment
 
             @Override
             public void onError(Throwable t) {
+                errorController.handleError(t);
             }
         }));
     }

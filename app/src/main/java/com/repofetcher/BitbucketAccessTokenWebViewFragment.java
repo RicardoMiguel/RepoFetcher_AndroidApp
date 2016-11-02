@@ -38,7 +38,7 @@ public class BitbucketAccessTokenWebViewFragment extends AccessTokenWebViewFragm
 
                     @Override
                     public void onError(Throwable t) {
-
+                        errorController.handleError(t);
                     }
                 }));
     }
