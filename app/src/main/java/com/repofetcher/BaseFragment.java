@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.ViewStub;
 
 import com.controller.ErrorUIController;
+import com.controller.ErrorUIHandler;
 import com.service.FetcherCallsHandler;
 
 import static com.repofetcher.UIUtils.showView;
@@ -36,6 +37,8 @@ public abstract class BaseFragment extends Fragment implements ErrorsContract.Vi
     private View errorContent;
 
     protected ErrorsContract.Controller errorController;
+
+    protected ErrorsContract.Handler errorHandler;
 
     public BaseFragment(@LayoutRes int layoutRes){
         this.layoutRes = layoutRes;
@@ -65,7 +68,8 @@ public abstract class BaseFragment extends Fragment implements ErrorsContract.Vi
         mainContentStub.inflate();
 
         errorContent = view.findViewById(R.id.error_content);
-        errorController = new ErrorUIController(this, errorContent);
+        errorController = new ErrorUIController(this);
+        errorHandler = new ErrorUIHandler(errorContent, errorController);
 
         ViewStub errorContentStub = (ViewStub)errorContent;
         errorContentStub.setLayoutResource(R.layout.error_view);
@@ -122,6 +126,16 @@ public abstract class BaseFragment extends Fragment implements ErrorsContract.Vi
         if(errorContent.getVisibility() != View.VISIBLE) {
             showView(errorContent, mainContent);
         }
+    }
+
+    public void showNetworkErrorView(){
+        errorHandler.createNetworkError();
+        showErrorView();
+    }
+
+    public void showUnexpectedErrorView(){
+        errorHandler.createUnexpectedError();
+        showErrorView();
     }
 
     public void retry(){}
