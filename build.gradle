@@ -27,7 +27,7 @@ task clean(type: Delete) {
 ext {
 
     // App dependencies
-    supportLibraryVersion = '24.2.1'
+    supportLibraryVersion = '25.0.0'
     leakCanaryVersion = '1.4-beta2'
     runnerVersion = '0.5'
     rulesVersion = '0.5'

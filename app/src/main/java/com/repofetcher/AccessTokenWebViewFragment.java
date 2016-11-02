@@ -2,6 +2,7 @@ package com.repofetcher;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -59,7 +60,10 @@ public abstract class AccessTokenWebViewFragment extends BaseFragment{
     }
 
     protected void configWebView(){
-
+        webView.getSettings().setJavaScriptEnabled(javaScriptEnable());
+        if (Build.VERSION.SDK_INT <= 18) {
+            webView.getSettings().setSavePassword(false);
+        }
         webView.loadUrl(getQuery());
 
         webView.setWebViewClient(new WebViewClient() {
@@ -81,6 +85,8 @@ public abstract class AccessTokenWebViewFragment extends BaseFragment{
     protected abstract void exchangeCodeForToken(@NonNull String code);
 
     protected abstract @RepoServiceType int getType();
+
+    protected abstract boolean javaScriptEnable();
 
     @Override
     public void retry() {

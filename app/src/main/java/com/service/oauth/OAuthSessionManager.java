@@ -17,14 +17,13 @@ public class OAuthSessionManager implements OAuthClientManager{
     @Nullable private AccessToken accessToken;
 
     @Nullable protected Owner owner;
-    private Handler handler;
+    @Nullable private Handler handler;
     private Runnable runnable;
 
     private OAuthClientRequester oAuthClientRequester;
     private int service;
 
     private OAuthSessionManager() {
-        handler = new Handler(Looper.getMainLooper());
         runnable = this::refreshToken;
     }
 
@@ -41,11 +40,11 @@ public class OAuthSessionManager implements OAuthClientManager{
             int delay = OAuthUtils.calcDelay(expirableAccessToken);
 //                int delay = 10000;
             if(delay > 0) {
-                handler.removeCallbacks(runnable);
-                handler.postDelayed(runnable, delay);
+                getHandler().removeCallbacks(runnable);
+                getHandler().postDelayed(runnable, delay);
             } else {
-                handler.removeCallbacks(runnable);
-                handler.post(runnable);
+                getHandler().removeCallbacks(runnable);
+                getHandler().post(runnable);
             }
         }
 
@@ -69,6 +68,7 @@ public class OAuthSessionManager implements OAuthClientManager{
     private void refreshToken(){
         if(oAuthClientRequester != null && accessToken instanceof ExpirableAccessToken) {
             setAccessToken(null);
+            getHandler().removeCallbacks(runnable);
             oAuthClientRequester.onRefreshToken(service, ((ExpirableAccessToken) accessToken).getRefreshCode());
         }
     }
@@ -85,5 +85,12 @@ public class OAuthSessionManager implements OAuthClientManager{
     @Nullable
     public Owner getOwner() {
         return owner;
+    }
+
+    private Handler getHandler(){
+        if(handler == null){
+            handler = new Handler(Looper.getMainLooper());
+        }
+        return handler;
     }
 }

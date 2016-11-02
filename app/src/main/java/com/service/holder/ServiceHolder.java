@@ -18,6 +18,7 @@ public abstract class ServiceHolder {
         this.serviceName = serviceName;
     }
 
+    @RepoServiceType
     public int getServiceType() {
         return serviceType;
     }
@@ -26,6 +27,7 @@ public abstract class ServiceHolder {
         return classType;
     }
 
+    @StringRes
     public int getServiceName() {
         return serviceName;
     }

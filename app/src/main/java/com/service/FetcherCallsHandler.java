@@ -209,6 +209,10 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
         }
     }
 
+    public static void removeToken(@RepoServiceType int service){
+        getInstance().get(service).getOAuthClientManager().setAccessToken(null);
+    }
+
     @Override
     public void onTokenChanged(int service, @Nullable AccessToken accessToken) {
         new SessionSharedPrefs(context).saveToken(service, accessToken);
