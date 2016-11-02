@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import com.service.FetcherCallsHandler;
 import com.service.holder.ServiceHolderFactory;
 
+import java.util.ArrayList;
+
 /**
  * Created by ricar on 24/10/2016.
  */
@@ -25,14 +27,12 @@ public class LoginCenterController implements LoginCenterContract.Controller{
 
     @Override
     public void activeSessions() {
-
-        if(services.length == 0){
+        ArrayList<Integer> sessions = FetcherCallsHandler.getSessionsServicesAlias();
+        if(sessions.isEmpty()){
             view.showNoSessionsView();
         } else {
-            for (int i = 0; i < services.length; i++) {
-                if (FetcherCallsHandler.hasSession(services[i])) {
-                    view.inflateSessionView(resources.getString(new ServiceHolderFactory().create(services[i]).getServiceName()));
-                }
+            for (Integer service : sessions) {
+                view.inflateSessionView(resources.getString(new ServiceHolderFactory().create(service).getServiceName()));
             }
         }
 
