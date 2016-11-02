@@ -41,6 +41,7 @@ public class BitbucketAccessTokenWebViewFragment extends AccessTokenWebViewFragm
                 String code = uri.getQueryParameter(Constants.CODE);
                 if (!TextUtils.isEmpty(code)) {
                     webView.stopLoading();
+                    accessCode = code;
                     exchangeCodeForToken(code);
                 }
             }
@@ -61,7 +62,7 @@ public class BitbucketAccessTokenWebViewFragment extends AccessTokenWebViewFragm
 
                     @Override
                     public void onError(Throwable t) {
-
+                        errorController.handleError(t);
                     }
                 }));
     }

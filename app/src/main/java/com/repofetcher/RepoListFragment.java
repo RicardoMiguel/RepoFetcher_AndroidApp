@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.controller.RepoListAdapter;
 import com.controller.VerticalSpaceItemDecoration;
@@ -77,6 +76,10 @@ public class RepoListFragment extends BaseFragment{
         Log.d(TAG, "onResume");
         super.onResume();
 
+        configView();
+    }
+
+    private void configView() {
         if(repositoriesList == null) {
             getRepoList(user, repo);
         } else {
@@ -144,12 +147,12 @@ public class RepoListFragment extends BaseFragment{
 
                 @Override
                 public void onSuccess(BitBucketRepositories object) {
-                    buildRepositoriesRecyclerView(object.getValues());
+                    onPostGet(object.getValues());
                 }
 
                 @Override
                 public void onError(Throwable t) {
-                    Toast.makeText(RepoListFragment.this.getContext(), t.toString(), Toast.LENGTH_LONG).show();
+                    errorController.handleError(t);
                 }
             }));
         } else {
@@ -157,42 +160,52 @@ public class RepoListFragment extends BaseFragment{
 
                 @Override
                 public void onSuccess(BitBucketRepositories object) {
-                    buildRepositoriesRecyclerView(object.getValues());
+                    onPostGet(object.getValues());
                 }
 
                 @Override
                 public void onError(Throwable t) {
-                    Toast.makeText(RepoListFragment.this.getContext(), t.toString(), Toast.LENGTH_LONG).show();
+                    errorController.handleError(t);
                 }
             }));
         }
     }
 
-    private void getGitHubRepoList(@Nullable String user){
-        if(user != null) {
+    private void getGitHubRepoList(@Nullable String user) {
+        if (user != null) {
             FetcherCallsHandler.callListRepositories(RepoServiceType.GITHUB, new GetRepositoriesRequest<>(this, user, new RepoServiceResponse<ArrayList<GitHubRepo>>() {
                 @Override
                 public void onSuccess(ArrayList<GitHubRepo> object) {
-                    buildRepositoriesRecyclerView(object);
+                    onPostGet(object);
                 }
 
                 @Override
                 public void onError(Throwable t) {
-                    Toast.makeText(RepoListFragment.this.getContext(), t.toString(), Toast.LENGTH_LONG).show();
+                    errorController.handleError(t);
                 }
             }));
         } else {
             FetcherCallsHandler.callListRepositories(RepoServiceType.GITHUB, new GetOwnRepositoriesRequest<>(this, new RepoServiceResponse<ArrayList<GitHubRepo>>() {
                 @Override
                 public void onSuccess(ArrayList<GitHubRepo> object) {
-                    buildRepositoriesRecyclerView(object);
+                    onPostGet(object);
                 }
 
                 @Override
                 public void onError(Throwable t) {
-                    Toast.makeText(RepoListFragment.this.getContext(), t.toString(), Toast.LENGTH_LONG).show();
+                    errorController.handleError(t);
                 }
             }));
         }
+    }
+
+    @Override
+    public void retry() {
+        configView();
+    }
+
+    private void onPostGet(@NonNull ArrayList<? extends Repo> repoList){
+        buildRepositoriesRecyclerView(repoList);
+        showContentView();
     }
 }

@@ -12,13 +12,18 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 
+import com.controller.ErrorUIController;
+import com.controller.ErrorUIHandler;
 import com.service.FetcherCallsHandler;
+
+import static com.repofetcher.UIUtils.showView;
 
 /**
  * Created by ricar on 07/09/2016.
  */
-public abstract class BaseFragment extends Fragment{
+public abstract class BaseFragment extends Fragment implements ErrorsContract.View {
 
     private static final String TAG = BaseFragment.class.getName();
 
@@ -26,6 +31,14 @@ public abstract class BaseFragment extends Fragment{
     private FragmentTransitionService fragmentTransitionService;
 
     @LayoutRes protected int layoutRes;
+
+    private View mainContent;
+
+    private View errorContent;
+
+    protected ErrorsContract.Controller errorController;
+
+    protected ErrorsContract.Handler errorHandler;
 
     public BaseFragment(@LayoutRes int layoutRes){
         this.layoutRes = layoutRes;
@@ -43,7 +56,25 @@ public abstract class BaseFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(fragmentTransitionService != null && fragmentTransitionService.hasToBuildActionBar(this));
-        return inflater.inflate(layoutRes, container, false);
+        return inflater.inflate(R.layout.base_fragment_layout, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ViewStub mainContentStub = (ViewStub)view.findViewById(R.id.main_content);
+        mainContentStub.setLayoutResource(layoutRes);
+        mainContentStub.setOnInflateListener((viewStub, view1) -> mainContent = view1);
+        mainContentStub.inflate();
+
+        errorContent = view.findViewById(R.id.error_content);
+        errorController = new ErrorUIController(this);
+        errorHandler = new ErrorUIHandler(errorContent, errorController);
+
+        ViewStub errorContentStub = (ViewStub)errorContent;
+        errorContentStub.setLayoutResource(R.layout.error_view);
+        errorContentStub.setOnInflateListener((viewStub, view1) -> errorContent = view1);
+
     }
 
     @Override
@@ -84,4 +115,28 @@ public abstract class BaseFragment extends Fragment{
             fragmentTransitionService.goToLoginCenter();
         }
     }
+
+    public void showContentView(){
+        if(mainContent.getVisibility() != View.VISIBLE) {
+            showView(mainContent, errorContent);
+        }
+    }
+
+    public void showErrorView(){
+        if(errorContent.getVisibility() != View.VISIBLE) {
+            showView(errorContent, mainContent);
+        }
+    }
+
+    public void showNetworkErrorView(){
+        errorHandler.createNetworkError();
+        showErrorView();
+    }
+
+    public void showUnexpectedErrorView(){
+        errorHandler.createUnexpectedError();
+        showErrorView();
+    }
+
+    public void retry(){}
 }
