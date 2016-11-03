@@ -28,9 +28,8 @@ android:
 #  - sys-img-x86-android-17
 
   licenses:
-  - android-sdk-license
-  - android-sdk-preview-license
-  - intel-android-extra-license
+  - android-sdk-license-.+
+  - '.+'
 
 before_script:
   # Create and start emulator
