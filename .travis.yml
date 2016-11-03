@@ -36,8 +36,6 @@ before_script:
   # Create and start emulator
   - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
   - emulator -avd test -no-skin -no-audio -no-window &
-  - android-wait-for-emulator
-  - adb shell input keyevent 82 &
 
 before_install:
  - chmod +x gradlew
@@ -46,4 +44,8 @@ before_install:
 
 script:
 #  - ./gradlew build --stacktrace
-  - ./gradlew build connectedCheck --stacktrace
+  - ./gradlew check -PdisablePreDex --continue --stacktrace
+  - android-wait-for-emulator
+  - adb devices
+  - adb shell input keyevent 82 &amp;
+  - ./gradlew connectedAndroidTest -PdisablePreDex --continue --stacktrace
