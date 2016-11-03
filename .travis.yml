@@ -28,9 +28,9 @@ android:
 #  - sys-img-x86-android-17
 
   licenses:
-  - android-sdk-preview-license-52d11cd2
-  - android-sdk-license-.+
-  - google-gdk-license-.+
+  - android-sdk-license
+  - android-sdk-preview-license
+  - intel-android-extra-license
 
 before_script:
   # Create and start emulator
