@@ -51,6 +51,7 @@ public class Initializer {
 
                     if(OAuthUtils.calcDelay(expirableAccessToken) <= 0){
                         expirablesMap.put(entry.getKey(), expirableAccessToken);
+                        //TODO: operation must be done previously
                         map.remove(entry.getKey());
                     }
                 }
