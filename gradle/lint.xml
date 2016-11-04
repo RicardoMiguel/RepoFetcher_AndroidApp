@@ -7,7 +7,7 @@
     </issue>
 
     <!-- Change the severity of hardcoded strings to "error" -->
-    <issue id="HardcodedText" severity="error" />
+    <!--<issue id="HardcodedText" severity="error" />-->
 
     <issue id="OldTargetApi" severity="ignore" />
 
