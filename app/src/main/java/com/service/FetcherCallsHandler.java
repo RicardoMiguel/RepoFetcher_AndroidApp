@@ -1,7 +1,6 @@
 package com.service;
 
 import android.accounts.NetworkErrorException;
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -31,33 +30,21 @@ import java.util.HashMap;
 import static com.service.holder.RepoServiceType.BITBUCKET;
 import static com.service.holder.RepoServiceType.GITHUB;
 
-/**
- * Created by ricar on 04/09/2016.
- */
 public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> implements OAuthClientRequester {
 
     //The instance might be null. Use getInstance instead.
     @Nullable private static FetcherCallsHandler instance;
-    private static Context context;
 
     @NonNull
     private static FetcherCallsHandler getInstance(){
-        if(context == null){
-            throw new IllegalStateException("Context is null. Call init() with valid context");
-        }
-
         if(instance == null){
             instance = new FetcherCallsHandler();
         }
         return instance;
     }
 
-    public static void init(@NonNull Context context){
-        FetcherCallsHandler.context = context;
-    }
-
     public static void load(@Nullable InitRequest request){
-        new Initializer(context, getInstance()).loadSessions(request);
+        new Initializer(ServiceUtils.getContext(), getInstance()).loadSessions(request);
     }
 
     private FetcherCallsHandler(){
@@ -69,7 +56,7 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
         RepoServiceHandler handler = super.get(key);
 
         if(handler == null){
-            handler = new RepoServiceFactory(context, new OAuthSessionManager((int)key, this)).create((int)key);
+            handler = new RepoServiceFactory(ServiceUtils.getContext(), new OAuthSessionManager((int)key, this)).create((int)key);
             if(handler != null) {
                 put((int) key, handler);
             }
@@ -192,7 +179,7 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
     }
 
     private static void makeCallIfThereIsNetwork(@NonNull Runnable runnable, @Nullable RepoServiceResponse<?> callback){
-        if(ServiceUtils.isNetworkAvailable(context)){
+        if(ServiceUtils.isNetworkAvailable(ServiceUtils.getContext())){
             runnable.run();
         } else if(callback != null){
             callback.onError(new NetworkErrorException());
@@ -215,13 +202,13 @@ public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> im
 
     @Override
     public void onTokenChanged(int service, @Nullable AccessToken accessToken) {
-        new SessionSharedPrefs(context).saveToken(service, accessToken);
+        new SessionSharedPrefs(ServiceUtils.getContext()).saveToken(service, accessToken);
     }
 
     @Override
     public void onOwnerChanged(int service, @Nullable Owner owner) {
         if(owner != null) {
-            new SessionSharedPrefs(context).saveOwner(service, owner);
+            new SessionSharedPrefs(ServiceUtils.getContext()).saveOwner(service, owner);
         }
     }
 

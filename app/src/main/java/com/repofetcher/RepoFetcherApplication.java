@@ -3,24 +3,19 @@ package com.repofetcher;
 import android.app.Application;
 import android.content.Context;
 
-import com.service.FetcherCallsHandler;
 import com.squareup.leakcanary.LeakCanary;
 
-/**
- * Created by ricar on 02/09/2016.
- */
 public class RepoFetcherApplication extends Application{
-    private static Context context;
+    private static RepoFetcherApplication application;
 
     @Override
     public void onCreate() {
         super.onCreate();
         LeakCanary.install(this);
-        FetcherCallsHandler.init(this);
-        context = this;
+        application = this;
     }
 
     public static Context getContext(){
-        return context;
+        return application.getApplicationContext();
     }
 }
