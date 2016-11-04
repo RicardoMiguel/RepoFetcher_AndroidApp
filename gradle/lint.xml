@@ -13,4 +13,6 @@
 
     <issue id="UnusedResources" severity="ignore" />
 
+    <!-- Changed issue severity because the app has not been deploed in the market -->
+    <issue id="GoogleAppIndexingWarning" severity="ignore" />
 </lint>
