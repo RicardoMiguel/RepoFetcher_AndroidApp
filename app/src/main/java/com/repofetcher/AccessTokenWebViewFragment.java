@@ -62,6 +62,7 @@ public abstract class AccessTokenWebViewFragment extends BaseFragment{
     protected void configWebView(){
         webView.getSettings().setJavaScriptEnabled(javaScriptEnable());
         if (Build.VERSION.SDK_INT <= 18) {
+            //noinspection deprecation
             webView.getSettings().setSavePassword(false);
         }
         webView.loadUrl(getQuery());

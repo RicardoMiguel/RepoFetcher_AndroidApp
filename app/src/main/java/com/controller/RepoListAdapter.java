@@ -41,7 +41,7 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.RepoLi
         Repo repo = repoList.get(position);
         holder.name.setText(repo.getName());
         holder.ownerName.setText(repo.getOwner().getLogin());
-        Picasso.with(context).load(repo.getOwner().getAvatarUrl()).error(R.drawable.leak_canary_icon).into(holder.ownerAvatar);
+        Picasso.with(context).load(repo.getOwner().getAvatarUrl()).error(R.drawable.ic_face_black_48dp).into(holder.ownerAvatar);
     }
 
     @Override
