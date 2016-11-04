@@ -2,7 +2,6 @@ package com.repofetcher;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,9 +16,6 @@ import com.service.Constants;
 import com.service.FetcherCallsHandler;
 import com.service.holder.RepoServiceType;
 
-/**
- * Created by ricar on 12/09/2016.
- */
 public abstract class AccessTokenWebViewFragment extends BaseFragment{
 
     private static final String TAG = AccessTokenWebViewFragment.class.getName();
@@ -61,10 +57,12 @@ public abstract class AccessTokenWebViewFragment extends BaseFragment{
 
     protected void configWebView(){
         webView.getSettings().setJavaScriptEnabled(javaScriptEnable());
-        if (Build.VERSION.SDK_INT <= 18) {
-            //noinspection deprecation
-            webView.getSettings().setSavePassword(false);
-        }
+
+        //Required for running tests.
+//        if (Build.VERSION.SDK_INT <= 18) {
+//            webView.getSettings().setSavePassword(false);
+//        }
+
         webView.loadUrl(getQuery());
 
         webView.setWebViewClient(new WebViewClient() {
