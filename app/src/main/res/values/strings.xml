@@ -6,10 +6,6 @@
     <string name="to_add_label">to add an account</string>
     <string name="login_center">Login Center</string>
     <string name="login_center_label">Go to Login Center</string>
-    <string name="login_to_github_label">Login to GitHub</string>
-    <string name="logged_in_github_label">Already logged into GitHub</string>
-    <string name="login_to_bitbucket_label">Login to BitBucket</string>
-    <string name="logged_in_bitbucket_label">Already logged into BitBucket</string>
     <string name="chose_account_label">Choose account</string>
     <string name="network_error_label">Please, make sure you have internet connection and try again.</string>
     <string name="unexpected_error_label">Something wrong occurred, please try again.</string>

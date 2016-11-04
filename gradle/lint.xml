@@ -11,4 +11,6 @@
 
     <issue id="OldTargetApi" severity="ignore" />
 
+    <issue id="UnusedResources" severity="ignore" />
+
 </lint>
