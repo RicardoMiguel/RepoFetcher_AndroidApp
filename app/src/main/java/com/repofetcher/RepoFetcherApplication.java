@@ -16,6 +16,6 @@ public class RepoFetcherApplication extends Application{
     }
 
     public static Context getContext(){
-        return application.getApplicationContext();
+        return application;
     }
 }

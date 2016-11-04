@@ -5,7 +5,6 @@ import android.content.res.Resources;
 
 import com.controller.LoginCenterContract;
 import com.controller.LoginCenterController;
-import com.service.FetcherCallsHandler;
 import com.service.holder.RepoServiceType;
 
 import org.junit.Before;
@@ -35,8 +34,6 @@ public class LoginCenterTest {
     @Before
     public void setup(){
         MockitoAnnotations.initMocks(this);
-
-        FetcherCallsHandler.init(context);
 
         controller = new LoginCenterController(view, resources);
     }
