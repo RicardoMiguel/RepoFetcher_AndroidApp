@@ -58,4 +58,4 @@ after_success:
 
 after_script:
   # print lint results details
-  - for f in $TRAVIS_BUILD_DIR/app/build/outputs/lint-results-debug.html; do pandoc $f -t plain; done
+#  - for f in $TRAVIS_BUILD_DIR/app/build/outputs/lint-results-debug.html; do pandoc $f -t plain; done
