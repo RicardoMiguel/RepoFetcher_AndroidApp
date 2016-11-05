@@ -49,15 +49,14 @@ public class Initializer {
 
                     if(OAuthUtils.calcDelay(expirableAccessToken) <= 0){
                         expirablesMap.put(key, expirableAccessToken);
-                        //TODO: operation must be done previously
-//                        map.remove(key);
                     }
                 }
             }
 
-//            for(int i = 0; i < expirablesMap.size() ; i++){
-//                map.remove(expirablesMap.keyAt(i));
-//            }
+            //Removes expirable tokens that need to be refreshed from map.
+            for(int i = 0; i < expirablesMap.size() ; i++){
+                map.remove(expirablesMap.keyAt(i));
+            }
 
             loadTokens(map);
 
