@@ -2,11 +2,11 @@ package com.service.rx;
 
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
+import android.util.SparseArray;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.List;
-import java.util.Map;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -14,9 +14,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.observables.ConnectableObservable;
 import rx.schedulers.Schedulers;
 
-/**
- * Created by ricar on 15/09/2016.
- */
 public class RxJavaController<T> {
 
     @IntDef({MAIN_THREAD, IO, })
@@ -29,13 +26,15 @@ public class RxJavaController<T> {
     public void scheduleAndObserve(@NonNull Observable<T> observable, @NonNull SubscribersMap<T> subscribersMap){
         ConnectableObservable<T> connectableObservable = observable.publish();
 
-        for (Map.Entry<Integer, List<Subscriber<T>>> entry : subscribersMap.getSubscribersList().entrySet())
-        {
-            for(Subscriber<T> subscriber: entry.getValue()){
+        SparseArray<List<Subscriber<T>>> subsList = subscribersMap.getSubscribersList();
+        for (int i = 0; i < subsList.size(); i++) {
+            int key = subsList.keyAt(i);
+            List<Subscriber<T>> value = subsList.get(key);
+            for(Subscriber<T> subscriber: value){
 
                 Observable<T> obs = connectableObservable.subscribeOn(Schedulers.io());
 
-                switch (entry.getKey()){
+                switch (key){
                     case(MAIN_THREAD):
                         obs = obs.observeOn(AndroidSchedulers.mainThread());
                         break;

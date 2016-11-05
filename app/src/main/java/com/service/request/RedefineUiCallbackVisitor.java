@@ -1,17 +1,15 @@
 package com.service.request;
 
+import android.util.SparseArray;
+
 import com.model.AccessToken;
 import com.service.RepoServiceResponse;
 import com.service.SubscriberAdapter;
 
 import java.util.List;
-import java.util.Map;
 
 import rx.Subscriber;
 
-/**
- * Created by ricar on 17/09/2016.
- */
 public class RedefineUiCallbackVisitor {
 
     public <S extends AccessToken> void swap(ExchangeTokenRequest<S> request, RepoServiceResponse<S> uiCallback){
@@ -20,12 +18,14 @@ public class RedefineUiCallbackVisitor {
 
     private <S> void removeAndRedefine(BaseRequest<S> request, RepoServiceResponse<S> uiCallback){
         RepoServiceResponse<S> callbackToRemove = request.getUiServiceResponse();
-        Map<Integer, List<Subscriber<S>>> subscribersList = request.getServiceResponseList().getSubscribersList();
+        SparseArray<List<Subscriber<S>>> subscribersList = request.getServiceResponseList().getSubscribersList();
 
-        for(Map.Entry<Integer, List<Subscriber<S>>> entry : subscribersList.entrySet()){
+        for (int i = 0; i < subscribersList.size(); i++) {
+            int key = subscribersList.keyAt(i);
+            List<Subscriber<S>> value = subscribersList.get(key);
             Subscriber<S> toRemove = null;
 
-            for(Subscriber<S> subscriber : entry.getValue()){
+            for(Subscriber<S> subscriber : value){
                 if(subscriber instanceof SubscriberAdapter){
                     if(((SubscriberAdapter) subscriber).getResponse() == callbackToRemove){
                         toRemove = subscriber;
@@ -34,7 +34,7 @@ public class RedefineUiCallbackVisitor {
             }
 
             if(toRemove != null){
-                entry.getValue().remove(toRemove);
+                value.remove(toRemove);
             }
         }
 
