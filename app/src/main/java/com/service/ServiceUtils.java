@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Base64;
 
 import com.repofetcher.RepoFetcherApplication;
@@ -34,5 +35,18 @@ public class ServiceUtils {
 
     public static Context getContext(){
         return RepoFetcherApplication.getContext();
+    }
+
+    @NonNull
+    public static <S> S checkNotNull(@Nullable S object, @Nullable String message){
+        if(object == null){
+            throw new NullPointerException(message);
+        }
+        return object;
+    }
+
+    @NonNull
+    public static <S> S checkNotNull(@Nullable S object){
+        return checkNotNull(object, null);
     }
 }

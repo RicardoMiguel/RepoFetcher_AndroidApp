@@ -18,6 +18,8 @@ import com.service.Constants;
 import com.service.ServiceUtils;
 import com.service.holder.RepoServiceType;
 
+import static com.service.ServiceUtils.checkNotNull;
+
 /**
  * This class uses currentThread to write into SharedPreferences.
  *
@@ -116,7 +118,7 @@ public class SessionSharedPrefs {
                     expirableAccessToken.setExpiresIn(OAuthUtils.calcTimeToRefreshToken(dateAcquired, expiration));
                 }
             }
-            accessToken.setToken(token);
+            checkNotNull(accessToken, "Wrong RepoServiceType: "+ serviceType).setToken(token);
         }
         return accessToken;
     }
@@ -153,7 +155,8 @@ public class SessionSharedPrefs {
                     owner = new BitBucketOwner();
                     break;
             }
-            owner.setLogin(username);
+
+            checkNotNull(owner, "Wrong RepoServiceType: "+ serviceType).setLogin(username);
         }
         return owner;
     }
