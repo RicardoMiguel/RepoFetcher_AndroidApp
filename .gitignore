@@ -137,6 +137,7 @@ gradle-app.setting
 /local.properties
 /.idea/workspace.xml
 /.idea/libraries
+/.idea/inspectionProfiles
 ProjectFilesBackup/
 .DS_Store
 /build
