@@ -30,6 +30,10 @@ android:
   - android-sdk-license-.+
   - '.+'
 
+addons:
+  apt_packages:
+    - pandoc
+
 before_script:
   # Create and start emulator
 #  - android list targets
