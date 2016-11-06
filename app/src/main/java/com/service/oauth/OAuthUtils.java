@@ -7,7 +7,9 @@ import android.text.TextUtils;
 import com.model.AccessToken;
 import com.model.ExpirableAccessToken;
 
-public class OAuthUtils {
+public final class OAuthUtils {
+
+    private OAuthUtils(){}
 
     public static final int SECURE_RAGE_FOR_DELAY = 120;
 

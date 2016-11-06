@@ -30,7 +30,7 @@ import java.util.HashMap;
 import static com.service.holder.RepoServiceType.BITBUCKET;
 import static com.service.holder.RepoServiceType.GITHUB;
 
-public class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> implements OAuthClientRequester {
+public final class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandler> implements OAuthClientRequester {
 
     //The instance might be null. Use getInstance instead.
     @Nullable private static FetcherCallsHandler instance;

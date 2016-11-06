@@ -5,14 +5,28 @@
     xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd"
     xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd">
 
+    <description>Custom rule set</description>
+
     <exclude-pattern>.*/R.java</exclude-pattern>
     <exclude-pattern>.*/gen/.*</exclude-pattern>
     <exclude-pattern>.*/AndroidManifest.xml</exclude-pattern>
     <exclude-pattern>.*/res/.*</exclude-pattern>
 
     <rule ref="rulesets/java/android.xml" />
+    <rule ref="rulesets/java/codesize.xml" >
+        <exclude name="TooManyMethods" />
+    </rule>
+    <!--<rule ref="rulesets/java/coupling.xml" />-->
+    <!--<rule ref="rulesets/java/controversial.xml" />-->
     <rule ref="rulesets/java/clone.xml" />
     <rule ref="rulesets/java/finalizers.xml" />
+    <rule ref="rulesets/java/design.xml">
+        <exclude name="ImmutableField" />
+        <exclude name="UseVarargs" />
+        <exclude name="SwitchStmtsShouldHaveDefault" />
+        <exclude name="UncommentedEmptyConstructor" />
+        <exclude name="ConfusingTernary" />
+    </rule>
     <rule ref="rulesets/java/imports.xml">
         <!-- Espresso is designed this way !-->
         <exclude name="TooManyStaticImports" />
@@ -29,5 +43,15 @@
         <exclude name="VariableNamingConventions" />
         <exclude name="ShortClassName" />
     </rule>
-    <!--<exclude-pattern>.*/some/package/.*</exclude-pattern>-->
+
+    <rule ref="rulesets/java/comments.xml/CommentContent"/>
+    <!--<rule ref="rulesets/java/design.xml/SimplifyBooleanReturns"/>-->
+    <!--<rule ref="rulesets/java/design.xml/SimplifyBooleanExpressions"/>-->
+    <!--<rule ref="rulesets/java/design.xml/AvoidReassigningParameters"/>-->
+    <!--<rule ref="rulesets/java/design.xml/SwitchDensity"/>-->
+    <!--<rule ref="rulesets/java/design.xml/ConstructorCallsOverridableMethod"/>-->
+    <!--<rule ref="rulesets/java/design.xml/FinalFieldCouldBeStatic"/>-->
+    <!--<rule ref="rulesets/java/design.xml/CloseResource"/>-->
+
+
 </ruleset>
