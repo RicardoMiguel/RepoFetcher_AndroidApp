@@ -18,6 +18,8 @@ import com.service.holder.RepoServiceType;
 
 import java.util.ArrayList;
 
+import static com.service.ServiceUtils.checkNotNull;
+
 public class MainActivity extends AppCompatActivity implements FragmentTransitionService{
 
     private static final String TAG = MainActivity.class.getName();
@@ -34,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements FragmentTransitio
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
-        actionBarController = new ActionBarController(getSupportActionBar(), this);
+        actionBarController = new ActionBarController(checkNotNull(getSupportActionBar()), this);
 
         fragmentController = new FragmentController(this);
         fragmentController.restoreState(savedInstanceState);
