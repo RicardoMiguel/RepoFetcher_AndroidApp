@@ -29,6 +29,6 @@ public class OAuthUtils {
     }
 
     public static int calcDelay(@NonNull ExpirableAccessToken expirableAccessToken){
-        return (secondsToMilliseconds(expirableAccessToken.getExpiresIn())) - secondsToMilliseconds(SECURE_RAGE_FOR_DELAY); // time - 2 minutes
+        return secondsToMilliseconds(expirableAccessToken.getExpiresIn()) - secondsToMilliseconds(SECURE_RAGE_FOR_DELAY); // time - 2 minutes
     }
 }

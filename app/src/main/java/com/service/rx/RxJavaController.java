@@ -35,10 +35,10 @@ public class RxJavaController<T> {
                 Observable<T> obs = connectableObservable.subscribeOn(Schedulers.io());
 
                 switch (key){
-                    case(MAIN_THREAD):
+                    case MAIN_THREAD:
                         obs = obs.observeOn(AndroidSchedulers.mainThread());
                         break;
-                    case(IO):
+                    case IO:
                         obs = obs.observeOn(Schedulers.io());
                         break;
                 }
