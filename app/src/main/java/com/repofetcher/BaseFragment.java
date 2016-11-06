@@ -135,5 +135,7 @@ public abstract class BaseFragment extends Fragment implements ErrorsContract.Vi
         showErrorView();
     }
 
-    public void retry(){}
+    public void retry(){
+        //Intentional empty method. The childs might not use the error layout
+    }
 }

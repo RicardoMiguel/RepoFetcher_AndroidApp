@@ -85,7 +85,7 @@ public final class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandl
 
             @Override
             public void onError(Throwable t) {
-
+                //Intentional empty method.
             }
         });
 
@@ -140,7 +140,7 @@ public final class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandl
 
             @Override
             public void onError(Throwable t) {
-
+                //Intentional empty method.
             }
         });
         makeCallIfThereIsNetwork(() -> handler.callGetOwner(request), request.getUiServiceResponse());
@@ -156,7 +156,7 @@ public final class FetcherCallsHandler extends HashMap<Integer, RepoServiceHandl
 
             @Override
             public void onError(Throwable t) {
-
+                //Intentional empty method.
             }
         });
 
