@@ -47,7 +47,7 @@ public class LoginCenterController implements LoginCenterContract.Controller{
     }
 
     @Override
-    public void removeSession(int i) {
+    public void removeSession(final int i) {
         FetcherCallsHandler.removeToken(services[i]);
         view.wipeSessionsView();
         activeSessions();
@@ -55,7 +55,7 @@ public class LoginCenterController implements LoginCenterContract.Controller{
     }
 
     @Override
-    public void addSession(int i) {
+    public void addSession(final int i) {
         view.goToWebViewFragment(services[i]);
         view.dismissSessionsDialog();
     }
