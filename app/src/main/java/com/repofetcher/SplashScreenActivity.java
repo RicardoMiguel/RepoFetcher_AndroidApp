@@ -7,10 +7,6 @@ import com.service.FetcherCallsHandler;
 import com.service.RepoServiceResponse;
 import com.service.request.InitRequest;
 
-/**
- * Created by ricar on 29/09/2016.
- */
-
 public class SplashScreenActivity extends AppCompatActivity{
 
     @Override

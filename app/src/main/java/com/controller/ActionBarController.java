@@ -16,9 +16,6 @@ import com.repofetcher.LoginCenterFragment;
 import com.repofetcher.R;
 import com.repofetcher.RepoListFragment;
 
-/**
- * Created by ricar on 19/09/2016.
- */
 public class ActionBarController {
     private final ActionBar actionBar;
     private final FragmentTransitionService fragmentTransitionService;

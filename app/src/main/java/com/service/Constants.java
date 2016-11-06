@@ -1,8 +1,5 @@
 package com.service;
 
-/**
- * Created by ricar on 14/09/2016.
- */
 public final class Constants {
     public static final String CODE = "code";
     public static final String CLIENT_ID = "client_id";

@@ -16,9 +16,6 @@ import com.controller.RepoListPageAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by ricar on 08/09/2016.
- */
 public class MultipleAccountRepositoriesFragment extends BaseFragment{
 
     public static final String SERVICE_ALIAS = "SERVICE_ALIAS";

@@ -18,9 +18,6 @@ import com.controller.LoginCenterContract;
 import com.controller.LoginCenterController;
 import com.service.holder.RepoServiceType;
 
-/**
- * Created by ricar on 13/09/2016.
- */
 public class LoginCenterFragment extends BaseFragment implements DialogInterface.OnMultiChoiceClickListener, LoginCenterContract.View {
 
     private static final String TAG = LoginCenterFragment.class.getName();

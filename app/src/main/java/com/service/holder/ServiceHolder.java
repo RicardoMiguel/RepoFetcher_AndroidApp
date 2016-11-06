@@ -2,17 +2,15 @@ package com.service.holder;
 
 import android.support.annotation.StringRes;
 
-/**
- * Created by ricar on 24/10/2016.
- */
+import com.service.handler.RepoServiceHandler;
 
 public abstract class ServiceHolder {
 
     private @RepoServiceType int serviceType;
-    private Class classType;
+    private Class<? extends RepoServiceHandler> classType;
     private @StringRes int serviceName;
 
-    ServiceHolder(@RepoServiceType int serviceType, Class classType, @StringRes int serviceName) {
+    ServiceHolder(@RepoServiceType int serviceType, Class<? extends RepoServiceHandler> classType, @StringRes int serviceName) {
         this.serviceType = serviceType;
         this.classType = classType;
         this.serviceName = serviceName;
@@ -23,7 +21,7 @@ public abstract class ServiceHolder {
         return serviceType;
     }
 
-    public Class getClassType() {
+    public Class<? extends RepoServiceHandler> getClassType() {
         return classType;
     }
 

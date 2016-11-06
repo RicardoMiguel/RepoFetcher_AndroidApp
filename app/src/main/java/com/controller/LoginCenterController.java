@@ -8,10 +8,6 @@ import com.service.holder.ServiceHolderFactory;
 
 import java.util.ArrayList;
 
-/**
- * Created by ricar on 24/10/2016.
- */
-
 public class LoginCenterController implements LoginCenterContract.Controller{
 
     private LoginCenterContract.View view;

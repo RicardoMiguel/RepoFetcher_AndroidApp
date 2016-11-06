@@ -7,10 +7,6 @@ import com.model.bitbucket.BitBucketAccessToken;
 import com.service.Constants;
 import com.service.RepoServiceResponse;
 
-/**
- * Created by ricar on 23/09/2016.
- */
-
 public class BitbucketRefreshTokenRequest extends BitbucketExchangeTokenRequest{
     public BitbucketRefreshTokenRequest(@NonNull Object context,
                                         @NonNull String refreshCode,

@@ -5,9 +5,6 @@ import android.support.annotation.Nullable;
 
 import com.service.RepoServiceResponse;
 
-/**
- * Created by ricar on 16/09/2016.
- */
 public class BaseBodyRequest<V, T> extends BaseRequest<T>{
     private V body;
 

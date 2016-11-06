@@ -10,10 +10,6 @@ import android.widget.TextView;
 import com.repofetcher.ErrorsContract;
 import com.repofetcher.R;
 
-/**
- * Created by ricar on 02/11/2016.
- */
-
 public class ErrorUIHandler implements ErrorsContract.Handler {
 
     private TextView errorText;

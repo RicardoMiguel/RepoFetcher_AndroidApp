@@ -27,9 +27,6 @@ import java.util.ArrayList;
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.AnimationAdapter;
 
-/**
- * Created by ricar on 07/09/2016.
- */
 public class RepoListFragment extends BaseFragment{
 
     private static final String TAG = RepoListFragment.class.getName();

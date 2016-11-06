@@ -8,9 +8,6 @@ import com.service.RepoServiceResponse;
 
 import java.util.Map;
 
-/**
- * Created by ricar on 15/09/2016.
- */
 public class GetOwnRepositoriesRequest<T> extends BaseRequest<T> {
 
     public GetOwnRepositoriesRequest(@NonNull Object context, @Nullable RepoServiceResponse<T> response) {

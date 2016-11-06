@@ -1,9 +1,5 @@
 package com.model.github;
 
-
-/**
- * Created by ricar on 16/08/2016.
- */
 import android.os.Parcel;
 import android.os.Parcelable;
 

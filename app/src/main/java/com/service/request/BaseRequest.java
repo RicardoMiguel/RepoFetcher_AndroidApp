@@ -10,9 +10,6 @@ import com.service.rx.RxJavaController;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by ricar on 12/09/2016.
- */
 public abstract class BaseRequest<T> {
 
     private RepoServiceResponse<T> uiServiceResponse;

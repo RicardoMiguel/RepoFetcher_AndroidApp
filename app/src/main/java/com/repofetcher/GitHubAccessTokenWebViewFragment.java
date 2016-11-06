@@ -10,9 +10,6 @@ import com.service.RepoServiceResponse;
 import com.service.holder.RepoServiceType;
 import com.service.request.GitHubExchangeTokenRequest;
 
-/**
- * Created by ricar on 16/09/2016.
- */
 public class GitHubAccessTokenWebViewFragment extends AccessTokenWebViewFragment{
 
     @Override

@@ -9,10 +9,6 @@ import com.service.RepoServiceResponse;
 
 import java.util.Map;
 
-/**
- * Created by ricar on 11/10/2016.
- */
-
 public class GitHubExchangeTokenRequest extends ExchangeTokenRequest<GitHubAccessToken> {
 
     public GitHubExchangeTokenRequest(@NonNull Object context,

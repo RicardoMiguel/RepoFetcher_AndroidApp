@@ -7,10 +7,6 @@ import android.text.TextUtils;
 import com.model.AccessToken;
 import com.model.ExpirableAccessToken;
 
-/**
- * Created by ricar on 25/09/2016.
- */
-
 public class OAuthUtils {
 
     public static int SECURE_RAGE_FOR_DELAY = 120;

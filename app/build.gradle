@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'jacoco-android'
 
 android {
     compileSdkVersion 25
@@ -15,9 +14,6 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
-        debug {
-            testCoverageEnabled true
-        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -30,7 +26,8 @@ android {
     }
 
     lintOptions {
-        abortOnError false
+        lintConfig rootProject.file('gradle/lint.xml')
+        abortOnError true
     }
 }
 
@@ -78,7 +75,6 @@ dependencies {
     testCompile "org.powermock:powermock-api-mockito:$rootProject.ext.powerMockito"
 
     //RetroLambda - Has to be the last one. Source: https://medium.com/android-news/retrolambda-on-android-191cc8151f85#.plukggfya
-    apply plugin: 'com.android.application'
     apply plugin: 'me.tatarka.retrolambda' // I'm the last one!
 }
 

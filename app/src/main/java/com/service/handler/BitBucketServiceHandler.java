@@ -23,9 +23,6 @@ import com.service.rx.RxJavaController;
 
 import rx.Observable;
 
-/**
- * Created by ricar on 06/09/2016.
- */
 public class BitBucketServiceHandler extends RepoServiceHandler<BitBucketService>{
 
     BitBucketServiceHandler(@NonNull Context context, @Nullable OAuthClientManager clientManager) {

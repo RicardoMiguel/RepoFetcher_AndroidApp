@@ -10,9 +10,6 @@ import android.view.ViewGroup;
 
 import com.service.FetcherCallsHandler;
 
-/**
- * Created by ricar on 07/09/2016.
- */
 public class IntroFragment extends BaseFragment{
     private static final String TAG = IntroFragment.class.getName();
 

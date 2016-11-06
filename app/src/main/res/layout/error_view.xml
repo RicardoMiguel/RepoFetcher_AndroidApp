@@ -20,6 +20,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_perm_scan_wifi_black_48dp"
         android:layout_marginBottom="10dp"
+        android:contentDescription="@string/error_image_description"
         />
 
     <Button

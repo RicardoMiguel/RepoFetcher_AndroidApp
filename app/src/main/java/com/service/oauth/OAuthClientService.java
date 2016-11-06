@@ -2,9 +2,6 @@ package com.service.oauth;
 
 import android.support.annotation.NonNull;
 
-/**
- * Created by ricar on 13/09/2016.
- */
 public interface OAuthClientService {
     @NonNull String getClientId();
     @NonNull String getClientSecret();

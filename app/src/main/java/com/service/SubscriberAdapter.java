@@ -4,9 +4,6 @@ import android.support.annotation.Nullable;
 
 import rx.Subscriber;
 
-/**
- * Created by ricar on 05/09/2016.
- */
 public class SubscriberAdapter<T> extends Subscriber<T> {
 
     @Nullable

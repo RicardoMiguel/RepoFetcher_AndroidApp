@@ -5,10 +5,6 @@ import android.support.annotation.Nullable;
 
 import com.service.RepoServiceResponse;
 
-
-/**
- * Created by ricar on 12/09/2016.
- */
 public class GetRepositoriesRequest<T> extends GetOwnRepositoriesRequest<T> {
 
     private String user;

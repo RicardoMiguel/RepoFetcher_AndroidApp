@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+
+    <issue id="InvalidPackage">
+        <ignore regexp=".*okio.*" />
+        <ignore regexp=".*retrofit.*" />
+    </issue>
+
+    <!-- Change the severity of hardcoded strings to "error" -->
+    <issue id="HardcodedText" severity="error" />
+
+    <issue id="OldTargetApi" severity="ignore" />
+
+    <issue id="UnusedResources" severity="ignore" />
+
+    <!-- Changed issue severity because the app has not been deploed in the market -->
+    <issue id="GoogleAppIndexingWarning" severity="ignore" />
+</lint>

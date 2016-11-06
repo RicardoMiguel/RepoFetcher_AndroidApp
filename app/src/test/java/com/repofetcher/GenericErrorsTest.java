@@ -11,10 +11,6 @@ import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Mockito.verify;
 
-/**
- * Created by ricar on 01/11/2016.
- */
-
 public class GenericErrorsTest {
 
     @Mock

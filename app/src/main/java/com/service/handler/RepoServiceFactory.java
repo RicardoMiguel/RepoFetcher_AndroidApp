@@ -7,9 +7,6 @@ import android.support.annotation.Nullable;
 import com.service.holder.RepoServiceType;
 import com.service.oauth.OAuthClientManager;
 
-/**
- * Created by ricar on 05/09/2016.
- */
 public class RepoServiceFactory {
 
     private Context context;

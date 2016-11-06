@@ -10,9 +10,6 @@ import com.service.ServiceUtils;
 
 import java.util.Map;
 
-/**
- * Created by ricar on 16/09/2016.
- */
 public class BitbucketExchangeTokenRequest extends ExchangeTokenRequest<BitBucketAccessToken>{
 
     public BitbucketExchangeTokenRequest(@NonNull Object context,

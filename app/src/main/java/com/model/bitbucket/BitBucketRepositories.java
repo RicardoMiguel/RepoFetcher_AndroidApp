@@ -5,9 +5,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-/**
- * Created by ricar on 07/09/2016.
- */
 public class BitBucketRepositories {
 
     @SerializedName("pagelen")

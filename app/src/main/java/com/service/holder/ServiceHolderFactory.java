@@ -1,9 +1,5 @@
 package com.service.holder;
 
-/**
- * Created by ricar on 24/10/2016.
- */
-
 public class ServiceHolderFactory {
 
     public ServiceHolder create(@RepoServiceType int service){

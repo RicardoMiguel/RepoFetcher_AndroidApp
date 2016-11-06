@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.SparseArray;
 
 import com.model.AccessToken;
 import com.model.ExpirableAccessToken;
@@ -17,8 +18,7 @@ import com.service.Constants;
 import com.service.ServiceUtils;
 import com.service.holder.RepoServiceType;
 
-import java.util.HashMap;
-import java.util.Map;
+import static com.service.ServiceUtils.checkNotNull;
 
 /**
  * This class uses currentThread to write into SharedPreferences.
@@ -75,14 +75,14 @@ public class SessionSharedPrefs {
     }
 
     @Nullable
-    public Map<Integer, AccessToken> getTokens(@RepoServiceType int[] services){
-        Map<Integer, AccessToken> map = null;
+    public SparseArray<AccessToken> getTokens(@RepoServiceType int[] services){
+        SparseArray<AccessToken> map = null;
 
         for(Integer c : services){
             AccessToken token = getToken(c);
             if(token != null){
                 if(map == null){
-                    map = new HashMap<>();
+                    map = new SparseArray<>();
                 }
                 map.put(c, token);
             }
@@ -118,7 +118,7 @@ public class SessionSharedPrefs {
                     expirableAccessToken.setExpiresIn(OAuthUtils.calcTimeToRefreshToken(dateAcquired, expiration));
                 }
             }
-            accessToken.setToken(token);
+            checkNotNull(accessToken, "Wrong RepoServiceType: "+ serviceType).setToken(token);
         }
         return accessToken;
     }
@@ -155,20 +155,21 @@ public class SessionSharedPrefs {
                     owner = new BitBucketOwner();
                     break;
             }
-            owner.setLogin(username);
+
+            checkNotNull(owner, "Wrong RepoServiceType: "+ serviceType).setLogin(username);
         }
         return owner;
     }
 
     @Nullable
-    public Map<Integer, Owner> getOwners(@RepoServiceType int[] services){
-        Map<Integer, Owner> owners = null;
+    public SparseArray<Owner> getOwners(@RepoServiceType int[] services){
+        SparseArray<Owner> owners = null;
 
         for(Integer c : services){
             Owner owner = getOwner(c);
             if(owner != null){
                 if(owners == null){
-                    owners = new HashMap<>();
+                    owners = new SparseArray<>();
                 }
                 owners.put(c,owner);
             }
