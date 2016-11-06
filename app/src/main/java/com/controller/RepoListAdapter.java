@@ -21,6 +21,7 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.RepoLi
     private Context context;
 
     public RepoListAdapter(@NonNull List<? extends Repo> repoList, @NonNull Context context) {
+        super();
         this.repoList = repoList;
         this.context = context;
     }
