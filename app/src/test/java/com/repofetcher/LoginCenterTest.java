@@ -1,6 +1,5 @@
 package com.repofetcher;
 
-import android.content.Context;
 import android.content.res.Resources;
 
 import com.controller.LoginCenterContract;
@@ -21,9 +20,6 @@ public class LoginCenterTest {
 
     @Mock
     private Resources resources;
-
-    @Mock
-    private Context context;
 
     private LoginCenterContract.Controller controller;
 
