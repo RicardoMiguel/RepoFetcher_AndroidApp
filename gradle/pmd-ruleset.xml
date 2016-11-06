@@ -29,6 +29,7 @@
         <exclude name="AbstractClassWithoutAbstractMethod" />
         <exclude name="AvoidDeeplyNestedIfStmts" />
         <exclude name="GodClass" /><!--Temporary-->
+        <exclude name="TooFewBranchesForASwitchStatement" />
 
     </rule>
     <rule ref="rulesets/java/imports.xml">
