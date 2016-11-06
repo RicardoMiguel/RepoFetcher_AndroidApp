@@ -9,9 +9,9 @@ import com.model.ExpirableAccessToken;
 
 public final class OAuthUtils {
 
-    private OAuthUtils(){}
-
     public static final int SECURE_RAGE_FOR_DELAY = 120;
+
+    private OAuthUtils(){}
 
     public static boolean isTokenValid(@Nullable AccessToken accessToken){
         return accessToken != null && !TextUtils.isEmpty(accessToken.getToken());

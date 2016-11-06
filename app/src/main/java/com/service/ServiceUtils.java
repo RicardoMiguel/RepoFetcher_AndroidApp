@@ -11,7 +11,9 @@ import com.repofetcher.RepoFetcherApplication;
 import com.service.holder.RepoServiceType;
 import com.service.holder.ServiceHolderFactory;
 
-public class ServiceUtils {
+public final class ServiceUtils {
+
+    private ServiceUtils(){}
 
     public static boolean isNetworkAvailable(@NonNull Context context) {
         ConnectivityManager connectivityManager

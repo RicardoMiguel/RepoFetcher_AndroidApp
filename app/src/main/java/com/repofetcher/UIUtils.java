@@ -14,7 +14,7 @@ public final class UIUtils {
         return (int)(context.getResources().getDimension(resource) / context.getResources().getDisplayMetrics().density);
     }
 
-    protected static void showView(View viewToShow, View... viewsToHide){
+    public static void showView(View viewToShow, View... viewsToHide){
         for(View view : viewsToHide){
             view.setVisibility(View.GONE);
         }
