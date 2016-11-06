@@ -26,10 +26,8 @@ public class RedefineUiCallbackVisitor {
             Subscriber<S> toRemove = null;
 
             for(Subscriber<S> subscriber : value){
-                if(subscriber instanceof SubscriberAdapter){
-                    if(((SubscriberAdapter) subscriber).getResponse() == callbackToRemove){
-                        toRemove = subscriber;
-                    }
+                if(subscriber instanceof SubscriberAdapter && ((SubscriberAdapter) subscriber).getResponse() == callbackToRemove){
+                    toRemove = subscriber;
                 }
             }
 
