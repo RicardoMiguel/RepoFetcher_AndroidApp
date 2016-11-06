@@ -25,7 +25,7 @@ public class IntroScreenTest {
             new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void clickLoginScreen_OpensLoginScreenUi(){
+    public void clickLoginScreenAndOpensLoginScreenUi(){
         onView(withId(R.id.login_center_button)).perform(click());
 
         onView(withId(R.id.floating_button)).check(matches(allOf(isDisplayed(), isEnabled())));

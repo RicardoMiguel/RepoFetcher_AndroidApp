@@ -38,13 +38,13 @@ public class LoginCenterTest {
     }
 
     @Test
-    public void addGitHubSession_OpensWebView(){
+    public void addGitHubSessionAndOpensWebView(){
         controller.addSession(0);
         verify(view).goToWebViewFragment(RepoServiceType.GITHUB);
     }
 
     @Test
-    public void addBitbucketSession_OpensWebView(){
+    public void addBitbucketSessionAndOpensWebView(){
         controller.addSession(1);
 
         verify(view).goToWebViewFragment(RepoServiceType.BITBUCKET);

@@ -38,8 +38,8 @@ public class LoginCenterUITest {
     }
 
     @Test
-    public void clickOnGitHub_OpensGitHubWebView() throws InterruptedException {
-        clickOnRepository_OpensWebView(R.string.github);
+    public void clickOnGitHubAndOpensGitHubWebView() throws InterruptedException {
+        clickOnRepositoryAndOpensWebView(R.string.github);
         // Commented due to "script-src assets-cdn.github.com"
 
 //        onWebView(withId(R.id.web_view)).forceJavascriptEnabled()
@@ -52,8 +52,8 @@ public class LoginCenterUITest {
     }
 
     @Test
-    public void clickOnBitbucket_OpensBitbucketWebView() throws InterruptedException {
-        clickOnRepository_OpensWebView(R.string.bitbucket);
+    public void clickOnBitbucketAndOpensBitbucketWebView() throws InterruptedException {
+        clickOnRepositoryAndOpensWebView(R.string.bitbucket);
         //Commented due to java.lang.RuntimeException: java.util.concurrent.TimeoutException: Timeout waiting for task.
         //The webview takes too long to load.
 
@@ -65,7 +65,7 @@ public class LoginCenterUITest {
 //        onView(withText(R.string.bitbucket)).check(matches(allOf(isDisplayed(), not(isEnabled()))));
     }
 
-    private void clickOnRepository_OpensWebView(@StringRes int resource){
+    private void clickOnRepositoryAndOpensWebView(@StringRes int resource){
         onView(withId(R.id.floating_button)).perform(click());
 
         onView(withText(resource)).perform(click());
