@@ -29,7 +29,9 @@
         <exclude name="AbstractClassWithoutAbstractMethod" />
         <exclude name="AvoidDeeplyNestedIfStmts" />
         <exclude name="GodClass" /><!--Temporary-->
+        <exclude name="NonThreadSafeSingleton" /><!--Temporary-->
         <exclude name="TooFewBranchesForASwitchStatement" />
+        <exclude name="EmptyMethodInAbstractClassShouldBeAbstract" /><!--Try to find exclusion for BaseFragment-->
 
     </rule>
     <rule ref="rulesets/java/imports.xml">
