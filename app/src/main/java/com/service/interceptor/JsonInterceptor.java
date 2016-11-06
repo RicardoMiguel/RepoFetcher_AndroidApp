@@ -8,9 +8,6 @@ import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
 
-/**
- * Created by ricar on 13/09/2016.
- */
 public class JsonInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {

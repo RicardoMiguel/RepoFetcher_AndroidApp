@@ -6,10 +6,6 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by ricar on 21/09/2016.
- */
-
 class Avatar implements Parcelable {
 
     @SerializedName("href")

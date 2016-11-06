@@ -14,9 +14,6 @@ import retrofit2.http.Path;
 import retrofit2.http.Url;
 import rx.Observable;
 
-/**
- * Created by ricar on 06/09/2016.
- */
 interface BitBucketService {
     @GET("repositories/{user}/")
     Observable<BitBucketRepositories> listRepositories(@Path("user") String user);

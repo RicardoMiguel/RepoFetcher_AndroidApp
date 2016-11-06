@@ -6,9 +6,6 @@ import android.support.annotation.Nullable;
 import com.model.AccessToken;
 import com.service.RepoServiceResponse;
 
-/**
- * Created by ricar on 13/09/2016.
- */
 public class ExchangeTokenRequest<T extends AccessToken> extends BaseRequest<T>{
 
     protected String code;

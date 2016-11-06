@@ -4,10 +4,6 @@ import android.support.annotation.NonNull;
 
 import com.service.holder.RepoServiceType;
 
-/**
- * Created by ricar on 20/10/2016.
- */
-
 public interface LoginCenterContract {
 
     interface View {

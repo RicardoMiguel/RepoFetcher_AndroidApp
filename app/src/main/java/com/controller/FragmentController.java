@@ -13,11 +13,6 @@ import com.repofetcher.R;
 
 import java.util.ArrayList;
 
-
-/**
- * Created by ricar on 20/09/2016.
- */
-
 public class FragmentController {
 
     private FragmentManager fragmentManager;

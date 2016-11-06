@@ -14,9 +14,6 @@ import com.service.holder.RepoServiceType;
 
 import java.util.List;
 
-/**
- * Created by ricar on 08/09/2016.
- */
 public class RepoListPageAdapter extends FragmentPagerAdapter {
 
     private Bundle[] repos;

@@ -24,9 +24,6 @@ import java.util.List;
 
 import rx.Observable;
 
-/**
- * Created by ricar on 02/09/2016.
- */
 public class GitHubServiceHandler extends RepoServiceHandler<GitHubService>{
 
     GitHubServiceHandler(@NonNull Context context, @Nullable OAuthClientManager clientManager) {

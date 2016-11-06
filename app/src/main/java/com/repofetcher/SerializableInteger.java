@@ -4,9 +4,6 @@ import com.service.holder.RepoServiceType;
 
 import java.io.Serializable;
 
-/**
- * Created by ricar on 15/09/2016.
- */
 public class SerializableInteger implements Serializable {
     @RepoServiceType
     int service;

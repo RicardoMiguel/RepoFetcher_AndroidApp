@@ -9,10 +9,6 @@ import com.google.gson.annotations.SerializedName;
 import com.model.Owner;
 import com.model.Repo;
 
-/**
- * Created by ricar on 16/08/2016.
- */
-
 public class GitHubRepo implements Repo {
 
     @SerializedName("id")

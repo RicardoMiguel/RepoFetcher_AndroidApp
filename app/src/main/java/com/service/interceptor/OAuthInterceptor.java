@@ -13,9 +13,6 @@ import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
 
-/**
- * Created by ricar on 14/09/2016.
- */
 public class OAuthInterceptor implements Interceptor {
     private OAuthClientManager oAuthClientService;
 

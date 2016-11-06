@@ -20,9 +20,6 @@ import com.service.FetcherCallsHandler;
 
 import static com.repofetcher.UIUtils.showView;
 
-/**
- * Created by ricar on 07/09/2016.
- */
 public abstract class BaseFragment extends Fragment implements ErrorsContract.View {
 
     private static final String TAG = BaseFragment.class.getName();

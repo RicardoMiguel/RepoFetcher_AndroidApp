@@ -4,9 +4,6 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.model.ExpirableAccessToken;
 
-/**
- * Created by ricar on 16/09/2016.
- */
 public class BitBucketAccessToken implements ExpirableAccessToken{
 
     @SerializedName("access_token")

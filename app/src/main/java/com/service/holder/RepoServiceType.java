@@ -8,9 +8,6 @@ import java.lang.annotation.RetentionPolicy;
 import static com.service.holder.RepoServiceType.BITBUCKET;
 import static com.service.holder.RepoServiceType.GITHUB;
 
-/**
- * Created by ricar on 24/10/2016.
- */
 @IntDef({GITHUB, BITBUCKET})
 @Retention(RetentionPolicy.SOURCE)
 public @interface RepoServiceType {

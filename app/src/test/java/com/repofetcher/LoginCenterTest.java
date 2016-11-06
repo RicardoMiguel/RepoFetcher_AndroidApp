@@ -14,10 +14,6 @@ import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Mockito.verify;
 
-/**
- * Created by ricar on 02/11/2016.
- */
-
 public class LoginCenterTest {
 
     @Mock

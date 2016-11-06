@@ -10,9 +10,6 @@ import com.service.request.GetOwnRepositoriesRequest;
 import com.service.request.GetOwnerRequest;
 import com.service.request.GetRepositoriesRequest;
 
-/**
- * Created by ricar on 04/09/2016.
- */
 interface IRepoServiceHandler {
     <S> void callListRepositories(@NonNull GetRepositoriesRequest<S> request);
     <S> void callListRepositories(@NonNull GetOwnRepositoriesRequest<S> request);

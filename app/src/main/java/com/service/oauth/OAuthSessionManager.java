@@ -8,10 +8,6 @@ import com.model.AccessToken;
 import com.model.ExpirableAccessToken;
 import com.model.Owner;
 
-/**
- * Created by ricar on 23/09/2016.
- */
-
 public class OAuthSessionManager implements OAuthClientManager{
 
     @Nullable private AccessToken accessToken;

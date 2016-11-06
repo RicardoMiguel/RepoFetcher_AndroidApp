@@ -19,10 +19,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.AllOf.allOf;
 
-/**
- * Created by ricar on 18/10/2016.
- */
-
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class LoginCenterUITest {
