@@ -42,8 +42,9 @@ android {
 task pmd (type: Pmd) {
 
     group 'verification'
-//    ruleSets = ["basic", "braces", "strings", "design", "unusedcode"]
-    source = fileTree('src/main/java')
+    ruleSetFiles = files("${project.rootDir}/gradle/pmd-ruleset.xml")
+    ruleSets=[]
+    source = fileTree('src/')
 
     reports {
         xml.enabled = false
