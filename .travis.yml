@@ -33,10 +33,13 @@ addons:
   apt_packages:
     - pandoc
 
-cache:
-  directories:
-    - $HOME/.gradle/caches/
-    - $HOME/.gradle/wrapper/
+#cache:
+#  directories:
+#    - $HOME/.gradle/caches/
+#    - $HOME/.gradle/wrapper/
+#before_cache:
+#  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+#  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 
 before_install:
  - chmod +x gradlew
@@ -59,7 +62,3 @@ script:
 after_script:
   # print lint results details
   - for f in $TRAVIS_BUILD_DIR/app/build/outputs/lint-results-debug.html; do pandoc $f -t plain; done
-
-before_cache:
-  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
