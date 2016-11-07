@@ -12,7 +12,7 @@ import static com.service.holder.RepoServiceType.GITHUB;
 @Retention(RetentionPolicy.SOURCE)
 public @interface RepoServiceType {
 
-    int GITHUB = 0;
-    int BITBUCKET = 1;
+    final static int GITHUB = 0;
+    final static int BITBUCKET = 1;
 
 }
