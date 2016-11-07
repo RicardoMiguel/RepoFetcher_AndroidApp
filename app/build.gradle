@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'pmd'
+apply plugin: 'findbugs'
 
 android {
     compileSdkVersion 25
@@ -40,8 +41,9 @@ android {
 }
 
 task pmd (type: Pmd) {
-
+    description 'Run pmd'
     group 'verification'
+
     ruleSetFiles = files("${project.rootDir}/gradle/pmd-ruleset.xml")
     ruleSets=[]
     source = fileTree('src/')
@@ -49,6 +51,27 @@ task pmd (type: Pmd) {
     reports {
         xml.enabled = false
         html.enabled = true
+    }
+}
+
+task findbugs(type: FindBugs, dependsOn: assemble) {
+    description 'Run findbugs'
+    group 'verification'
+
+    ignoreFailures = false
+    effort = "max"
+    reportLevel = "high"
+    excludeFilter = new File("${project.rootDir}/gradle/findbugs-filter.xml")
+    classes = files("${project.rootDir}/app/build/intermediates/classes")
+    classpath = files()
+    source fileTree('src/')
+
+    reports {
+        xml.enabled = false
+        html.enabled = true
+        html {
+            destination "$project.buildDir/reports/findbugs/findbugs.html"
+        }
     }
 }
 
