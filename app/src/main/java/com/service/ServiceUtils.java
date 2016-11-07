@@ -42,7 +42,7 @@ public final class ServiceUtils {
     @NonNull
     public static <S> S checkNotNull(@Nullable S object, @Nullable String message){
         if(object == null){
-            throw new NullPointerException(message);
+            throw new IllegalArgumentException(message);
         }
         return object;
     }
