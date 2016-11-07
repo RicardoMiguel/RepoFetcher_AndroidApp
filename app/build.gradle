@@ -77,6 +77,7 @@ task findbugs(type: FindBugs, dependsOn: assemble) {
 
 check.doLast {
     project.tasks.getByName("pmd").execute()
+    project.tasks.getByName("findbugs").execute()
 }
 
 dependencies {
