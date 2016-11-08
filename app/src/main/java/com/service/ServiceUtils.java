@@ -11,6 +11,8 @@ import com.repofetcher.RepoFetcherApplication;
 import com.service.holder.RepoServiceType;
 import com.service.holder.ServiceHolderFactory;
 
+import java.nio.charset.Charset;
+
 public final class ServiceUtils {
 
     private ServiceUtils(){}
@@ -24,7 +26,7 @@ public final class ServiceUtils {
 
     public static String getBasicAuthorization(String firstParameter, String secondParameter){
         String credentials = firstParameter + ":" + secondParameter;
-        return Constants.BASIC + " " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
+        return Constants.BASIC + " " + Base64.encodeToString(credentials.getBytes(Charset.forName("UTF-8")), Base64.NO_WRAP);
     }
 
     public static int getHashCode(@NonNull Object object){
