@@ -22,7 +22,7 @@ public class SplashScreenActivity extends AppCompatActivity{
 
             @Override
             public void onError(Throwable t) {
-
+                //Intentional empty method.
             }
         }));
     }

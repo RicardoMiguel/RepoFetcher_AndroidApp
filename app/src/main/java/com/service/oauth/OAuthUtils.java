@@ -7,9 +7,11 @@ import android.text.TextUtils;
 import com.model.AccessToken;
 import com.model.ExpirableAccessToken;
 
-public class OAuthUtils {
+public final class OAuthUtils {
 
-    public static int SECURE_RAGE_FOR_DELAY = 120;
+    public static final int SECURE_RAGE_FOR_DELAY = 120;
+
+    private OAuthUtils(){}
 
     public static boolean isTokenValid(@Nullable AccessToken accessToken){
         return accessToken != null && !TextUtils.isEmpty(accessToken.getToken());
@@ -29,6 +31,6 @@ public class OAuthUtils {
     }
 
     public static int calcDelay(@NonNull ExpirableAccessToken expirableAccessToken){
-        return (secondsToMilliseconds(expirableAccessToken.getExpiresIn())) - secondsToMilliseconds(SECURE_RAGE_FOR_DELAY); // time - 2 minutes
+        return secondsToMilliseconds(expirableAccessToken.getExpiresIn()) - secondsToMilliseconds(SECURE_RAGE_FOR_DELAY); // time - 2 minutes
     }
 }

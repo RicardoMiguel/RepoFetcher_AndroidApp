@@ -1,4 +1,8 @@
 apply plugin: 'com.android.application'
+apply plugin: 'pmd'
+apply plugin: 'findbugs'
+//RetroLambda - Has to be the last one. Source: https://medium.com/android-news/retrolambda-on-android-191cc8151f85#.plukggfya
+apply plugin: 'me.tatarka.retrolambda' // I'm the last one!
 
 android {
     compileSdkVersion 25
@@ -36,6 +40,46 @@ android {
             events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
         }
     }
+}
+
+task pmd (type: Pmd) {
+    description 'Run pmd'
+    group 'verification'
+
+    ruleSetFiles = files("${project.rootDir}/gradle/pmd-ruleset.xml")
+    ruleSets=[]
+    source = fileTree('src/')
+
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+}
+
+task findbugs(type: FindBugs) {
+    description 'Run findbugs'
+    group 'verification'
+
+    ignoreFailures = false
+    effort = "max"
+    reportLevel = "high"
+    excludeFilter = new File("${project.rootDir}/gradle/findbugs-filter.xml")
+    classes = files("${project.rootDir}/app/build/intermediates/classes")
+    classpath = files()
+    source fileTree('src/')
+
+    reports {
+        xml.enabled = false
+        html.enabled = true
+        html {
+            destination "$project.buildDir/reports/findbugs/findbugs.html"
+        }
+    }
+}
+
+check.doLast {
+    project.tasks.getByName("pmd").execute()
+    project.tasks.getByName("findbugs").execute()
 }
 
 dependencies {
@@ -81,8 +125,6 @@ dependencies {
     testCompile "org.powermock:powermock-module-junit4:$rootProject.ext.powerMockito"
     testCompile "org.powermock:powermock-api-mockito:$rootProject.ext.powerMockito"
 
-    //RetroLambda - Has to be the last one. Source: https://medium.com/android-news/retrolambda-on-android-191cc8151f85#.plukggfya
-    apply plugin: 'me.tatarka.retrolambda' // I'm the last one!
 }
 
 /*

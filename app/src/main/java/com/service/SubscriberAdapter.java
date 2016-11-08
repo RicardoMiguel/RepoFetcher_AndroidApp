@@ -26,7 +26,7 @@ public class SubscriberAdapter<T> extends Subscriber<T> {
 
     @Override
     public void onCompleted() {
-
+        //Intentional empty method. Not needed so far.
     }
 
     @Override

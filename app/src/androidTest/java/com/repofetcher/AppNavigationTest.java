@@ -26,7 +26,7 @@ public class AppNavigationTest {
             new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void clickSearch_OpenRepositoriesUi(){
+    public void clickSearchAndOpenRepositoriesUi(){
         onView(withId(R.id.action_search)).perform(click());
 
         onView(withId(android.support.design.R.id.search_src_text)).perform(typeText("RicardoMiguel"), pressKey(KeyEvent.KEYCODE_ENTER));

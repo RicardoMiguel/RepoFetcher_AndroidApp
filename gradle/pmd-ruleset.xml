@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<ruleset name="Custom ruleset"
+    xmlns="http://pmd.sf.net/ruleset/1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd"
+    xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd">
+
+    <description>Custom rule set</description>
+
+    <exclude-pattern>.*/R.java</exclude-pattern>
+    <exclude-pattern>.*/gen/.*</exclude-pattern>
+    <exclude-pattern>.*/AndroidManifest.xml</exclude-pattern>
+    <exclude-pattern>.*/res/.*</exclude-pattern>
+
+    <rule ref="rulesets/java/android.xml" />
+    <rule ref="rulesets/java/codesize.xml" >
+        <exclude name="TooManyMethods" />
+    </rule>
+    <!--<rule ref="rulesets/java/coupling.xml" />-->
+    <!--<rule ref="rulesets/java/controversial.xml" />-->
+    <rule ref="rulesets/java/clone.xml" />
+    <rule ref="rulesets/java/finalizers.xml" />
+    <rule ref="rulesets/java/design.xml">
+        <exclude name="ImmutableField" />
+        <exclude name="UseVarargs" />
+        <exclude name="SwitchStmtsShouldHaveDefault" />
+        <exclude name="UncommentedEmptyConstructor" />
+        <exclude name="ConfusingTernary" />
+        <exclude name="AbstractClassWithoutAbstractMethod" />
+        <exclude name="AvoidDeeplyNestedIfStmts" />
+        <exclude name="GodClass" /><!--Temporary-->
+        <exclude name="NonThreadSafeSingleton" /><!--Temporary-->
+        <exclude name="TooFewBranchesForASwitchStatement" />
+        <exclude name="EmptyMethodInAbstractClassShouldBeAbstract" /><!--Try to find exclusion for BaseFragment-->
+    </rule>
+    <rule ref="rulesets/java/imports.xml">
+        <!-- Espresso is designed this way !-->
+        <exclude name="TooManyStaticImports" />
+    </rule>
+
+    <rule ref="rulesets/java/optimizations.xml">
+        <!-- Espresso is designed this way !-->
+        <exclude name="LocalVariableCouldBeFinal" />
+        <exclude name="MethodArgumentCouldBeFinal" />
+        <exclude name="AvoidInstantiatingObjectsInLoops" />
+    </rule>
+    <rule ref="rulesets/java/logging-jakarta-commons.xml"/>
+    <rule ref="rulesets/java/logging-java.xml" />
+    <rule ref="rulesets/java/migrating.xml"/>
+    <rule ref="rulesets/java/strictexception.xml"/>
+    <rule ref="rulesets/java/braces.xml" />
+    <rule ref="rulesets/java/strings.xml" />
+    <rule ref="rulesets/java/empty.xml" />
+    <rule ref="rulesets/java/unnecessary.xml"/>
+    <rule ref="rulesets/java/basic.xml" />
+    <rule ref="rulesets/java/naming.xml">
+        <exclude name="AbstractNaming" />
+        <exclude name="LongVariable" />
+        <exclude name="ShortMethodName" />
+        <exclude name="ShortVariable" />
+        <!--<exclude name="VariableNamingConventions" />-->
+        <exclude name="ShortClassName" />
+    </rule>
+
+    <rule ref="rulesets/java/comments.xml/CommentContent"/>
+
+</ruleset>
