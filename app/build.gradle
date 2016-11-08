@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'pmd'
 apply plugin: 'findbugs'
+//RetroLambda - Has to be the last one. Source: https://medium.com/android-news/retrolambda-on-android-191cc8151f85#.plukggfya
+apply plugin: 'me.tatarka.retrolambda' // I'm the last one!
 
 android {
     compileSdkVersion 25
@@ -123,8 +125,6 @@ dependencies {
     testCompile "org.powermock:powermock-module-junit4:$rootProject.ext.powerMockito"
     testCompile "org.powermock:powermock-api-mockito:$rootProject.ext.powerMockito"
 
-    //RetroLambda - Has to be the last one. Source: https://medium.com/android-news/retrolambda-on-android-191cc8151f85#.plukggfya
-    apply plugin: 'me.tatarka.retrolambda' // I'm the last one!
 }
 
 /*
