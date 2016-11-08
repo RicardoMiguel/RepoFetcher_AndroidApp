@@ -54,7 +54,7 @@ task pmd (type: Pmd) {
     }
 }
 
-task findbugs(type: FindBugs, dependsOn: assemble) {
+task findbugs(type: FindBugs) {
     description 'Run findbugs'
     group 'verification'
 
