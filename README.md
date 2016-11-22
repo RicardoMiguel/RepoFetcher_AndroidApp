@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/RicardoMiguel/RepoFetcher_AndroidApp.svg?branch=master)](https://travis-ci.org/RicardoMiguel/RepoFetcher_AndroidApp)
+[![codecov](https://codecov.io/gh/RicardoMiguel/RepoFetcher_AndroidApp/branch/master/graph/badge.svg)](https://codecov.io/gh/RicardoMiguel/RepoFetcher_AndroidApp)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)]()
 
 ## Repo Fetcher
